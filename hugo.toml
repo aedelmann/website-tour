@@ -1,0 +1,78 @@
+baseURL = 'https://cristyneandalex.com'
+languageCode = 'en-us'
+title = 'Cristyne & Alex World Tour'
+theme = 'travelify'
+canonifyURLs = true
+
+[params]
+  author = "Cristyne & Alex"
+  site_description = "Follow our Tesla Model Y adventure around Europe and the world"
+  copyright = "Cristyne & Alex"
+  logo = "logo.png"
+  title_in_logo = true
+  disable_mathjax = true
+  date_format = "02 January, 2006"
+  
+  # Contact info
+  email = "alexander.edelmann80@gmail.com"
+  instagram = "your_instagram_handle"
+  tesla_model = "Model Y Long Range"
+  
+  # Theme colors - Blue gradient
+  primary_color = "#2c5aa0"
+  secondary_color = "#4a90e2"
+  accent_color = "#64b5f6"
+
+[params.share]
+  enable = true
+  facebook = true
+  twitter = true
+  linkedin = true
+  email = true
+
+[params.privacy]
+  enable = false
+  facebook_like = false
+
+[params.widgets]
+  recent_articles = true
+  categories = true
+  tags = true
+  tag_cloud = true
+  archives = false
+  search = true
+  mailchimp = false
+  author = true
+
+[params.slider]
+  enable = true
+  manual = false
+  num_features = 6
+
+[social]
+  rss = "Needed"
+  instagram = "your_instagram_handle"
+  email = "alexander.edelmann80@gmail.com"
+
+[menu]
+  [[menu.main]]
+    name = "Home"
+    url = "/"
+    weight = 1
+  [[menu.main]]
+    name = "Blog"
+    url = "/post/"
+    weight = 2
+  [[menu.main]]
+    name = "Contact"
+    url = "/contact/"
+    weight = 4
+
+[taxonomies]
+  category = "categories"
+  tag = "tags"
+  location = "locations"
+
+[permalinks]
+  categories = "/categories/:slug/"
+  tags = "/tags/:slug/"

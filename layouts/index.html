@@ -1,0 +1,224 @@
+{{ define "main" }}
+<!-- Hero Section with Map -->
+<section class="hero-section bg-gradient text-white text-center py-4" style="background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));">
+    <div class="container">
+        <div class="row align-items-center py-3">
+            <div class="col-lg-10 mx-auto">
+                <h1 class="display-5 fw-bold mb-2">
+                    <i class="fas fa-route me-2"></i>
+                    {{ .Site.Title }}
+                </h1>
+                <p class="mb-2">{{ .Site.Params.description }}</p>
+                <div class="mb-0">
+                    <small class="text-light">
+                        <i class="fas fa-car me-1"></i> Traveling in our {{ .Site.Params.tesla_model }}
+                    </small>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Interactive Map Section -->
+<section class="py-4 bg-light">
+    <div class="container">
+        <div class="row mb-3">
+            <div class="col-12 text-center">
+                <h2 class="mb-2">
+                    <i class="fas fa-map-marked-alt me-2"></i>Our Journey Map
+                </h2>
+                <p class="text-muted mb-0">Click on any pin to read about our adventures at that location</p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <div id="homeMap" style="height: 600px; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.1);"></div>
+            </div>
+        </div>
+        <div class="row mt-4">
+            <div class="col-md-3 col-6 mb-3">
+                <div class="stat-box bg-primary text-white p-3 rounded text-center">
+                    <h4 id="home-posts-count">0</h4>
+                    <small>Blog Posts</small>
+                </div>
+            </div>
+            <div class="col-md-3 col-6 mb-3">
+                <div class="stat-box bg-success text-white p-3 rounded text-center">
+                    <h4 id="home-countries-count">0</h4>
+                    <small>Countries Visited</small>
+                </div>
+            </div>
+            <div class="col-md-3 col-6 mb-3">
+                <div class="stat-box bg-warning text-white p-3 rounded text-center">
+                    <h4 id="home-distance">0</h4>
+                    <small>Total Distance (km)</small>
+                </div>
+            </div>
+            <div class="col-md-3 col-6 mb-3">
+                <div class="stat-box bg-info text-white p-3 rounded text-center">
+                    <h4 id="home-days">0</h4>
+                    <small>Days on Road</small>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Latest Posts Section -->
+<section class="py-5">
+    <div class="container">
+        <h2 class="text-center mb-5">
+            <i class="fas fa-newspaper me-2"></i>Latest Adventures
+        </h2>
+        <div class="row">
+            {{ range first 3 (where .Site.RegularPages "Type" "posts") }}
+            <div class="col-md-4 mb-4">
+                <div class="card h-100 shadow-sm">
+                    {{ if .Params.featured_image }}
+                    <img src="{{ .Params.featured_image | relURL }}" class="card-img-top" alt="{{ .Title }}" style="height: 200px; object-fit: cover;">
+                    {{ end }}
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title">{{ .Title }}</h5>
+                        <p class="card-text text-muted">{{ .Summary | truncate 120 }}</p>
+                        <div class="mt-auto">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <small class="text-muted">
+                                    <i class="fas fa-calendar me-1"></i>
+                                    {{ .Date.Format "Jan 2, 2006" }}
+                                </small>
+                                {{ if .Params.location }}
+                                <small class="text-muted">
+                                    <i class="fas fa-map-marker-alt me-1"></i>
+                                    {{ .Params.location }}
+                                </small>
+                                {{ end }}
+                            </div>
+                            <a href="{{ .RelPermalink }}" class="btn btn-primary btn-sm mt-2">
+                                Read More <i class="fas fa-arrow-right ms-1"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {{ end }}
+        </div>
+        <div class="text-center mt-4">
+            <a href="{{ "/posts/" | relURL }}" class="btn btn-outline-primary">
+                View All Posts <i class="fas fa-arrow-right ms-1"></i>
+            </a>
+        </div>
+    </div>
+</section>
+
+{{ end }}
+
+{{ define "scripts" }}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Initialize map
+    const homeMap = L.map('homeMap').setView([
+        {{ .Site.Params.map_center_lat | default 50.0755 }}, 
+        {{ .Site.Params.map_center_lng | default 14.4378 }}
+    ], {{ .Site.Params.map_zoom | default 4 }});
+
+    // Add tile layer
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '© OpenStreetMap contributors'
+    }).addTo(homeMap);
+
+    // Custom Tesla icon
+    const teslaIcon = L.divIcon({
+        html: '<i class="fas fa-car" style="color: #3b82f6; font-size: 24px;"></i>',
+        iconSize: [30, 30],
+        className: 'custom-div-icon'
+    });
+
+    // Store map data
+    const locations = [
+        {{ range where .Site.RegularPages "Type" "posts" }}
+        {{ if .Params.latitude }}
+        {
+            lat: {{ .Params.latitude }},
+            lng: {{ .Params.longitude }},
+            title: "{{ .Title }}",
+            url: "{{ .RelPermalink }}",
+            date: "{{ .Date.Format "Jan 2, 2006" }}",
+            location: "{{ .Params.location }}",
+            summary: "{{ .Summary | truncate 100 }}",
+            featured_image: "{{ .Params.featured_image | relURL }}",
+            distance: {{ .Params.tesla_stats.distance | default 0 }}
+        },
+        {{ end }}
+        {{ end }}
+    ];
+
+    // Add markers to map
+    const bounds = [];
+    locations.forEach(location => {
+        bounds.push([location.lat, location.lng]);
+        
+        const marker = L.marker([location.lat, location.lng], { icon: teslaIcon })
+            .addTo(homeMap);
+        
+        const popupContent = `
+            <div class="map-popup">
+                <h6>${location.title}</h6>
+                <p class="mb-2"><strong>${location.location}</strong></p>
+                <p class="text-muted small mb-2">${location.date}</p>
+                ${location.featured_image ? `<img src="${location.featured_image}" alt="${location.title}" class="img-fluid" style="max-width: 200px; border-radius: 8px; margin: 0.5rem 0;">` : ''}
+                <p class="small mt-2">${location.summary}</p>
+                <a href="${location.url}" class="btn btn-primary btn-sm">
+                    Read Post <i class="fas fa-arrow-right ms-1"></i>
+                </a>
+            </div>
+        `;
+        
+        marker.bindPopup(popupContent);
+    });
+
+    // Fit map to show all markers
+    if (bounds.length > 0) {
+        homeMap.fitBounds(bounds, { padding: [50, 50] });
+    }
+
+    // Calculate statistics
+    const totalDistance = locations.reduce((sum, loc) => sum + loc.distance, 0);
+    const countries = new Set(locations.map(l => l.location.split(',')[0].trim())).size;
+    
+    document.getElementById('home-posts-count').textContent = locations.length;
+    document.getElementById('home-countries-count').textContent = countries;
+    document.getElementById('home-distance').textContent = totalDistance.toLocaleString();
+    document.getElementById('home-days').textContent = Math.ceil(locations.length * 2.5);
+});
+</script>
+
+<style>
+.stat-box {
+    transition: transform 0.3s ease;
+}
+
+.stat-box:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+
+.custom-div-icon {
+    background: transparent;
+    border: none;
+}
+
+.custom-div-icon i {
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+}
+
+.map-popup {
+    text-align: center;
+    max-width: 250px;
+}
+
+.map-popup h6 {
+    color: var(--primary-color);
+    margin-bottom: 0.5rem;
+}
+</style>
+{{ end }}

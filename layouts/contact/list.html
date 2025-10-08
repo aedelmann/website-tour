@@ -1,0 +1,207 @@
+{{ define "main" }}
+<div class="container py-5">
+    <div class="row">
+        <div class="col-12">
+            <h1 class="text-center mb-5">
+                <i class="fas fa-envelope me-2"></i>Get in Touch
+            </h1>
+            <p class="text-center text-muted mb-5">
+                We'd love to hear from you! Follow our journey and share your own travel stories.
+            </p>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Contact Information -->
+        <div class="col-lg-6 mb-5">
+            <div class="contact-info">
+                <h3><i class="fas fa-info-circle me-2"></i>Contact Information</h3>
+                <div class="contact-item mb-3">
+                    <i class="fas fa-envelope"></i>
+                    <strong>Email:</strong>
+                    <a href="mailto:{{ .Site.Params.email }}" class="ms-2">{{ .Site.Params.email }}</a>
+                </div>
+                
+                {{ if .Site.Params.instagram }}
+                <div class="contact-item mb-3">
+                    <i class="fab fa-instagram"></i>
+                    <strong>Instagram:</strong>
+                    <a href="https://instagram.com/{{ .Site.Params.instagram }}" target="_blank" class="ms-2">
+                        @{{ .Site.Params.instagram }}
+                    </a>
+                </div>
+                {{ end }}
+                
+                <div class="contact-item mb-3">
+                    <i class="fas fa-car"></i>
+                    <strong>Vehicle:</strong>
+                    <span class="ms-2">{{ .Site.Params.tesla_model }}</span>
+                </div>
+                
+                <div class="contact-item mb-3">
+                    <i class="fas fa-map-marked-alt"></i>
+                    <strong>Current Location:</strong>
+                    <span class="ms-2">Follow our map for real-time updates!</span>
+                </div>
+            </div>
+
+            <!-- Social Media Links -->
+            <div class="social-links bg-light p-4 rounded">
+                <h4><i class="fas fa-share-alt me-2"></i>Follow Our Journey</h4>
+                <div class="row">
+                    <div class="col-12 mb-3">
+                        <a href="mailto:{{ .Site.Params.email }}" class="btn btn-primary btn-lg w-100 mb-2">
+                            <i class="fas fa-envelope me-2"></i>Send us an Email
+                        </a>
+                    </div>
+                    {{ if .Site.Params.instagram }}
+                    <div class="col-12 mb-3">
+                        <a href="https://instagram.com/{{ .Site.Params.instagram }}" 
+                           target="_blank" 
+                           class="btn btn-outline-primary btn-lg w-100">
+                            <i class="fab fa-instagram me-2"></i>Follow on Instagram
+                        </a>
+                    </div>
+                    {{ end }}
+                    <div class="col-12">
+                        <a href="{{ "/map/" | relURL }}" class="btn btn-outline-secondary btn-lg w-100">
+                            <i class="fas fa-map-marked-alt me-2"></i>Track Our Route
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Contact Form -->
+        <div class="col-lg-6">
+            <div class="contact-form bg-light p-4 rounded">
+                <h3><i class="fas fa-paper-plane me-2"></i>Send us a Message</h3>
+                <form id="contactForm">
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Name</label>
+                        <input type="text" class="form-control" id="name" name="name" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email</label>
+                        <input type="email" class="form-control" id="email" name="email" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="subject" class="form-label">Subject</label>
+                        <select class="form-select" id="subject" name="subject" required>
+                            <option value="">Choose a subject</option>
+                            <option value="travel-tips">Travel Tips</option>
+                            <option value="tesla-questions">Tesla Questions</option>
+                            <option value="collaboration">Collaboration</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="message" class="form-label">Message</label>
+                        <textarea class="form-control" id="message" name="message" rows="5" required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-lg w-100">
+                        <i class="fas fa-paper-plane me-2"></i>Send Message
+                    </button>
+                </form>
+                <div id="formResult" class="mt-3"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- FAQ Section -->
+    <div class="row mt-5">
+        <div class="col-12">
+            <h2 class="text-center mb-4">
+                <i class="fas fa-question-circle me-2"></i>Frequently Asked Questions
+            </h2>
+            <div class="accordion" id="faqAccordion">
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="faq1">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse1">
+                            How long have you been traveling?
+                        </button>
+                    </h2>
+                    <div id="collapse1" class="accordion-collapse collapse show" data-bs-parent="#faqAccordion">
+                        <div class="accordion-body">
+                            We started our world tour in [START_DATE] and plan to continue for [DURATION]. 
+                            You can follow our journey in real-time on our interactive map!
+                        </div>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="faq2">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse2">
+                            How does the Tesla Model Y handle long-distance travel?
+                        </button>
+                    </h2>
+                    <div id="collapse2" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                        <div class="accordion-body">
+                            Our Tesla Model Y Long Range has been fantastic for long-distance travel! 
+                            With a range of ~500km per charge and the extensive Supercharger network, 
+                            we've had no issues crossing countries and continents.
+                        </div>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="faq3">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse3">
+                            Can I share my own travel photos with you?
+                        </button>
+                    </h2>
+                    <div id="collapse3" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                        <div class="accordion-body">
+                            Absolutely! We love seeing other people's travel adventures. 
+                            Send us your photos and stories via email, and we might feature them on our blog!
+                        </div>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="faq4">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse4">
+                            How often do you update the blog?
+                        </button>
+                    </h2>
+                    <div id="collapse4" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                        <div class="accordion-body">
+                            We try to update our blog weekly with new adventures, photos, and Tesla travel insights. 
+                            Follow us on Instagram for more frequent updates and behind-the-scenes content!
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.getElementById('contactForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    const formData = new FormData(this);
+    const resultDiv = document.getElementById('formResult');
+    
+    // Simulate form submission (replace with actual form handling)
+    resultDiv.innerHTML = '<div class="alert alert-info">Sending message...</div>';
+    
+    setTimeout(() => {
+        // Create mailto link as fallback
+        const name = formData.get('name');
+        const email = formData.get('email');
+        const subject = formData.get('subject');
+        const message = formData.get('message');
+        
+        const mailtoLink = `mailto:{{ .Site.Params.email }}?subject=${encodeURIComponent(subject + ' - ' + name)}&body=${encodeURIComponent(message + '\n\nFrom: ' + name + ' (' + email + ')')}`;
+        
+        resultDiv.innerHTML = `
+            <div class="alert alert-success">
+                <i class="fas fa-check-circle me-2"></i>
+                Thank you for your message! 
+                <a href="${mailtoLink}" class="alert-link">Click here to send via email</a>
+            </div>
+        `;
+        
+        this.reset();
+    }, 1000);
+});
+</script>
+{{ end }}

@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="{{ .Site.LanguageCode }}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ if .Title }}{{ .Title }} | {{ end }}{{ .Site.Title }}</title>
+    <meta name="description" content="{{ if .Description }}{{ .Description }}{{ else }}{{ .Site.Params.description }}{{ end }}">
+    
+    <!-- CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" rel="stylesheet">
+    <link href="{{ "css/style.css" | relURL }}" rel="stylesheet">
+    
+    <!-- Custom CSS Variables -->
+    <style>
+        :root {
+            --primary-color: {{ .Site.Params.primary_color | default "#2c5aa0" }};
+            --secondary-color: {{ .Site.Params.secondary_color | default "#f4a261" }};
+            --accent-color: {{ .Site.Params.accent_color | default "#e76f51" }};
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="{{ "/" | relURL }}">
+                <i class="fas fa-globe-americas me-2"></i>
+                {{ .Site.Title }}
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    {{ range .Site.Menus.main }}
+                    <li class="nav-item">
+                        <a class="nav-link {{ if $.IsMenuCurrent "main" . }}active{{ end }}" href="{{ .URL | relURL }}">{{ .Name }}</a>
+                    </li>
+                    {{ end }}
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        {{ block "main" . }}{{ end }}
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-light py-4 mt-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <h5>{{ .Site.Title }}</h5>
+                    <p class="mb-0">{{ .Site.Params.description }}</p>
+                    <small class="text-muted">Traveling in our {{ .Site.Params.tesla_model }}</small>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <h6>Connect with us</h6>
+                    <a href="mailto:{{ .Site.Params.email }}" class="text-light me-3">
+                        <i class="fas fa-envelope me-1"></i> Email
+                    </a>
+                    {{ if .Site.Params.instagram }}
+                    <a href="https://instagram.com/{{ .Site.Params.instagram }}" class="text-light" target="_blank">
+                        <i class="fab fa-instagram me-1"></i> Instagram
+                    </a>
+                    {{ end }}
+                </div>
+            </div>
+            <hr class="my-3">
+            <div class="text-center text-muted">
+                <small>&copy; {{ now.Format "2006" }} {{ .Site.Params.author }}. Made with <i class="fas fa-heart text-danger"></i> and Hugo.</small>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="{{ "js/main.js" | relURL }}"></script>
+    {{ block "scripts" . }}{{ end }}
+</body>
+</html>

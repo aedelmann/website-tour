@@ -1,0 +1,158 @@
+{{ define "main" }}
+<div class="container py-5">
+    <div class="row">
+        <div class="col-12">
+            <h1 class="text-center mb-5">
+                <i class="fas fa-map-marked-alt me-2"></i>Our Journey Map
+            </h1>
+            <p class="text-center text-muted mb-4">
+                Click on any pin to read about our adventures at that location
+            </p>
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="col-12">
+            <div id="map" class="mb-4"></div>
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="col-md-6">
+            <h3><i class="fas fa-route me-2"></i>Journey Statistics</h3>
+            <div class="row text-center">
+                <div class="col-6 mb-3">
+                    <div class="stat-box bg-primary text-white p-3 rounded">
+                        <h4 id="total-distance">0</h4>
+                        <small>Total Distance (km)</small>
+                    </div>
+                </div>
+                <div class="col-6 mb-3">
+                    <div class="stat-box bg-success text-white p-3 rounded">
+                        <h4 id="countries-count">0</h4>
+                        <small>Countries Visited</small>
+                    </div>
+                </div>
+                <div class="col-6 mb-3">
+                    <div class="stat-box bg-warning text-white p-3 rounded">
+                        <h4 id="posts-count">0</h4>
+                        <small>Blog Posts</small>
+                    </div>
+                </div>
+                <div class="col-6 mb-3">
+                    <div class="stat-box bg-info text-white p-3 rounded">
+                        <h4 id="days-count">0</h4>
+                        <small>Days on Road</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <h3><i class="fas fa-car me-2"></i>Tesla Model Y Stats</h3>
+            <div class="tesla-stats bg-light p-4 rounded">
+                <div class="row">
+                    <div class="col-12 mb-2">
+                        <strong>Model:</strong> {{ .Site.Params.tesla_model }}
+                    </div>
+                    <div class="col-12 mb-2">
+                        <strong>Range:</strong> ~500 km per charge
+                    </div>
+                    <div class="col-12 mb-2">
+                        <strong>Supercharger Stops:</strong> <span id="charger-stops">0</span>
+                    </div>
+                    <div class="col-12 mb-2">
+                        <strong>Total Energy Used:</strong> <span id="energy-used">0</span> kWh
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Initialize map
+    const map = L.map('map').setView([
+        {{ .Site.Params.map_center_lat | default 50.0755 }}, 
+        {{ .Site.Params.map_center_lng | default 14.4378 }}
+    ], {{ .Site.Params.map_zoom | default 4 }});
+
+    // Add tile layer
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '© OpenStreetMap contributors'
+    }).addTo(map);
+
+    // Custom Tesla icon
+    const teslaIcon = L.divIcon({
+        html: '<i class="fas fa-car" style="color: #3b82f6; font-size: 20px;"></i>',
+        iconSize: [30, 30],
+        className: 'custom-div-icon'
+    });
+
+    // Store map data
+    const locations = [
+        {{ range where .Site.RegularPages "Type" "posts" }}
+        {{ if .Params.latitude }}
+        {
+            lat: {{ .Params.latitude }},
+            lng: {{ .Params.longitude }},
+            title: "{{ .Title }}",
+            url: "{{ .RelPermalink }}",
+            date: "{{ .Date.Format "Jan 2, 2006" }}",
+            location: "{{ .Params.location }}",
+            summary: "{{ .Summary | truncate 100 }}",
+            featured_image: "{{ .Params.featured_image | relURL }}"
+        },
+        {{ end }}
+        {{ end }}
+    ];
+
+    // Add markers to map
+    locations.forEach(location => {
+        const marker = L.marker([location.lat, location.lng], { icon: teslaIcon })
+            .addTo(map);
+        
+        const popupContent = `
+            <div class="map-popup">
+                <h6>${location.title}</h6>
+                <p class="mb-2"><strong>${location.location}</strong></p>
+                <p class="text-muted small mb-2">${location.date}</p>
+                ${location.featured_image ? `<img src="${location.featured_image}" alt="${location.title}" class="img-fluid">` : ''}
+                <p class="small mt-2">${location.summary}</p>
+                <a href="${location.url}" class="btn btn-primary btn-sm">
+                    Read Post <i class="fas fa-arrow-right ms-1"></i>
+                </a>
+            </div>
+        `;
+        
+        marker.bindPopup(popupContent);
+    });
+
+    // Calculate statistics
+    document.getElementById('posts-count').textContent = locations.length;
+    document.getElementById('countries-count').textContent = new Set(locations.map(l => l.location.split(',')[0].trim())).size;
+    document.getElementById('days-count').textContent = Math.ceil(locations.length * 2.5); // Estimate
+    document.getElementById('charger-stops').textContent = Math.ceil(locations.length * 0.8); // Estimate
+    document.getElementById('energy-used').textContent = Math.ceil(locations.length * 45); // Estimate
+});
+</script>
+
+<style>
+.stat-box {
+    transition: transform 0.3s ease;
+}
+
+.stat-box:hover {
+    transform: translateY(-3px);
+}
+
+.custom-div-icon {
+    background: transparent;
+    border: none;
+}
+
+.custom-div-icon i {
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+}
+</style>
+{{ end }}

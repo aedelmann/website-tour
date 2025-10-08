@@ -1,0 +1,192 @@
+{{ define "main" }}
+<div class="container py-5">
+    <div class="row">
+        <div class="col-12">
+            <article class="blog-post">
+                <!-- Post Header -->
+                <header class="mb-4">
+                    <div class="mb-3">
+                        {{ if .Params.category }}
+                        <span class="badge bg-primary me-2">{{ .Params.category }}</span>
+                        {{ end }}
+                        {{ if .Params.location }}
+                        <span class="badge bg-secondary me-2">{{ .Params.location }}</span>
+                        {{ end }}
+                        {{ if .Params.tags }}
+                        {{ range .Params.tags }}
+                        <span class="badge bg-light text-dark me-1">#{{ . }}</span>
+                        {{ end }}
+                        {{ end }}
+                    </div>
+                    <h1 class="display-5 fw-bold mb-3">{{ .Title }}</h1>
+                    <div class="post-meta">
+                        <div class="row align-items-center">
+                            <div class="col-md-6">
+                                <div class="d-flex align-items-center">
+                                    <i class="fas fa-calendar text-primary me-2"></i>
+                                    <span class="me-4">{{ .Date.Format "January 2, 2006" }}</span>
+                                    {{ if .Params.reading_time }}
+                                    <i class="fas fa-clock text-primary me-2"></i>
+                                    <span>{{ .Params.reading_time }} min read</span>
+                                    {{ end }}
+                                </div>
+                            </div>
+                            <div class="col-md-6 text-md-end">
+                                {{ if .Params.latitude }}
+                                <a href="{{ "/map/" | relURL }}?lat={{ .Params.latitude }}&lng={{ .Params.longitude }}&zoom=10" 
+                                   class="btn btn-outline-primary btn-sm">
+                                    <i class="fas fa-map-marker-alt me-1"></i>View on Map
+                                </a>
+                                {{ end }}
+                            </div>
+                        </div>
+                    </div>
+                </header>
+
+                <!-- Featured Image -->
+                {{ if .Params.featured_image }}
+                <img src="{{ .Params.featured_image | relURL }}" 
+                     alt="{{ .Title }}" 
+                     class="featured-image">
+                {{ end }}
+
+                <!-- Post Content -->
+                <div class="post-content">
+                    {{ .Content }}
+                </div>
+
+                <!-- Photo Gallery -->
+                {{ if .Params.gallery }}
+                <section class="mt-5">
+                    <h3><i class="fas fa-images me-2"></i>Photo Gallery</h3>
+                    <div class="photo-gallery">
+                        {{ range .Params.gallery }}
+                        <img src="{{ . | relURL }}" 
+                             alt="Gallery image" 
+                             data-bs-toggle="modal" 
+                             data-bs-target="#galleryModal"
+                             onclick="openGalleryModal('{{ . | relURL }}')">
+                        {{ end }}
+                    </div>
+                </section>
+                {{ end }}
+
+                <!-- Tesla Stats for this location -->
+                {{ if .Params.tesla_stats }}
+                <section class="mt-5">
+                    <h3><i class="fas fa-car me-2"></i>Tesla Stats</h3>
+                    <div class="row">
+                        {{ if .Params.tesla_stats.distance }}
+                        <div class="col-md-3 mb-3">
+                            <div class="stat-card bg-primary text-white p-3 rounded text-center">
+                                <i class="fas fa-route fa-2x mb-2"></i>
+                                <h5>{{ .Params.tesla_stats.distance }} km</h5>
+                                <small>Distance</small>
+                            </div>
+                        </div>
+                        {{ end }}
+                        {{ if .Params.tesla_stats.charging_stops }}
+                        <div class="col-md-3 mb-3">
+                            <div class="stat-card bg-warning text-white p-3 rounded text-center">
+                                <i class="fas fa-bolt fa-2x mb-2"></i>
+                                <h5>{{ .Params.tesla_stats.charging_stops }}</h5>
+                                <small>Charging Stops</small>
+                            </div>
+                        </div>
+                        {{ end }}
+                        {{ if .Params.tesla_stats.energy_used }}
+                        <div class="col-md-3 mb-3">
+                            <div class="stat-card bg-success text-white p-3 rounded text-center">
+                                <i class="fas fa-battery-half fa-2x mb-2"></i>
+                                <h5>{{ .Params.tesla_stats.energy_used }} kWh</h5>
+                                <small>Energy Used</small>
+                            </div>
+                        </div>
+                        {{ end }}
+                        {{ if .Params.tesla_stats.weather }}
+                        <div class="col-md-3 mb-3">
+                            <div class="stat-card bg-info text-white p-3 rounded text-center">
+                                <i class="fas fa-thermometer-half fa-2x mb-2"></i>
+                                <h5>{{ .Params.tesla_stats.weather }}°C</h5>
+                                <small>Temperature</small>
+                            </div>
+                        </div>
+                        {{ end }}
+                    </div>
+                </section>
+                {{ end }}
+
+                <!-- Navigation to other posts -->
+                <nav class="mt-5">
+                    <div class="row">
+                        <div class="col-md-6">
+                            {{ with .PrevInSection }}
+                            <a href="{{ .RelPermalink }}" class="btn btn-outline-primary">
+                                <i class="fas fa-chevron-left me-2"></i>Previous: {{ .Title | truncate 30 }}
+                            </a>
+                            {{ end }}
+                        </div>
+                        <div class="col-md-6 text-md-end">
+                            {{ with .NextInSection }}
+                            <a href="{{ .RelPermalink }}" class="btn btn-outline-primary">
+                                Next: {{ .Title | truncate 30 }}<i class="fas fa-chevron-right ms-2"></i>
+                            </a>
+                            {{ end }}
+                        </div>
+                    </div>
+                </nav>
+
+                <!-- Share buttons -->
+                <div class="mt-4 pt-4 border-top">
+                    <h6>Share this post:</h6>
+                    <div class="share-buttons">
+                        <a href="https://twitter.com/intent/tweet?text={{ .Title }}&url={{ .Permalink }}" 
+                           target="_blank" class="btn btn-outline-primary btn-sm me-2">
+                            <i class="fab fa-twitter me-1"></i>Twitter
+                        </a>
+                        <a href="https://www.facebook.com/sharer/sharer.php?u={{ .Permalink }}" 
+                           target="_blank" class="btn btn-outline-primary btn-sm me-2">
+                            <i class="fab fa-facebook me-1"></i>Facebook
+                        </a>
+                        <a href="https://wa.me/?text={{ .Title }}%20{{ .Permalink }}" 
+                           target="_blank" class="btn btn-outline-success btn-sm">
+                            <i class="fab fa-whatsapp me-1"></i>WhatsApp
+                        </a>
+                    </div>
+                </div>
+            </article>
+        </div>
+    </div>
+</div>
+
+<!-- Gallery Modal -->
+<div class="modal fade" id="galleryModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Photo Gallery</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body text-center">
+                <img id="modalImage" src="" alt="Gallery image" class="img-fluid rounded">
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function openGalleryModal(imageSrc) {
+    document.getElementById('modalImage').src = imageSrc;
+}
+
+// Add smooth scrolling for anchor links
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        document.querySelector(this.getAttribute('href')).scrollIntoView({
+            behavior: 'smooth'
+        });
+    });
+});
+</script>
+{{ end }}
