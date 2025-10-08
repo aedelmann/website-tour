@@ -1,7 +1,8 @@
 baseURL = 'https://cristyneandalex.com'
 languageCode = 'en-us'
 title = 'Cristyne & Alex World Tour'
-canonifyURLs = true
+canonifyURLs = false
+publishDir = 'public'
 
 [params]
   author = "Cristyne & Alex"
