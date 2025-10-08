@@ -1,7 +1,6 @@
 baseURL = 'https://cristyneandalex.com'
 languageCode = 'en-us'
 title = 'Cristyne & Alex World Tour'
-theme = 'travelify'
 canonifyURLs = true
 
 [params]
@@ -61,7 +60,7 @@ canonifyURLs = true
     weight = 1
   [[menu.main]]
     name = "Blog"
-    url = "/post/"
+    url = "/posts/"
     weight = 2
   [[menu.main]]
     name = "Contact"
