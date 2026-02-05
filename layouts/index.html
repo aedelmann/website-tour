@@ -19,8 +19,51 @@
     </div>
 </section>
 
+<!-- Tesla Model Y & Journey Statistics -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <h2 class="text-center mb-4">
+            <i class="fas fa-car me-2"></i>Our {{ .Site.Params.tesla_model }}
+        </h2>
+        <div class="row align-items-center">
+            <div class="col-lg-5 mb-4 mb-lg-0 text-center">
+                <img src="{{ "/images/tesla-modely.png" | relURL }}" alt="{{ .Site.Params.tesla_model }}" class="img-fluid rounded shadow tesla-home-image">
+            </div>
+            <div class="col-lg-7">
+                <h3 class="h5 text-muted mb-3 text-center text-lg-start">Journey statistics</h3>
+                <div class="row">
+                    <div class="col-6 col-md-3 mb-3">
+                        <div class="stat-box bg-primary text-white p-3 rounded text-center">
+                            <h4 id="home-posts-count">0</h4>
+                            <small>Blog Posts</small>
+                        </div>
+                    </div>
+                    <div class="col-6 col-md-3 mb-3">
+                        <div class="stat-box bg-success text-white p-3 rounded text-center">
+                            <h4 id="home-countries-count">0</h4>
+                            <small>Countries Visited</small>
+                        </div>
+                    </div>
+                    <div class="col-6 col-md-3 mb-3">
+                        <div class="stat-box bg-warning text-white p-3 rounded text-center">
+                            <h4 id="home-distance">0</h4>
+                            <small>Total Distance (km)</small>
+                        </div>
+                    </div>
+                    <div class="col-6 col-md-3 mb-3">
+                        <div class="stat-box bg-info text-white p-3 rounded text-center">
+                            <h4 id="home-days">0</h4>
+                            <small>Days on Road</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
 <!-- Interactive Map Section -->
-<section class="py-4 bg-light">
+<section class="py-4">
     <div class="container">
         <div class="row mb-3">
             <div class="col-12 text-center">
@@ -33,32 +76,6 @@
         <div class="row">
             <div class="col-12">
                 <div id="homeMap" style="height: 600px; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.1);"></div>
-            </div>
-        </div>
-        <div class="row mt-4">
-            <div class="col-md-3 col-6 mb-3">
-                <div class="stat-box bg-primary text-white p-3 rounded text-center">
-                    <h4 id="home-posts-count">0</h4>
-                    <small>Blog Posts</small>
-                </div>
-            </div>
-            <div class="col-md-3 col-6 mb-3">
-                <div class="stat-box bg-success text-white p-3 rounded text-center">
-                    <h4 id="home-countries-count">0</h4>
-                    <small>Countries Visited</small>
-                </div>
-            </div>
-            <div class="col-md-3 col-6 mb-3">
-                <div class="stat-box bg-warning text-white p-3 rounded text-center">
-                    <h4 id="home-distance">0</h4>
-                    <small>Total Distance (km)</small>
-                </div>
-            </div>
-            <div class="col-md-3 col-6 mb-3">
-                <div class="stat-box bg-info text-white p-3 rounded text-center">
-                    <h4 id="home-days">0</h4>
-                    <small>Days on Road</small>
-                </div>
             </div>
         </div>
     </div>
@@ -128,7 +145,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Custom Tesla icon
     const teslaIcon = L.divIcon({
-        html: '<i class="fas fa-flag" style="color: #3b82f6; font-size: 24px;"></i>',
+        html: '<i class="fas fa-car" style="color: #3b82f6; font-size: 24px;"></i>',
         iconSize: [30, 30],
         className: 'custom-div-icon'
     });
@@ -219,6 +236,12 @@ document.addEventListener('DOMContentLoaded', function() {
 .map-popup h6 {
     color: var(--primary-color);
     margin-bottom: 0.5rem;
+}
+
+.tesla-home-image {
+    max-height: 320px;
+    width: auto;
+    object-fit: contain;
 }
 </style>
 {{ end }}
