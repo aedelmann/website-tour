@@ -15,15 +15,15 @@
     <!-- Custom CSS Variables -->
     <style>
         :root {
-            --primary-color: {{ .Site.Params.primary_color | default "#2c5aa0" }};
-            --secondary-color: {{ .Site.Params.secondary_color | default "#f4a261" }};
-            --accent-color: {{ .Site.Params.accent_color | default "#e76f51" }};
+            --primary: {{ .Site.Params.primary_color | default "#b45309" }};
+            --secondary: {{ .Site.Params.secondary_color | default "#4d7c5a" }};
+            --accent: {{ .Site.Params.accent_color | default "#0d9488" }};
         }
     </style>
 </head>
 <body>
     <!-- Navigation -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top">
+    <nav class="navbar navbar-expand-lg fixed-top">
         <div class="container">
             <a class="navbar-brand fw-bold" href="{{ "/" | relURL }}">
                 <i class="fas fa-globe-americas me-2"></i>
@@ -50,7 +50,7 @@
     </main>
 
     <!-- Footer -->
-    <footer class="bg-dark text-light py-4 mt-5">
+    <footer class="py-4 mt-5">
         <div class="container">
             <div class="row">
                 <div class="col-md-6">

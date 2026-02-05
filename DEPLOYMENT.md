@@ -1,6 +1,6 @@
 # Deploying to Netlify
 
-Your Cristyne & Alex World Tour website is ready to deploy to Netlify! Follow these simple steps:
+Your Silent Wanderers website is ready to deploy to Netlify! Follow these simple steps:
 
 ## Option 1: Deploy via GitHub (Recommended)
 
@@ -35,7 +35,7 @@ Replace `YOUR_USERNAME` with your GitHub username.
 ### Step 4: Add Custom Domain (Optional)
 1. In Netlify dashboard, go to "Domain settings"
 2. Click "Add custom domain"
-3. Enter `cristyneandalex.com`
+3. Enter `silentwanderers.com`
 4. Follow the DNS configuration instructions
 5. Netlify will automatically provision HTTPS certificate
 

@@ -1,6 +1,6 @@
-baseURL = 'https://cristyneandalex.com'
+baseURL = 'https://silentwanderers.com'
 languageCode = 'en-us'
-title = 'Cristyne & Alex World Tour'
+title = 'Silent Wanderers'
 canonifyURLs = false
 publishDir = 'public'
 
@@ -18,10 +18,10 @@ publishDir = 'public'
   instagram = "your_instagram_handle"
   tesla_model = "Model Y Long Range"
   
-  # Theme colors - Blue gradient
-  primary_color = "#2c5aa0"
-  secondary_color = "#4a90e2"
-  accent_color = "#64b5f6"
+  # Theme colors - Warm editorial
+  primary_color = "#b45309"
+  secondary_color = "#4d7c5a"
+  accent_color = "#0d9488"
 
 [params.share]
   enable = true
@@ -63,6 +63,10 @@ publishDir = 'public'
     name = "Blog"
     url = "/posts/"
     weight = 2
+  [[menu.main]]
+    name = "Map"
+    url = "/map/"
+    weight = 3
   [[menu.main]]
     name = "Contact"
     url = "/contact/"

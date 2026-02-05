@@ -1,9 +1,9 @@
 ---
-title: "Cristyne & Alex World Tour"
+title: "Silent Wanderers"
 date: 2025-10-08
 type: "home"
 ---
 
-# Welcome to Our World Tour
+# Welcome to Silent Wanderers
 
 Join Cristyne and Alex on an incredible journey around Europe and the world in our Tesla Model Y Long Range. We're documenting our adventures, sharing travel tips, and showcasing the beauty of electric vehicle travel.

@@ -1,26 +1,22 @@
 {{ define "main" }}
-<!-- Hero Section with Map -->
-<section class="hero-section bg-gradient text-white text-center py-4" style="background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));">
+<!-- Hero -->
+<section class="hero-section">
     <div class="container">
-        <div class="row align-items-center py-3">
-            <div class="col-lg-10 mx-auto">
-                <h1 class="display-5 fw-bold mb-2">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <h1>
                     <i class="fas fa-route me-2"></i>
                     {{ .Site.Title }}
                 </h1>
-                <p class="mb-2">{{ .Site.Params.description }}</p>
-                <div class="mb-0">
-                    <small class="text-light">
-                        <i class="fas fa-car me-1"></i> Traveling in our {{ .Site.Params.tesla_model }}
-                    </small>
-                </div>
+                <p>{{ .Site.Params.description }}</p>
+                <small><i class="fas fa-car me-1"></i> Traveling in our {{ .Site.Params.tesla_model }}</small>
             </div>
         </div>
     </div>
 </section>
 
 <!-- Tesla Model Y & Journey Statistics -->
-<section class="py-5 bg-light">
+<section class="bg-light">
     <div class="container">
         <h2 class="text-center mb-4">
             <i class="fas fa-car me-2"></i>Our {{ .Site.Params.tesla_model }}
@@ -75,7 +71,7 @@
         </div>
         <div class="row">
             <div class="col-12">
-                <div id="homeMap" style="height: 600px; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.1);"></div>
+                <div id="homeMap"></div>
             </div>
         </div>
     </div>
@@ -145,7 +141,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Custom Tesla icon
     const teslaIcon = L.divIcon({
-        html: '<i class="fas fa-car" style="color: #3b82f6; font-size: 24px;"></i>',
+        html: '<i class="fas fa-car" style="color: #b45309; font-size: 24px;"></i>',
         iconSize: [30, 30],
         className: 'custom-div-icon'
     });
@@ -210,36 +206,8 @@ document.addEventListener('DOMContentLoaded', function() {
 </script>
 
 <style>
-.stat-box {
-    transition: transform 0.3s ease;
-}
-
-.stat-box:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-}
-
-.custom-div-icon {
-    background: transparent;
-    border: none;
-}
-
-.custom-div-icon i {
-    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-}
-
-.map-popup {
-    text-align: center;
-    max-width: 250px;
-}
-
-.map-popup h6 {
-    color: var(--primary-color);
-    margin-bottom: 0.5rem;
-}
-
 .tesla-home-image {
-    max-height: 320px;
+    max-height: 300px;
     width: auto;
     object-fit: contain;
 }
