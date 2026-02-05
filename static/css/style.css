@@ -197,6 +197,21 @@ body {
     margin: 0.5rem 0;
 }
 
+/* Map popup "Read Post" button – high contrast for readability */
+.map-popup .btn-primary {
+    background: var(--dark-color) !important;
+    color: #fff !important;
+    border: none;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+    font-weight: 700;
+}
+
+.map-popup .btn-primary:hover {
+    background: #0f2847 !important;
+    color: #fff !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+}
+
 /* Blog Post Styles */
 .blog-post {
     max-width: 800px;

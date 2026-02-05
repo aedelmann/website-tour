@@ -130,7 +130,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Calculate statistics
     document.getElementById('posts-count').textContent = locations.length;
-    document.getElementById('countries-count').textContent = new Set(locations.map(l => l.location.split(',')[0].trim())).size;
+    document.getElementById('countries-count').textContent = new Set(locations.map(l => l.location.split(',').pop().trim())).size;
     document.getElementById('days-count').textContent = Math.ceil(locations.length * 2.5); // Estimate
     document.getElementById('charger-stops').textContent = Math.ceil(locations.length * 0.8); // Estimate
     document.getElementById('energy-used').textContent = Math.ceil(locations.length * 45); // Estimate

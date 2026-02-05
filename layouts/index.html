@@ -128,7 +128,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Custom Tesla icon
     const teslaIcon = L.divIcon({
-        html: '<i class="fas fa-car" style="color: #3b82f6; font-size: 24px;"></i>',
+        html: '<i class="fas fa-flag" style="color: #3b82f6; font-size: 24px;"></i>',
         iconSize: [30, 30],
         className: 'custom-div-icon'
     });
@@ -183,7 +183,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Calculate statistics
     const totalDistance = locations.reduce((sum, loc) => sum + loc.distance, 0);
-    const countries = new Set(locations.map(l => l.location.split(',')[0].trim())).size;
+    const countries = new Set(locations.map(l => l.location.split(',').pop().trim())).size;
     
     document.getElementById('home-posts-count').textContent = locations.length;
     document.getElementById('home-countries-count').textContent = countries;
