@@ -6,4 +6,4 @@ type: "map"
 
 # Our Journey Map
 
-Explore our world tour through an interactive map showing all the places we've visited in our Tesla Model Y Long Range. Click on any pin to read about our adventures at that location.
+Explore our world tour through an interactive map showing all the places we've visited in our Tesla Model Y. Click on any pin to read about our adventures at that location.

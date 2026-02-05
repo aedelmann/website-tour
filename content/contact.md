@@ -15,6 +15,6 @@ We'd love to hear from you! Whether you have questions about our journey, want t
 
 ## About Our Journey
 
-We're Cristyne and Alex, traveling around Europe and the world in our Tesla Model Y Long Range. We're documenting our adventures, sharing travel tips, and showcasing the beauty of electric vehicle travel.
+We're Cristyne and Alex, traveling around Europe and the world in our Tesla Model Y. We're documenting our adventures, sharing travel tips, and showcasing the beauty of electric vehicle travel.
 
 Follow along as we explore new destinations, discover hidden gems, and share our experiences on the road!

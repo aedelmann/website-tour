@@ -16,7 +16,7 @@ publishDir = 'public'
   # Contact info
   email = "alexander.edelmann80@gmail.com"
   instagram = "your_instagram_handle"
-  tesla_model = "Model Y Long Range"
+  tesla_model = "Tesla Model Y"
   
   # Theme colors - Warm editorial
   primary_color = "#b45309"
