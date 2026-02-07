@@ -63,4 +63,4 @@ For now, we're soaking up every sunny (and windy) moment in Torremolinos. Life's
 
 *Hasta luego, amigos!*
 
-*Follow our journey on [Instagram](https://instagram.com/silentwanderers_) for daily updates and more photos.*
+*Follow our journey on [Instagram](https://instagram.com/silentwanderers_) for daily updates and more photos. More from our time in Torremolinos: [view on Instagram](https://www.instagram.com/p/DUdhvm6AX5a/?img_index=6&igsh=bjI0ODU2d3R1YWUx).*
