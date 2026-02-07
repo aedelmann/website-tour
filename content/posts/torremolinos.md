@@ -60,6 +60,14 @@ Amid all this bliss, we've been adulting hard. We placed an order for a shiny ne
 
 The biggest news? We've found our next chapter. A brand-new apartment in Jerez de la Frontera (Cádiz province), complete with garage, for just €700/month. It's about 2.5 hours south of here—far enough for sherry country vibes, close enough that we won't miss the Costa del Sol entirely. We'll pack up and head there at the beginning of March. More stories (and probably more tapas disasters) coming soon—stay tuned!
 
+## Key takeaways and tips
+
+1. **Budget:** You can comfortably live on €3,000 per month for two people in Spain—including rent and health insurance.
+2. **Street smarts:** Learn how to spot dog poop on the street :)
+3. **Rentals:** Watch out for scammers when finding an apartment. Do your checks and never pay large sums or share personal documents before viewing or signing.
+4. **Spanish bureaucracy:** Bring extra time (and patience). Register for the [Cl@ve system](https://www.sede.administracionespublicas.gob.es/) (similar to Singapore’s Singpass) so you can handle many procedures online instead of queuing in person.
+5. **Empadronamiento:** Register your residency (*empadronamiento*) very early—it can take several weeks or even months to be approved, and you’ll need it for other paperwork.
+
 For now, we're soaking up every sunny (and windy) moment in Torremolinos. Life's too short not to enjoy cheap paella, friendly strangers, and the occasional gale-force wind trying to yeet you off the balcony.
 
 *Hasta luego, amigos!*
