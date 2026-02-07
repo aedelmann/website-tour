@@ -22,6 +22,7 @@ gallery:
   - src: "/images/torremolinos/IMG_8344-Medium.jpeg"
     caption: "Windy day on the coast—classic Torremolinos winter weather."
 reading_time: 12
+instagram_post: "https://www.instagram.com/p/DUdhvm6AX5a/?img_index=6&igsh=bjI0ODU2d3R1YWUx"
 tesla_stats:
   distance: 0
   charging_stops: 0

@@ -76,9 +76,9 @@
                              onclick="openGalleryModal(this.src, this.getAttribute('data-caption'))">
                         {{ end }}
                     </div>
-                    {{ if .Site.Params.instagram }}
+                    {{ if or .Params.instagram_post .Site.Params.instagram }}
                     <p class="text-center mt-3 mb-0">
-                        <a href="https://instagram.com/{{ .Site.Params.instagram }}" target="_blank" rel="noopener" class="btn btn-outline-primary btn-sm">
+                        <a href="{{ .Params.instagram_post | default (printf "https://instagram.com/%s" .Site.Params.instagram) }}" target="_blank" rel="noopener" class="btn btn-outline-primary btn-sm">
                             <i class="fab fa-instagram me-1"></i>More photos on Instagram
                         </a>
                     </p>
