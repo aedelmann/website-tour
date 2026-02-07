@@ -63,13 +63,19 @@
                         {{ range .Params.gallery }}
                         <img src="{{ . | relURL }}" 
                              alt="Gallery image" 
-                             data-bs-toggle="modal" 
-                             data-bs-target="#galleryModal"
-                             onclick="openGalleryModal('{{ . | relURL }}')"
+                             role="button"
+                             onclick="openGalleryModal(this.src)"
                              class="img-thumbnail me-2 mb-2"
                              style="width: 150px; height: 150px; object-fit: cover;">
                         {{ end }}
                     </div>
+                    {{ if .Site.Params.instagram }}
+                    <p class="text-center mt-3 mb-0">
+                        <a href="https://instagram.com/{{ .Site.Params.instagram }}" target="_blank" rel="noopener" class="btn btn-outline-primary btn-sm">
+                            <i class="fab fa-instagram me-1"></i>More photos on Instagram
+                        </a>
+                    </p>
+                    {{ end }}
                 </section>
                 {{ end }}
 
@@ -144,7 +150,7 @@
                     <div class="share-buttons">
                         <a href="https://twitter.com/intent/tweet?text={{ .Title }}&url={{ .Permalink }}"
                            target="_blank" class="btn btn-outline-primary btn-sm me-2">
-                            <i class="fab fa-twitter me-1"></i>Twitter
+                            <i class="fab fa-x-twitter me-1"></i>X
                         </a>
                         <a href="https://www.facebook.com/sharer/sharer.php?u={{ .Permalink }}"
                            target="_blank" class="btn btn-outline-primary btn-sm me-2">
@@ -179,14 +185,30 @@
 <script>
 function openGalleryModal(imageSrc) {
     document.getElementById('modalImage').src = imageSrc;
+    var modalEl = document.getElementById('galleryModal');
+    var modal = bootstrap.Modal.getOrCreateInstance(modalEl);
+    modal.show();
 }
 
-// Add smooth scrolling for anchor links
-document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-    anchor.addEventListener('click', function (e) {
-        e.preventDefault();
-        document.querySelector(this.getAttribute('href')).scrollIntoView({
-            behavior: 'smooth'
+document.addEventListener('DOMContentLoaded', function() {
+    var galleryModal = document.getElementById('galleryModal');
+    if (galleryModal) {
+        galleryModal.addEventListener('hidden.bs.modal', function() {
+            document.querySelectorAll('.modal-backdrop').forEach(function(el) { el.remove(); });
+            document.body.classList.remove('modal-open');
+            document.body.style.overflow = '';
+            document.body.style.paddingRight = '';
+        });
+    }
+
+    // Add smooth scrolling for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            var target = document.querySelector(this.getAttribute('href'));
+            if (target) {
+                e.preventDefault();
+                target.scrollIntoView({ behavior: 'smooth' });
+            }
         });
     });
 });

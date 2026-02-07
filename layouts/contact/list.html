@@ -177,31 +177,20 @@
 document.getElementById('contactForm').addEventListener('submit', function(e) {
     e.preventDefault();
     
-    const formData = new FormData(this);
+    const name = this.querySelector('[name="name"]').value.trim();
+    const email = this.querySelector('[name="email"]').value.trim();
+    const subject = this.querySelector('[name="subject"]').value;
+    const subjectLabel = this.querySelector('[name="subject"]').selectedOptions[0]?.text || subject;
+    const message = this.querySelector('[name="message"]').value.trim();
+    
+    const body = message + '\n\n---\nFrom: ' + name + ' <' + email + '>';
+    const mailtoLink = 'mailto:{{ .Site.Params.email }}?subject=' + encodeURIComponent('[' + subjectLabel + '] ' + name) + '&body=' + encodeURIComponent(body);
+    
     const resultDiv = document.getElementById('formResult');
+    resultDiv.innerHTML = '<div class="alert alert-info"><i class="fas fa-envelope-open-text me-2"></i>Opening your email app… Add any final touches and hit Send.</div>';
     
-    // Simulate form submission (replace with actual form handling)
-    resultDiv.innerHTML = '<div class="alert alert-info">Sending message...</div>';
-    
-    setTimeout(() => {
-        // Create mailto link as fallback
-        const name = formData.get('name');
-        const email = formData.get('email');
-        const subject = formData.get('subject');
-        const message = formData.get('message');
-        
-        const mailtoLink = `mailto:{{ .Site.Params.email }}?subject=${encodeURIComponent(subject + ' - ' + name)}&body=${encodeURIComponent(message + '\n\nFrom: ' + name + ' (' + email + ')')}`;
-        
-        resultDiv.innerHTML = `
-            <div class="alert alert-success">
-                <i class="fas fa-check-circle me-2"></i>
-                Thank you for your message! 
-                <a href="${mailtoLink}" class="alert-link">Click here to send via email</a>
-            </div>
-        `;
-        
-        this.reset();
-    }, 1000);
+    window.location.href = mailtoLink;
+    this.reset();
 });
 </script>
 {{ end }}

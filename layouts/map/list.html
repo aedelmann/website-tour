@@ -75,7 +75,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const map = L.map('map').setView([
         {{ .Site.Params.map_center_lat | default 50.0755 }}, 
         {{ .Site.Params.map_center_lng | default 14.4378 }}
-    ], {{ .Site.Params.map_zoom | default 4 }});
+    ], {{ .Site.Params.map_zoom | default 6 }});
 
     // Add tile layer
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {

@@ -15,9 +15,14 @@ publishDir = 'public'
   
   # Contact info
   email = "alexander.edelmann80@gmail.com"
-  instagram = "your_instagram_handle"
+  instagram = "silentwanderers_"
   tesla_model = "Tesla Model Y"
   
+  # Map initial view (Europe, zoomed in)
+  map_center_lat = 38
+  map_center_lng = 12
+  map_zoom = 6
+
   # Theme colors - Warm editorial
   primary_color = "#b45309"
   secondary_color = "#4d7c5a"
@@ -51,7 +56,7 @@ publishDir = 'public'
 
 [social]
   rss = "Needed"
-  instagram = "your_instagram_handle"
+  instagram = "silentwanderers_"
   email = "alexander.edelmann80@gmail.com"
 
 [menu]

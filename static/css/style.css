@@ -30,11 +30,15 @@ body {
     line-height: 1.65;
     color: var(--text);
     background: var(--bg);
+    background-image: linear-gradient(rgba(250, 248, 245, 0.92), rgba(250, 248, 245, 0.92)), url('/images/torremolinos/IMG_8333.jpg');
+    background-size: cover;
+    background-attachment: fixed;
+    background-position: center;
     -webkit-font-smoothing: antialiased;
 }
 
 .main-content {
-    background: var(--bg);
+    background: transparent;
     margin-top: 72px;
     min-height: calc(100vh - 72px);
 }

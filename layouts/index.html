@@ -152,7 +152,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const homeMap = L.map('homeMap').setView([
         {{ .Site.Params.map_center_lat | default 50.0755 }}, 
         {{ .Site.Params.map_center_lng | default 14.4378 }}
-    ], {{ .Site.Params.map_zoom | default 4 }});
+    ], {{ .Site.Params.map_zoom | default 6 }});
 
     // Add tile layer
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -209,9 +209,9 @@ document.addEventListener('DOMContentLoaded', function() {
         marker.bindPopup(popupContent);
     });
 
-    // Fit map to show all markers
+    // Fit map to show all markers, but never zoom in past Europe-wide view
     if (bounds.length > 0) {
-        homeMap.fitBounds(bounds, { padding: [50, 50] });
+        homeMap.fitBounds(bounds, { padding: [50, 50], maxZoom: 6 });
     }
 
     // Calculate statistics
