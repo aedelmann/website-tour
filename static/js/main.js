@@ -55,6 +55,17 @@ function initializePhotoGallery() {
         img.addEventListener('click', function() {
             const modal = new bootstrap.Modal(document.getElementById('galleryModal'));
             document.getElementById('modalImage').src = this.src;
+            const capEl = document.getElementById('modalImageCaption');
+            if (capEl) {
+                const desc = (this.getAttribute && this.getAttribute('data-caption')) || this.alt || '';
+                if (desc && desc.trim()) {
+                    capEl.textContent = desc.trim();
+                    capEl.style.display = 'block';
+                } else {
+                    capEl.textContent = '';
+                    capEl.style.display = 'none';
+                }
+            }
             modal.show();
         });
     });

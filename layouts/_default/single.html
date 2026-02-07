@@ -61,10 +61,19 @@
                     <h3><i class="fas fa-images me-2"></i>Photo Gallery</h3>
                     <div class="photo-gallery">
                         {{ range .Params.gallery }}
-                        <img src="{{ . | relURL }}" 
-                             alt="Gallery image" 
+                        {{ $src := "" }}
+                        {{ $caption := "" }}
+                        {{ if reflect.IsMap . }}
+                            {{ $src = .src | relURL }}
+                            {{ $caption = .caption | default "" }}
+                        {{ else }}
+                            {{ $src = . | relURL }}
+                        {{ end }}
+                        <img src="{{ $src }}" 
+                             alt="{{ $caption | default "Gallery image" }}" 
                              role="button"
-                             onclick="openGalleryModal(this.src)"
+                             data-caption="{{ $caption }}"
+                             onclick="openGalleryModal(this.src, this.getAttribute('data-caption'))"
                              class="img-thumbnail me-2 mb-2"
                              style="width: 150px; height: 150px; object-fit: cover;">
                         {{ end }}
@@ -132,14 +141,25 @@
             </div>
             <div class="modal-body text-center">
                 <img id="modalImage" src="" alt="Gallery image" class="img-fluid rounded">
+                <p id="modalImageCaption" class="text-muted mt-2 small mb-0" style="display: none;"></p>
             </div>
         </div>
     </div>
 </div>
 
 <script>
-function openGalleryModal(imageSrc) {
+function openGalleryModal(imageSrc, description) {
     document.getElementById('modalImage').src = imageSrc;
+    var capEl = document.getElementById('modalImageCaption');
+    if (capEl) {
+        if (description && description.trim()) {
+            capEl.textContent = description.trim();
+            capEl.style.display = 'block';
+        } else {
+            capEl.textContent = '';
+            capEl.style.display = 'none';
+        }
+    }
     var modalEl = document.getElementById('galleryModal');
     var modal = bootstrap.Modal.getOrCreateInstance(modalEl);
     modal.show();
@@ -161,7 +181,7 @@ document.addEventListener('DOMContentLoaded', function() {
         img.style.cursor = 'pointer';
         img.title = img.title || 'Click to enlarge';
         img.addEventListener('click', function() {
-            openGalleryModal(this.currentSrc || this.src);
+            openGalleryModal(this.currentSrc || this.src, this.alt || '');
         });
     });
 

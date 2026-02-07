@@ -9,12 +9,18 @@ tags: ["torremolinos", "andalucia", "coast", "culture", "tapas", "spain"]
 banner: "/images/torremolinos/IMG_8341-Medium.jpeg"
 featured_image: "/images/torremolinos/IMG_8341-Medium.jpeg"
 gallery:
-  - "/images/torremolinos/IMG_8333.jpg"
-  - "/images/torremolinos/IMG_8331.jpg"
-  - "/images/torremolinos/FullSizeRender-Medium.jpeg"
-  - "/images/torremolinos/IMG_8258-Medium.jpeg"
-  - "/images/torremolinos/IMG_8341-Medium.jpeg"
-  - "/images/torremolinos/IMG_8344-Medium.jpeg"
+  - src: "/images/torremolinos/IMG_8333.jpg"
+    caption: "Water is still too cold to dip our feet in. Approx. 9 degrees. "
+  - src: "/images/torremolinos/IMG_8331.jpg"
+    caption: "The beach and promenade in Torremolinos on a clear winter day."
+  - src: "/images/torremolinos/FullSizeRender-Medium.jpeg"
+    caption: "Exploring the coast—one of our favourite weekend walks."
+  - src: "/images/torremolinos/IMG_8258-Medium.jpeg"
+    caption: "Fresh veg and fruits from the market. Only 5 euro total."
+  - src: "/images/torremolinos/IMG_8341-Medium.jpeg"
+    caption: "Our temporary home base in Torremolinos for two months."
+  - src: "/images/torremolinos/IMG_8344-Medium.jpeg"
+    caption: "Windy day on the coast—classic Torremolinos winter weather."
 reading_time: 12
 tesla_stats:
   distance: 0
