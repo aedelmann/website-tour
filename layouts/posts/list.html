@@ -57,10 +57,10 @@
              data-date="{{ .Date.Format "2006-01-02" }}">
             <article class="card h-100 shadow-sm">
                 {{ if .Params.featured_image }}
-                <img src="{{ .Params.featured_image | relURL }}" 
+<img src="{{ .Params.featured_image | relURL }}" 
                      class="card-img-top" 
-                     alt="{{ .Title }}" 
-                     style="height: 250px; object-fit: cover;">
+                     alt="{{ .Title }}"
+                     style="height: 250px; object-fit: contain; object-position: center; background: var(--bg-muted, #f5f5f5);">
                 {{ end }}
                 <div class="card-body d-flex flex-column">
                     <div class="mb-2">
