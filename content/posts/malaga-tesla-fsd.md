@@ -1,5 +1,5 @@
 ---
-title: "Hands-Off in Málaga: How Tesla's FSD Turned Me Into a Passenger Prince(ess) for an Hour (and I Survived!)"
+title: "Hands-Off in Málaga: How Tesla's FSD Turned Us Into a Passenger Prince(ess) for an Hour (and We Survived!)"
 date: 2026-01-27
 location: "Málaga, Spain"
 latitude: 36.7213
