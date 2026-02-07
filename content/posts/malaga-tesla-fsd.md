@@ -6,7 +6,14 @@ latitude: 36.7213
 longitude: -4.4214
 categories: ["Adventure", "Tech"]
 tags: ["malaga", "tesla", "fsd", "spain", "andalucia", "self-driving"]
-featured_image: "/images/malaga/tesla-fsd.png"
+featured_image: "/images/malaga/malaga-fsd-1.jpeg"
+gallery:
+  - src: "/images/malaga/IMG_8605 2 Medium.jpeg"
+    caption: "The showroom floor with the Tesla fleet."
+  - src: "/images/malaga/IMG_8603 Medium.jpeg"
+    caption: "Inside the Tesla Center Málaga—ready to try FSD."
+  - src: "/images/malaga/IMG_8604 Medium.jpeg"
+    caption: "Heading to the Model 3 for our hands-off test drive."
 reading_time: 8
 tesla_stats:
   distance: 0
