@@ -6,7 +6,7 @@ latitude: 36.7213
 longitude: -4.4214
 categories: ["Adventure", "Tech"]
 tags: ["malaga", "tesla", "fsd", "spain", "andalucia", "self-driving"]
-featured_image: "/images/malaga/malaga-fsd-1.jpeg"
+featured_image: "/images/malaga/tesla-fsd-cover.png"
 gallery:
   - src: "/images/malaga/IMG_8605 2 Medium.jpeg"
     caption: "The showroom floor with the Tesla fleet."
