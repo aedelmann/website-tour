@@ -8,8 +8,8 @@ categories: ["Adventure", "Tech"]
 tags: ["malaga", "tesla", "fsd", "spain", "andalucia", "self-driving"]
 featured_image: "/images/malaga/tesla-fsd-cover.png"
 gallery:
-  - src: "/images/malaga/IMG_8605 2 Medium.jpeg"
-    caption: "The showroom floor with the Tesla fleet."
+  - src: "/images/malaga/malaga-fsd-1.jpeg"
+    caption: "Getting ready to be driven around Malaga, by Tesla's AI brain."
   - src: "/images/malaga/IMG_8603 Medium.jpeg"
     caption: "Inside the Tesla Center Málaga—ready to try FSD."
   - src: "/images/malaga/IMG_8604 Medium.jpeg"
