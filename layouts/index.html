@@ -35,49 +35,6 @@
     </div>
 </section>
 
-<!-- Tesla Model Y & Journey Statistics -->
-<section class="bg-light">
-    <div class="container">
-        <h2 class="text-center mb-4">
-            <i class="fas fa-car me-2"></i>Our {{ .Site.Params.tesla_model }}
-        </h2>
-        <div class="row align-items-center">
-            <div class="col-lg-5 mb-4 mb-lg-0 text-center">
-                <img src="{{ "/images/tesla-modely.png" | relURL }}" alt="{{ .Site.Params.tesla_model }}" class="img-fluid rounded shadow tesla-home-image">
-            </div>
-            <div class="col-lg-7">
-                <h3 class="h5 text-muted mb-3 text-center text-lg-start">Journey statistics</h3>
-                <div class="row">
-                    <div class="col-6 col-md-3 mb-3">
-                        <div class="stat-box bg-primary text-white p-3 rounded text-center">
-                            <h4 id="home-posts-count">0</h4>
-                            <small>Blog Posts</small>
-                        </div>
-                    </div>
-                    <div class="col-6 col-md-3 mb-3">
-                        <div class="stat-box bg-success text-white p-3 rounded text-center">
-                            <h4 id="home-countries-count">0</h4>
-                            <small>Countries Visited</small>
-                        </div>
-                    </div>
-                    <div class="col-6 col-md-3 mb-3">
-                        <div class="stat-box bg-warning text-white p-3 rounded text-center">
-                            <h4 id="home-distance">0</h4>
-                            <small>Total Distance (km)</small>
-                        </div>
-                    </div>
-                    <div class="col-6 col-md-3 mb-3">
-                        <div class="stat-box bg-info text-white p-3 rounded text-center">
-                            <h4 id="home-days">0</h4>
-                            <small>Days on Road</small>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
 <!-- Interactive Map Section -->
 <section class="py-4">
     <div class="container">
@@ -218,10 +175,14 @@ document.addEventListener('DOMContentLoaded', function() {
     const totalDistance = locations.reduce((sum, loc) => sum + loc.distance, 0);
     const countries = new Set(locations.map(l => l.location.split(',').pop().trim())).size;
     
-    document.getElementById('home-posts-count').textContent = locations.length;
-    document.getElementById('home-countries-count').textContent = countries;
-    document.getElementById('home-distance').textContent = totalDistance.toLocaleString();
-    document.getElementById('home-days').textContent = Math.ceil(locations.length * 2.5);
+    var postsEl = document.getElementById('home-posts-count');
+    if (postsEl) { postsEl.textContent = locations.length; }
+    var countriesEl = document.getElementById('home-countries-count');
+    if (countriesEl) { countriesEl.textContent = countries; }
+    var distanceEl = document.getElementById('home-distance');
+    if (distanceEl) { distanceEl.textContent = totalDistance.toLocaleString(); }
+    var daysEl = document.getElementById('home-days');
+    if (daysEl) { daysEl.textContent = Math.ceil(locations.length * 2.5); }
 });
 </script>
 
