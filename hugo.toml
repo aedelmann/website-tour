@@ -76,7 +76,6 @@ publishDir = 'public'
     name = "Contact"
     url = "/contact/"
     weight = 4
-
 [taxonomies]
   category = "categories"
   tag = "tags"
