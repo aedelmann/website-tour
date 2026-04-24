@@ -1,9 +1,9 @@
 ---
 title: "How Much Does It Cost to Live in Spain?"
 date: 2026-04-24
-location: "Spain"
-latitude: 36.7213
-longitude: -4.4214
+location: "Jerez de la Frontera, Spain"
+latitude: 36.6850
+longitude: -6.1261
 categories: ["Budget", "Spain Life"]
 tags: ["spain", "cost of living", "budget", "expat life", "monthly expenses", "tips"]
 featured_image: "/images/spain/jerez-flat-outside.jpeg"
