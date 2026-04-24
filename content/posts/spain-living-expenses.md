@@ -29,7 +29,7 @@ Here is our real monthly budget in Spain for **2 adults**.
 - **Rent (50 sqm + parking garage):** 700 EUR
 - **Utilities (water + electricity):** 110 EUR
 - **Internet:** 10 EUR
-- **Private health insurance (Sanitas Top Quantum):** 140 EUR
+- **Private health insurance (includes dental, critical illness and worldwide coverage, no co payments):** 280 EUR
 - **Car insurance:** 140 EUR
 - **Charging costs (home charging in parking garage):** 20 EUR
 - **Gym:** 40 EUR
