@@ -7,7 +7,7 @@ longitude: -6.1261
 categories: ["Spain Life", "Practical"]
 tags: ["spain", "visa", "non-lucrative", "bureaucracy", "NIE", "empadronamiento", "tips", "expat"]
 featured_image: "/images/visa/visa.webp"
-reading_time: 12
+reading_time: 13
 ---
 
 I am German (EU) and Cristyne is from Singapore (non-EU). Trying to line up Spanish residency for both of us felt less like “follow the checklist” and more like **group homework with the Spanish state**—except nobody sends you the syllabus.
@@ -75,6 +75,18 @@ We waited **about one month** for empadronamiento in **Málaga province**, which
 ## NIE: your Spanish “everything ID”
 
 Almost everything serious runs on the **NIE** (foreigner ID number). **Bank account, car purchase, many contracts**—if you are EU and eligible, **get your NIE as early as you can**. Everything else gets easier when this exists.
+
+## Ballpark costs for our visa paperwork (professional help + translations)
+
+Numbers vary by language pair, page count, and how chatty your gestoría invoice is—but here is **our order of magnitude** for the visa application itself:
+
+| Item | Rough cost |
+| --- | --- |
+| **Gestoría** (local agency handling bureaucracy with us) | **€400–500** |
+| **Sworn translations** (bank records, police certificates, the usual pile) | **≈ €500** |
+| **Running total (those two)** | **≈ €1,000** |
+
+That total is **only** gestoría + translations—not insurance premiums, not the government visa fee (~€17-ish), not apostille courier fees, and definitely **not** life logistics like **car hire or petrol** for driving around to appointments. Your mileage (literally and figuratively) may vary.
 
 ## Bottom line
 
