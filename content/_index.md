@@ -2,6 +2,7 @@
 title: "Silent Wanderers"
 date: 2025-10-08
 type: "home"
+description: "Travel blog by Cristyne & Alex—electric road trips across Europe in a Tesla Model Y, Spain living tips, maps, and stories from the road."
 ---
 
 # Welcome to Silent Wanderers

@@ -126,4 +126,4 @@ After initial deployment via GitHub:
 
 ---
 
-**Need help?** Email: alexander.edelmann80@gmail.com
+**Need help?** Email: contactus@silentwanderers.com

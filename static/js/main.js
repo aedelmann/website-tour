@@ -115,7 +115,7 @@ function handleContactForm(e) {
         
         // Create mailto link as fallback
         const mailtoBody = `From: ${name} (${email})\n\n${message}`;
-        const mailtoLink = `mailto:alexander.edelmann80@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(mailtoBody)}`;
+        const mailtoLink = `mailto:contactus@silentwanderers.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(mailtoBody)}`;
         
         resultDiv.innerHTML = `
             <div class="alert alert-success">

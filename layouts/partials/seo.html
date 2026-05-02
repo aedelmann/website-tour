@@ -1,0 +1,90 @@
+{{- /* Meta description: frontmatter > summary > body excerpt > site default */ -}}
+{{- $desc := "" -}}
+{{- if .Description -}}
+  {{- $desc = .Description | plainify | truncate 160 -}}
+{{- else if .IsPage -}}
+  {{- $desc = .Summary | plainify | truncate 160 -}}
+  {{- if not $desc -}}
+    {{- $desc = .Content | plainify | truncate 160 -}}
+  {{- end -}}
+{{- end -}}
+{{- if not $desc -}}
+  {{- $desc = .Site.Params.site_description | plainify | truncate 160 -}}
+{{- end -}}
+
+{{- /* Absolute URL for this page */ -}}
+{{- $canonical := .Permalink -}}
+
+{{- /* OG / Twitter image */ -}}
+{{- $img := "" -}}
+{{- with .Params.featured_image -}}
+  {{- $img = . | absURL -}}
+{{- else -}}
+  {{- with .Site.Params.seo_default_image -}}
+    {{- $img = . | absURL -}}
+  {{- else -}}
+    {{- $img = "logo.png" | absURL -}}
+  {{- end -}}
+{{- end -}}
+
+{{- /* Post-specific */ -}}
+{{- $isArticle := and .IsPage (eq .Section "posts") -}}
+{{- $published := .Date.Format "2006-01-02T15:04:05Z07:00" -}}
+{{- $modDate := cond .Lastmod.IsZero .Date .Lastmod -}}
+{{- $modified := $modDate.Format "2006-01-02T15:04:05Z07:00" -}}
+
+<link rel="canonical" href="{{ $canonical }}">
+
+<meta name="description" content="{{ $desc }}">
+{{- if and $isArticle .Params.tags -}}
+<meta name="keywords" content="{{ delimit .Params.tags ", " }}">
+{{- end -}}
+
+<meta name="author" content="{{ .Site.Params.author }}">
+<meta name="robots" content="index, follow">
+<meta name="theme-color" content="{{ .Site.Params.primary_color | default "#b45309" }}">
+
+{{- /* Open Graph */ -}}
+<meta property="og:site_name" content="{{ .Site.Title }}">
+<meta property="og:title" content="{{ if .IsHome }}{{ .Site.Title }}{{ else }}{{ .Title }}{{ end }}">
+<meta property="og:description" content="{{ $desc }}">
+<meta property="og:url" content="{{ $canonical }}">
+<meta property="og:locale" content="{{ .Site.Params.seo_locale | default "en_US" }}">
+<meta property="og:image" content="{{ $img }}">
+<meta property="og:image:alt" content="{{ if .IsHome }}{{ .Site.Title }}{{ else }}{{ .Title }}{{ end }}">
+{{- if $isArticle -}}
+<meta property="og:type" content="article">
+<meta property="article:published_time" content="{{ $published }}">
+<meta property="article:modified_time" content="{{ $modified }}">
+<meta property="article:author" content="{{ .Site.Params.author }}">
+{{- else -}}
+<meta property="og:type" content="website">
+{{- end -}}
+
+{{- /* Twitter / X */ -}}
+<meta name="twitter:card" content="summary_large_image">
+{{- with .Site.Params.twitter -}}
+<meta name="twitter:site" content="@{{ . }}">
+{{- end -}}
+<meta name="twitter:title" content="{{ if .IsHome }}{{ .Site.Title }}{{ else }}{{ .Title }}{{ end }}">
+<meta name="twitter:description" content="{{ $desc }}">
+<meta name="twitter:image" content="{{ $img }}">
+
+{{- /* RSS discoverability (site-wide feed) */ -}}
+{{- with .Site.Home.OutputFormats.Get "RSS" -}}
+<link rel="alternate" type="application/rss+xml" title="{{ $.Site.Title }}" href="{{ .Permalink }}">
+{{- end -}}
+
+{{- /* JSON-LD — single dict | jsonify so strings are not double-encoded */ -}}
+{{- $logoURL := "logo.png" | absURL -}}
+{{- $logoObj := dict "@type" "ImageObject" "url" $logoURL -}}
+{{- $publisher := dict "@type" "Organization" "name" .Site.Title "logo" $logoObj -}}
+{{- $authorObj := dict "@type" "Person" "name" .Site.Params.author -}}
+{{- $mainEntity := dict "@type" "WebPage" "@id" $canonical -}}
+{{- $jsonLD := dict "@context" "https://schema.org" "@type" "WebSite" "name" .Site.Title "url" .Site.BaseURL "description" $desc "publisher" $publisher -}}
+{{- if $isArticle -}}
+  {{- $jsonLD = dict "@context" "https://schema.org" "@type" "BlogPosting" "headline" .Title "description" $desc "image" $img "datePublished" $published "dateModified" $modified "author" $authorObj "publisher" $publisher "mainEntityOfPage" $mainEntity -}}
+{{- else if not .IsHome -}}
+  {{- $jsonLD = dict "@context" "https://schema.org" "@type" "WebPage" "name" .Title "description" $desc "url" $canonical "publisher" $publisher -}}
+{{- end -}}
+<script type="application/ld+json">{{ $jsonLD | jsonify | safeJS }}</script>

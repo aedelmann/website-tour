@@ -3,6 +3,7 @@ languageCode = 'en-us'
 title = 'Silent Wanderers'
 canonifyURLs = false
 publishDir = 'public'
+enableRobotsTXT = true
 # Include posts dated in the future (e.g. trip write-ups) in lists, RSS, and the map
 buildFuture = true
 
@@ -16,7 +17,7 @@ buildFuture = true
   date_format = "02 January, 2006"
   
   # Contact info
-  email = "alexander.edelmann80@gmail.com"
+  email = "contactus@silentwanderers.com"
   instagram = "silentwanderers_"
   tesla_model = "Tesla Model Y"
   
@@ -24,6 +25,11 @@ buildFuture = true
   map_center_lat = 38
   map_center_lng = 12
   map_zoom = 6
+
+  # SEO (optional)
+  # twitter = "yourhandle"       # site-wide @handle for twitter:site (no @ in value)
+  seo_locale = "en_US"
+  seo_default_image = "/logo.png"   # fallback when a page has no featured_image
 
   # Theme colors - Warm editorial
   primary_color = "#b45309"
@@ -59,7 +65,7 @@ buildFuture = true
 [social]
   rss = "Needed"
   instagram = "silentwanderers_"
-  email = "alexander.edelmann80@gmail.com"
+  email = "contactus@silentwanderers.com"
 
 [menu]
   [[menu.main]]

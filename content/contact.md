@@ -9,7 +9,7 @@ We'd love to hear from you! Whether you have questions about our journey, want t
 
 ## Contact Information
 
-**Email:** alexander.edelmann80@gmail.com
+**Email:** contactus@silentwanderers.com
 
 **Instagram:** Follow our daily adventures and photo stories
 
