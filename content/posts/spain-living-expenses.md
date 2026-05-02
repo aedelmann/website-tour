@@ -14,7 +14,7 @@ gallery:
     caption: "Another angle of the apartment: simple, bright, and practical."
   - src: "/images/spain/roof-terrace.jpeg"
     caption: "(Almost) private roof terrace."
-reading_time: 6
+reading_time: 7
 ---
 
 If you've ever wondered, "Can two adults live comfortably in Spain without selling a kidney?", welcome. We brought spreadsheets, receipts, and emotional support coffee.
@@ -44,7 +44,7 @@ Yes, that includes rent, insurance, and food for two humans who enjoy eating mor
 
 ## What feels surprisingly affordable
 
-- **Rent:** 700 EUR for a 60 sqm place with parking still feels like a small miracle.
+- **Rent:** 700 EUR for a 50 sqm place with parking still feels like a small miracle.
 - **Internet:** 10 EUR is basically the price of two fancy coffees and one bad life decision.
 - **Gym:** 40 EUR keeps both of us fit enough to carry groceries up the stairs with dignity.
 
@@ -52,6 +52,26 @@ Yes, that includes rent, insurance, and food for two humans who enjoy eating mor
 
 - **Groceries (600-800 EUR):** This is the wildcard. Cook at home a lot? Lower end. Add imported snacks and random "just one thing" supermarket missions? Welcome to the upper end.
 - **Utilities:** 110 EUR is reasonable, but summer AC and winter heating can add spice.
+
+## Groceries: example prices (why the basket stays sensible)
+
+Fruit and veg here are **cheap and fresh**—it is one of the best parts of the monthly spend. A few real prices we have seen:
+
+| Item | Price |
+| --- | --- |
+| Pack of 6 Eggs  | **~2 EUR** |
+| Milk carton (1L)  | **~1 EUR** |
+| Pack of strawberries | **~2 EUR** |
+| Pack of big pack spinach | **~1.60 EUR** |
+| Big apples | **~2.80 EUR / kg** |
+| Cheese (typical block / piece) | **~1.80 EUR** |
+| Still water | **~0.29 EUR / 1.5 L** |
+| Fresh bakery bread | **~2 EUR~** |
+| 1 kg yogurt | **~1.90 EUR~** |
+
+**Where to shop:** head to **Alcampo** or **Mercadona** when you can. Both are **huge**, well stocked, and run **serious promos**—easy to fill the trolley without drama.
+
+In general we eat **lots of fruit, veg, fish**, and **less ultra-processed stuff**. Spanish supermarkets are **great for finding healthy food** at everyday prices—your euros stretch further when cooking “real” meals instead of living out of the beige aisle.
 
 ## Final verdict
 
