@@ -20,12 +20,21 @@ Below is what actually mattered for us to **move things along** and eventually g
 
 ### 1. Translations into Spanish
 
-You will need **official or certified Spanish translations** for things like:
+You will need **official Spanish translations** for things like:
 
 - **Bank statements** for the **last 12 months**
 - **Police / criminal record** for the **non-EU applicant**, from their **country of origin** (and whatever additional countries Spain asks for in your case)
 
-If it is not in Spanish, assume you will translate it.
+**Important:** for immigration and many civil procedures, translations are **not** something you can hand to any bilingual friend. They generally must be done by an **authorized translator**—in Spain that usually means a **sworn translator–interpreter** (*traductor-intérprete jurado*) appointed by the **Spanish Ministry of Foreign Affairs (MAEC)**. Your gestoría or consulate will expect **traducción jurada** from someone on the official list.
+
+**Where to find authorized translators**
+
+- **Official source (searchable list):** the MAEC runs the **[official directory of sworn translators and interpreters](https://www.exteriores.gob.es/en/ServiciosAlCiudadano/Paginas/Buscador-STIJ.aspx)** (STIJ). Use the filters for country, language (e.g. English, German, Chinese), and type of appointment—then contact someone who matches your document pair.
+- **Background on the system:** see **[Translators – sworn interpreters](https://www.exteriores.gob.es/en/ServiciosAlCiudadano/Paginas/Traductores-Interpretes-Jurados.aspx)** on the same ministry site (Spanish Ministry of Foreign Affairs, European Union and Cooperation).
+
+If you are applying **from outside Spain**, also check the website of **your** Spanish embassy or consulate (missions are listed from the **[Ministry of Foreign Affairs](https://www.exteriores.gob.es/en/)** home portal under citizen services / embassies and consulates). They often repeat these rules and sometimes publish **local** instructions. When in doubt, the **STIJ directory** above is the authoritative place to confirm a translator is officially recognized in Spain.
+
+If it is not in Spanish, assume you will need it translated—and signed off by someone who appears on that official list (or the equivalent your office accepts).
 
 ### 2. Apostille on the criminal record
 
