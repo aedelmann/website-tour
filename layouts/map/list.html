@@ -82,11 +82,14 @@ document.addEventListener('DOMContentLoaded', function() {
         attribution: '© OpenStreetMap contributors'
     }).addTo(map);
 
-    // Custom Tesla icon
-    const teslaIcon = L.divIcon({
-        html: '<i class="fas fa-car" style="color: #b45309; font-size: 20px;"></i>',
-        iconSize: [30, 30],
-        className: 'custom-div-icon'
+    // Map pin marker (tip aligned to coordinates)
+    const mapPinHtml = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="32" viewBox="0 0 24 36" aria-hidden="true" style="display:block;filter:drop-shadow(0 1px 2px rgba(0,0,0,.35))"><path fill="#b45309" stroke="#7c2d12" stroke-width="0.5" d="M12 0C5.4 0 0 5.2 0 11.6 0 20 12 36 12 36s12-16 12-24.4C24 5.2 18.6 0 12 0zm0 16.4a5.4 5.4 0 110-10.8 5.4 5.4 0 010 10.8z"/></svg>';
+    const mapPinIcon = L.divIcon({
+        html: mapPinHtml,
+        className: 'custom-map-pin',
+        iconSize: [24, 32],
+        iconAnchor: [12, 32],
+        popupAnchor: [0, -32]
     });
 
     // Store map data
@@ -109,7 +112,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Add markers to map
     locations.forEach(location => {
-        const marker = L.marker([location.lat, location.lng], { icon: teslaIcon })
+        const marker = L.marker([location.lat, location.lng], { icon: mapPinIcon })
             .addTo(map);
         
         const popupContent = `
@@ -130,7 +133,13 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Calculate statistics
     document.getElementById('posts-count').textContent = locations.length;
-    document.getElementById('countries-count').textContent = new Set(locations.map(l => l.location.split(',').pop().trim())).size;
+    function countryFromLocation(loc) {
+        if (!loc || typeof loc !== 'string') return 'Unknown';
+        const parts = loc.split(',');
+        const last = parts[parts.length - 1];
+        return (last && last.trim()) ? last.trim() : loc.trim();
+    }
+    document.getElementById('countries-count').textContent = new Set(locations.map(l => countryFromLocation(l.location))).size;
     document.getElementById('days-count').textContent = Math.ceil(locations.length * 2.5); // Estimate
     document.getElementById('charger-stops').textContent = Math.ceil(locations.length * 0.8); // Estimate
     document.getElementById('energy-used').textContent = Math.ceil(locations.length * 45); // Estimate
@@ -146,13 +155,9 @@ document.addEventListener('DOMContentLoaded', function() {
     transform: translateY(-3px);
 }
 
-.custom-div-icon {
-    background: transparent;
-    border: none;
-}
-
-.custom-div-icon i {
-    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+.leaflet-div-icon.custom-map-pin {
+    background: transparent !important;
+    border: none !important;
 }
 </style>
 {{ end }}

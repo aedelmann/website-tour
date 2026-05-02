@@ -3,6 +3,8 @@ languageCode = 'en-us'
 title = 'Silent Wanderers'
 canonifyURLs = false
 publishDir = 'public'
+# Include posts dated in the future (e.g. trip write-ups) in lists, RSS, and the map
+buildFuture = true
 
 [params]
   author = "Cristyne & Alex"

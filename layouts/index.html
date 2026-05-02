@@ -151,10 +151,13 @@ document.addEventListener('DOMContentLoaded', function() {
             attribution: '© OpenStreetMap contributors'
         }).addTo(homeMap);
 
-        var teslaIcon = L.divIcon({
-            html: '<i class="fas fa-car" style="color: #b45309; font-size: 24px;"></i>',
-            iconSize: [30, 30],
-            className: 'custom-div-icon'
+        // SVG pin (no Font Awesome dependency—icons always show)
+        var mapPinIcon = L.divIcon({
+            html: '<svg xmlns="http://www.w3.org/2000/svg" width="28" height="36" viewBox="0 0 24 36" aria-hidden="true" style="display:block;filter:drop-shadow(0 1px 2px rgba(0,0,0,.35))"><path fill="#b45309" stroke="#7c2d12" stroke-width="0.5" d="M12 0C5.4 0 0 5.2 0 11.6 0 20 12 36 12 36s12-16 12-24.4C24 5.2 18.6 0 12 0zm0 16.4a5.4 5.4 0 110-10.8 5.4 5.4 0 010 10.8z"/></svg>',
+            className: 'custom-map-pin',
+            iconSize: [28, 36],
+            iconAnchor: [14, 36],
+            popupAnchor: [0, -36]
         });
 
         var locationsEl = document.getElementById('homeMapLocations');
@@ -177,7 +180,7 @@ document.addEventListener('DOMContentLoaded', function() {
         var bounds = [];
         locations.forEach(function(location) {
             bounds.push([location.lat, location.lng]);
-            var marker = L.marker([location.lat, location.lng], { icon: teslaIcon }).addTo(homeMap);
+            var marker = L.marker([location.lat, location.lng], { icon: mapPinIcon }).addTo(homeMap);
             var imgSrc = location.featured_image
                 ? (location.featured_image.indexOf('http') === 0 ? location.featured_image : baseUrl + (location.featured_image.indexOf('/') === 0 ? '' : '/') + location.featured_image)
                 : '';
@@ -196,8 +199,14 @@ document.addEventListener('DOMContentLoaded', function() {
             homeMap.fitBounds(bounds, { padding: [50, 50], maxZoom: 6 });
         }
 
-        var totalDistance = locations.reduce(function(sum, loc) { return sum + loc.distance; }, 0);
-        var countries = new Set(locations.map(function(l) { return l.location.split(',').pop().trim(); })).size;
+        var totalDistance = locations.reduce(function(sum, loc) { return sum + (loc.distance || 0); }, 0);
+        function countryFromLocation(loc) {
+            if (!loc || typeof loc !== 'string') return 'Unknown';
+            var parts = loc.split(',');
+            var last = parts[parts.length - 1];
+            return (last && last.trim()) ? last.trim() : loc.trim();
+        }
+        var countries = new Set(locations.map(function(l) { return countryFromLocation(l.location); })).size;
         var postsEl = document.getElementById('home-posts-count');
         if (postsEl) postsEl.textContent = locations.length;
         var countriesEl = document.getElementById('home-countries-count');
@@ -218,6 +227,10 @@ document.addEventListener('DOMContentLoaded', function() {
     max-height: 300px;
     width: auto;
     object-fit: contain;
+}
+.leaflet-div-icon.custom-map-pin {
+    background: transparent !important;
+    border: none !important;
 }
 </style>
 {{ end }}
