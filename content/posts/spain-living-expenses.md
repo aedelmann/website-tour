@@ -57,6 +57,10 @@ Yes, that includes rent, insurance, and food for two humans who enjoy eating mor
 
 Fruit and veg here are **cheap and fresh**—it is one of the best parts of the monthly spend. A few real prices we have seen:
 
+![Fresh fruit and vegetables from our weekly shop](/images/torremolinos/IMG_8258-Medium.jpeg)
+
+*Strawberries, apples, citrus, plums, vine tomatoes—the kind of haul that barely hurts the wallet.*
+
 | Item | Price |
 | --- | --- |
 | Pack of 6 Eggs  | **~2 EUR** |
