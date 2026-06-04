@@ -14,10 +14,16 @@
     <!-- Intro: Alex & Cristyne -->
     <div class="row align-items-center mb-5">
         <div class="col-lg-4 text-center mb-4 mb-lg-0">
-            <img src="{{ "/images/about/alex-github.png" | relURL }}"
-                 alt="Alexander Edelmann"
-                 class="img-fluid rounded-circle shadow-sm"
-                 style="max-width: 220px; width: 100%; height: auto; object-fit: cover;">
+            <div class="d-flex justify-content-center gap-3 flex-wrap">
+                <img src="{{ "/images/about/alex-github.png" | relURL }}"
+                     alt="Alexander Edelmann"
+                     class="img-fluid rounded-circle shadow-sm"
+                     style="max-width: 160px; width: 100%; height: auto; object-fit: cover;">
+                <img src="{{ "/images/about/cristyne.png" | relURL }}"
+                     alt="Cristyne Hung"
+                     class="img-fluid rounded-circle shadow-sm"
+                     style="max-width: 160px; width: 100%; height: auto; object-fit: cover;">
+            </div>
             <div class="mt-3">
                 <a href="https://github.com/aedelmann" target="_blank" rel="noopener" class="btn btn-outline-primary btn-sm">
                     <i class="fab fa-github me-1"></i>github.com/aedelmann
@@ -45,61 +51,15 @@
 
     <hr class="my-5">
 
-    <!-- Open Source / GitHub -->
-    <div class="row mb-4">
-        <div class="col-12">
-            <h2 class="h3 mb-3"><i class="fab fa-github me-2"></i>Code Alex has worked on</h2>
-            <p class="text-muted mb-4">
-                A few projects from Alex's
-                <a href="https://github.com/aedelmann" target="_blank" rel="noopener">GitHub profile</a>—a mix of
-                personal work and contributions to open-source IoT and developer tooling.
-            </p>
+    <!-- Alex: work experience -->
+    <div class="row align-items-start mb-4">
+        <div class="col-lg-3 text-center mb-4 mb-lg-0">
+            <img src="{{ "/images/about/alex-github.png" | relURL }}"
+                 alt="Alexander Edelmann"
+                 class="img-fluid rounded-circle shadow-sm"
+                 style="max-width: 200px; width: 100%; height: auto; object-fit: cover;">
         </div>
-    </div>
-    {{- $repos := slice
-        (dict "owner" "aedelmann" "repo" "jiva" "badge" "Java" "desc" "A human workflow engine—letting business users design and run their own processes.")
-        (dict "owner" "eclipse-vorto" "repo" "vorto" "badge" "Java · IoT" "desc" "Eclipse Vorto—an IoT device description language and toolset. Alex led this open-source project.")
-        (dict "owner" "eclipse-leshan" "repo" "leshan" "badge" "Java · LwM2M" "desc" "An OMA Lightweight M2M (LWM2M) implementation for connecting constrained IoT devices.")
-        (dict "owner" "eclipse-xtext" "repo" "xtext" "badge" "Java · DSL" "desc" "A framework for building programming languages and domain-specific languages (DSLs).")
-        (dict "owner" "tombatossals" "repo" "angular-leaflet-directive" "badge" "JavaScript" "desc" "An AngularJS directive to embed and interact with Leaflet maps—the same library powering our journey map.")
-    -}}
-    <div class="row g-4 mb-4">
-        {{- range $repos }}
-        {{- $url := printf "https://github.com/%s/%s" .owner .repo -}}
-        {{- $ogImg := printf "https://opengraph.githubassets.com/%s/%s" .owner .repo -}}
-        <div class="col-md-6 col-lg-4">
-            <a href="{{ $url }}" target="_blank" rel="noopener" class="repo-card-link text-decoration-none">
-                <div class="card h-100 shadow-sm repo-card overflow-hidden">
-                    <div class="repo-card-img-wrap">
-                        <img src="{{ $ogImg }}"
-                             alt="{{ .repo }} on GitHub"
-                             class="repo-card-img"
-                             loading="lazy"
-                             width="600"
-                             height="315">
-                        <div class="repo-card-img-fallback" aria-hidden="true">
-                            <i class="fab fa-github"></i>
-                        </div>
-                    </div>
-                    <div class="card-body d-flex flex-column">
-                        <h3 class="h5 mb-1 text-dark">{{ .repo }}</h3>
-                        <span class="badge bg-light text-dark mb-2 align-self-start">{{ .badge }}</span>
-                        <p class="text-muted small mb-0">{{ .desc }}</p>
-                        <span class="small text-primary mt-auto pt-2">
-                            View on GitHub <i class="fas fa-arrow-right ms-1"></i>
-                        </span>
-                    </div>
-                </div>
-            </a>
-        </div>
-        {{- end }}
-    </div>
-
-    <hr class="my-5">
-
-    <!-- Resume / Work experience -->
-    <div class="row">
-        <div class="col-lg-10 mx-auto">
+        <div class="col-lg-9">
             <h2 class="h3 mb-3"><i class="fas fa-briefcase me-2"></i>Alex's work, in short</h2>
             <p class="text-muted">
                 Results-driven solution architect and full-stack engineer with <strong>20+ years</strong> of
@@ -166,7 +126,156 @@
                 <li>AWS Hackathon Winner, Singapore 2016 (augmented-reality IoT use case)</li>
                 <li>Published IoT articles on the Bosch developer portal (e.g. Eclipse Vorto integration)</li>
             </ul>
+        </div>
+    </div>
 
+    <hr class="my-5">
+
+    <!-- Cristyne: work experience -->
+    <div class="row align-items-start mb-4">
+        <div class="col-lg-3 text-center mb-4 mb-lg-0">
+            <img src="{{ "/images/about/cristyne.png" | relURL }}"
+                 alt="Cristyne Hung"
+                 class="img-fluid rounded-circle shadow-sm"
+                 style="max-width: 200px; width: 100%; height: auto; object-fit: cover;">
+        </div>
+        <div class="col-lg-9">
+            <h2 class="h3 mb-3"><i class="fas fa-briefcase me-2"></i>Cristyne's work, in short</h2>
+            <p class="text-muted">
+                Dynamic senior buyer and fashion professional with <strong>10+ years</strong> in procurement,
+                category management, and product merchandising across luxury retail, travel retail, and e-commerce.
+                Proven at driving sales growth, tightening inventory, and launching products that actually move.
+            </p>
+
+            <h3 class="h6 text-uppercase text-muted mt-4 mb-2">Key expertise</h3>
+            <ul class="text-muted">
+                <li>Category management, procurement &amp; negotiation, inventory optimisation</li>
+                <li>Product development, merchandising planning, and retail analytics</li>
+                <li>Tools: Adobe Illustrator &amp; Photoshop, Microsoft Office, Nav BC, Power BI</li>
+            </ul>
+
+            <h3 class="h6 text-uppercase text-muted mt-4 mb-3">Experience</h3>
+            <div class="timeline">
+                <div class="mb-4">
+                    <div class="d-flex justify-content-between flex-wrap">
+                        <strong>Assistant Purchasing Manager (APAC) — Heinemann Asia Pacific</strong>
+                        <span class="text-muted small">Sept 2021 – Present · Singapore</span>
+                    </div>
+                    <p class="text-muted small mb-0">Oversees luxury timepieces and eyewear for South-East Asia and Oceania. Achieved a <strong>70% sales increase</strong> vs pre-COVID levels, cut inventory <strong>40%</strong>, and mentors assistant buyers. Uses data dashboards to prevent stockouts and coordinates with brands for event-ready deliveries.</p>
+                </div>
+                <div class="mb-4">
+                    <div class="d-flex justify-content-between flex-wrap">
+                        <strong>Buyer, Travel Essentials (SG &amp; Malaysia) — Lagardère Travel Retail</strong>
+                        <span class="text-muted small">May 2019 – Aug 2021 · Singapore</span>
+                    </div>
+                    <p class="text-muted small mb-0">Managed inventory with sales forecasts; curated assortments and planograms; built promotional calendars. Launched innovative lines for &ldquo;Discover Singapore&rdquo; and &ldquo;Taste of Singapore.&rdquo;</p>
+                </div>
+                <div class="mb-4">
+                    <div class="d-flex justify-content-between flex-wrap">
+                        <strong>Buyer, U.S. Marketplace — Yventure Group</strong>
+                        <span class="text-muted small">2017 – 2019 · Singapore</span>
+                    </div>
+                    <p class="text-muted small mb-0">Selected products from U.S. market trends; negotiated vendor terms; aligned stock with demand forecasts. Collaborated on crowd-funding launches with Fair Leather &amp; Co. and Tocco Toscano.</p>
+                </div>
+                <div class="mb-4">
+                    <div class="d-flex justify-content-between flex-wrap">
+                        <strong>Product Manager (APAC &amp; Africa), Handbags &amp; Accessories — Bata Shoes</strong>
+                        <span class="text-muted small">2015 – 2016 · Singapore</span>
+                    </div>
+                    <p class="text-muted small mb-0">Led regional handbags and accessories—<strong>80% of regional sales</strong> at Q2-16 SRM vs prior year. Developed country-specific SKUs with annual turnover exceeding USD 500k.</p>
+                </div>
+                <div class="mb-4">
+                    <div class="d-flex justify-content-between flex-wrap">
+                        <strong>Assistant Buyer (E-Commerce) — Joobz International</strong>
+                        <span class="text-muted small">2014 – 2015 · Singapore</span>
+                    </div>
+                    <p class="text-muted small mb-0">Handled 98 luxury brands across apparel, shoes, handbags, and fine jewellery—online launches, competitor pricing, SEO with IT, and coordinated promotions.</p>
+                </div>
+                <div class="mb-4">
+                    <div class="d-flex justify-content-between flex-wrap">
+                        <strong>Assistant Merchandiser &amp; Product Designer — Active World (Bonia Group)</strong>
+                        <span class="text-muted small">2011 – 2014 · Singapore</span>
+                    </div>
+                    <p class="text-muted small mb-0">A/W 2013 handbags collection with Girls' Generation sold out in <strong>2 weeks</strong> and boosted seasonal sales <strong>85%</strong>. Planned buying budgets, displays, and production quality end-to-end.</p>
+                </div>
+            </div>
+
+            <h3 class="h6 text-uppercase text-muted mt-4 mb-2">Education &amp; languages</h3>
+            <ul class="text-muted">
+                <li>B.A. Fashion Design, LASALLE College of the Arts &amp; U.K. Open University (2009 – 2010)</li>
+                <li>Diploma in Fashion Design, LASALLE College of the Arts (2006 – 2009)</li>
+                <li>Professional development: Retail Buying, Merchandising Planning (Retail Academy of Singapore); Supply Chain Management (Coursera)</li>
+                <li>English (fluent), Mandarin (advanced), German (basic)</li>
+            </ul>
+
+            <h3 class="h6 text-uppercase text-muted mt-4 mb-2">A couple of highlights</h3>
+            <ul class="text-muted">
+                <li>70% sales lift in luxury timepieces &amp; eyewear post-COVID at Heinemann APAC</li>
+                <li>Girls' Generation collaboration collection sold out in two weeks (Bonia / Active World)</li>
+            </ul>
+
+            <p class="mt-3 mb-0">
+                <a href="{{ "/files/cristyne-resume.pdf" | relURL }}" class="btn btn-outline-secondary btn-sm" target="_blank" rel="noopener">
+                    <i class="fas fa-file-pdf me-1"></i>Full resume (PDF)
+                </a>
+            </p>
+        </div>
+    </div>
+
+    <hr class="my-5">
+
+    <!-- Open Source / GitHub -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <h2 class="h3 mb-3"><i class="fab fa-github me-2"></i>Code Alex has worked on</h2>
+            <p class="text-muted mb-4">
+                A few projects from Alex's
+                <a href="https://github.com/aedelmann" target="_blank" rel="noopener">GitHub profile</a>—a mix of
+                personal work and contributions to open-source IoT and developer tooling.
+            </p>
+        </div>
+    </div>
+    {{- $repos := slice
+        (dict "owner" "aedelmann" "repo" "jiva" "badge" "Java" "desc" "A human workflow engine—letting business users design and run their own processes.")
+        (dict "owner" "eclipse-vorto" "repo" "vorto" "badge" "Java · IoT" "desc" "Eclipse Vorto—an IoT device description language and toolset. Alex led this open-source project.")
+        (dict "owner" "eclipse-leshan" "repo" "leshan" "badge" "Java · LwM2M" "desc" "An OMA Lightweight M2M (LWM2M) implementation for connecting constrained IoT devices.")
+        (dict "owner" "eclipse-xtext" "repo" "xtext" "badge" "Java · DSL" "desc" "A framework for building programming languages and domain-specific languages (DSLs).")
+        (dict "owner" "tombatossals" "repo" "angular-leaflet-directive" "badge" "JavaScript" "desc" "An AngularJS directive to embed and interact with Leaflet maps—the same library powering our journey map.")
+    -}}
+    <div class="row g-4 mb-4">
+        {{- range $repos }}
+        {{- $url := printf "https://github.com/%s/%s" .owner .repo -}}
+        {{- $ogImg := printf "https://opengraph.githubassets.com/%s/%s" .owner .repo -}}
+        <div class="col-md-6 col-lg-4">
+            <a href="{{ $url }}" target="_blank" rel="noopener" class="repo-card-link text-decoration-none">
+                <div class="card h-100 shadow-sm repo-card overflow-hidden">
+                    <div class="repo-card-img-wrap">
+                        <img src="{{ $ogImg }}"
+                             alt="{{ .repo }} on GitHub"
+                             class="repo-card-img"
+                             loading="lazy"
+                             width="600"
+                             height="315">
+                        <div class="repo-card-img-fallback" aria-hidden="true">
+                            <i class="fab fa-github"></i>
+                        </div>
+                    </div>
+                    <div class="card-body d-flex flex-column">
+                        <h3 class="h5 mb-1 text-dark">{{ .repo }}</h3>
+                        <span class="badge bg-light text-dark mb-2 align-self-start">{{ .badge }}</span>
+                        <p class="text-muted small mb-0">{{ .desc }}</p>
+                        <span class="small text-primary mt-auto pt-2">
+                            View on GitHub <i class="fas fa-arrow-right ms-1"></i>
+                        </span>
+                    </div>
+                </div>
+            </a>
+        </div>
+        {{- end }}
+    </div>
+
+    <div class="row">
+        <div class="col-lg-10 mx-auto">
             <div class="text-center mt-5">
                 <a href="{{ "/contact/" | relURL }}" class="btn btn-primary">
                     <i class="fas fa-envelope me-1"></i>Get in touch
