@@ -1,0 +1,188 @@
+{{ define "main" }}
+<div class="container py-5">
+    <div class="row">
+        <div class="col-12 text-center mb-4">
+            <h1 class="mb-2">
+                <i class="fas fa-bolt me-2"></i>Charge Stats
+            </h1>
+            <p class="text-muted mb-1">Our {{ .Site.Params.tesla_model }} on the road</p>
+            <p class="charge-date-range mb-0">May 1 – Jul 21, 2026</p>
+        </div>
+    </div>
+
+    <div class="row g-4 mb-4">
+        <div class="col-lg-7">
+            <div class="charge-panel h-100">
+                <div id="chargeMap" class="charge-map" aria-label="Supercharger sessions across Western Europe"></div>
+                <div class="charge-map-stats">
+                    <div>
+                        <div class="charge-map-stat-value">43</div>
+                        <div class="charge-map-stat-label">Unique Superchargers</div>
+                    </div>
+                    <div>
+                        <div class="charge-map-stat-value">50</div>
+                        <div class="charge-map-stat-label">Supercharger Sessions</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-5">
+            <div class="row g-3 h-100">
+                <div class="col-6 col-lg-12">
+                    <div class="charge-stat-card h-100">
+                        <div class="charge-stat-label">Total Charged</div>
+                        <div class="charge-stat-value">2,374 <span>kWh</span></div>
+                    </div>
+                </div>
+                <div class="col-6 col-lg-12">
+                    <div class="charge-stat-card h-100">
+                        <div class="charge-stat-label">Total Spent</div>
+                        <div class="charge-stat-value">SGD 1,192</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4 mb-4">
+        <div class="col-lg-7">
+            <div class="charge-panel">
+                <h2 class="h5 mb-3">Monthly charging</h2>
+                <div class="charge-bar-chart" role="img" aria-label="Bar chart of monthly charging: May 1,085 kWh, June 360 kWh, July 929 kWh">
+                    <div class="charge-bar-col">
+                        <div class="charge-bar-track">
+                            <div class="charge-bar" style="--bar-h: 100%;" title="1,085 kWh"></div>
+                        </div>
+                        <div class="charge-bar-kwh">1,085</div>
+                        <div class="charge-bar-label">May</div>
+                    </div>
+                    <div class="charge-bar-col">
+                        <div class="charge-bar-track">
+                            <div class="charge-bar" style="--bar-h: 33%;" title="360 kWh"></div>
+                        </div>
+                        <div class="charge-bar-kwh">360</div>
+                        <div class="charge-bar-label">Jun</div>
+                    </div>
+                    <div class="charge-bar-col">
+                        <div class="charge-bar-track">
+                            <div class="charge-bar" style="--bar-h: 86%;" title="929 kWh"></div>
+                        </div>
+                        <div class="charge-bar-kwh">929</div>
+                        <div class="charge-bar-label">Jul</div>
+                    </div>
+                </div>
+                <p class="text-muted small mb-0 mt-3">Scale max 1,085 kWh · values sum to 2,374 kWh</p>
+            </div>
+        </div>
+        <div class="col-lg-5">
+            <div class="charge-panel h-100">
+                <h2 class="h5 mb-3">Where we charged</h2>
+                <ul class="charge-breakdown list-unstyled mb-0">
+                    <li>
+                        <div class="charge-breakdown-head">
+                            <span><i class="fas fa-home me-2 charge-icon-home"></i>Home</span>
+                            <span>48 kWh · 2%</span>
+                        </div>
+                        <div class="charge-progress"><span style="width: 2%; background: #3b82f6;"></span></div>
+                    </li>
+                    <li>
+                        <div class="charge-breakdown-head">
+                            <span><i class="fas fa-bolt me-2 charge-icon-sc"></i>Supercharger</span>
+                            <span>2,092 kWh · 88%</span>
+                        </div>
+                        <div class="charge-progress"><span style="width: 88%; background: #ef4444;"></span></div>
+                    </li>
+                    <li>
+                        <div class="charge-breakdown-head">
+                            <span><i class="fas fa-briefcase me-2 charge-icon-work"></i>Work</span>
+                            <span>0 kWh · 0%</span>
+                        </div>
+                        <div class="charge-progress"><span style="width: 0%; background: #eab308;"></span></div>
+                    </li>
+                    <li>
+                        <div class="charge-breakdown-head">
+                            <span><i class="fas fa-shield-alt me-2 charge-icon-other"></i>Other</span>
+                            <span>233 kWh · 10%</span>
+                        </div>
+                        <div class="charge-progress"><span style="width: 10%; background: #78716c;"></span></div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-3 mb-4">
+        <div class="col-md-6">
+            <div class="charge-stat-card charge-stat-card--accent">
+                <div class="charge-stat-label"><i class="fas fa-leaf me-2"></i>Saved vs petrol</div>
+                <div class="charge-stat-value">SGD 1,107</div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="charge-stat-card charge-stat-card--accent">
+                <div class="charge-stat-label"><i class="fas fa-road me-2"></i>Total kilometers added</div>
+                <div class="charge-stat-value">10,863 <span>km</span></div>
+            </div>
+        </div>
+    </div>
+
+    <p class="text-center text-muted small mb-0">
+        Stats from the Tesla app for our {{ .Site.Params.tesla_model }} · May–July 2026 European miles
+    </p>
+</div>
+{{ end }}
+
+{{ define "scripts" }}
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    var mapEl = document.getElementById('chargeMap');
+    if (!mapEl || typeof L === 'undefined') return;
+
+    var map = L.map('chargeMap', {
+        scrollWheelZoom: false,
+        zoomControl: true
+    }).setView([46.5, 2.5], 5);
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '© OpenStreetMap contributors'
+    }).addTo(map);
+
+    // Approximate Supercharger trail: northern Europe → France → Spain (Madrid)
+    var trail = [
+        [52.37, 4.90],   // Amsterdam area
+        [51.22, 4.40],   // Antwerp
+        [50.85, 4.35],   // Brussels
+        [49.0, 2.3],     // North of Paris
+        [48.85, 2.35],   // Paris
+        [47.3, 0.7],     // Loire
+        [45.75, 4.85],   // Lyon
+        [44.84, -0.58],  // Bordeaux
+        [43.6, 1.44],    // Toulouse
+        [41.65, -0.88],  // Zaragoza
+        [40.42, -3.70]   // Madrid
+    ];
+
+    L.polyline(trail, {
+        color: '#ef4444',
+        weight: 3,
+        opacity: 0.85,
+        dashArray: null
+    }).addTo(map);
+
+    var pin = L.divIcon({
+        className: 'charge-sc-pin',
+        html: '<span></span>',
+        iconSize: [10, 10],
+        iconAnchor: [5, 5]
+    });
+
+    trail.forEach(function (pt, i) {
+        if (i % 2 === 0 || i === trail.length - 1) {
+            L.marker(pt, { icon: pin }).addTo(map);
+        }
+    });
+
+    map.fitBounds(trail, { padding: [28, 28], maxZoom: 6 });
+});
+</script>
+{{ end }}

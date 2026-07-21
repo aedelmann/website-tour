@@ -520,3 +520,191 @@ footer hr {
         padding-bottom: 2rem;
     }
 }
+
+/* Charge Stats page */
+.charge-date-range {
+    font-weight: 600;
+    color: var(--primary);
+    letter-spacing: 0.02em;
+}
+
+.charge-panel {
+    background: var(--bg-elevated);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow);
+    padding: 1.25rem;
+}
+
+.charge-map {
+    height: 320px;
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    overflow: hidden;
+}
+
+.charge-map-stats {
+    display: flex;
+    gap: 1.5rem;
+    justify-content: space-around;
+    text-align: center;
+    margin-top: 1rem;
+    padding-top: 0.75rem;
+    border-top: 1px solid var(--border);
+}
+
+.charge-map-stat-value {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--text);
+    line-height: 1.1;
+}
+
+.charge-map-stat-label {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    margin-top: 0.25rem;
+}
+
+.charge-stat-card {
+    background: var(--bg-elevated);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow);
+    padding: 1.5rem 1.25rem;
+}
+
+.charge-stat-card--accent {
+    background: linear-gradient(180deg, #fff 0%, #faf6f1 100%);
+}
+
+.charge-stat-label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    margin-bottom: 0.5rem;
+}
+
+.charge-stat-value {
+    font-family: var(--font-serif);
+    font-size: clamp(1.75rem, 4vw, 2.25rem);
+    font-weight: 600;
+    color: var(--text);
+    letter-spacing: -0.02em;
+    line-height: 1.15;
+}
+
+.charge-stat-value span {
+    font-size: 0.55em;
+    font-family: var(--font-sans);
+    font-weight: 600;
+    color: var(--text-muted);
+}
+
+.charge-bar-chart {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-around;
+    gap: 1.25rem;
+    min-height: 220px;
+    padding: 0.5rem 0.5rem 0;
+}
+
+.charge-bar-col {
+    flex: 1;
+    max-width: 96px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.charge-bar-track {
+    width: 100%;
+    height: 180px;
+    display: flex;
+    align-items: flex-end;
+    background: rgba(180, 83, 9, 0.06);
+    border-radius: 10px 10px 4px 4px;
+    overflow: hidden;
+}
+
+.charge-bar {
+    width: 100%;
+    height: var(--bar-h, 0%);
+    background: linear-gradient(180deg, #d97706 0%, var(--primary) 100%);
+    border-radius: 10px 10px 0 0;
+    transition: height 0.6s ease;
+}
+
+.charge-bar-kwh {
+    margin-top: 0.5rem;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--text);
+}
+
+.charge-bar-label {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    font-weight: 600;
+}
+
+.charge-breakdown li + li {
+    margin-top: 1.1rem;
+}
+
+.charge-breakdown-head {
+    display: flex;
+    justify-content: space-between;
+    gap: 0.75rem;
+    font-size: 0.92rem;
+    font-weight: 600;
+    margin-bottom: 0.4rem;
+}
+
+.charge-progress {
+    height: 8px;
+    background: var(--border);
+    border-radius: 999px;
+    overflow: hidden;
+}
+
+.charge-progress span {
+    display: block;
+    height: 100%;
+    border-radius: 999px;
+    min-width: 0;
+}
+
+.charge-icon-home { color: #3b82f6; }
+.charge-icon-sc { color: #ef4444; }
+.charge-icon-work { color: #eab308; }
+.charge-icon-other { color: #78716c; }
+
+.leaflet-div-icon.charge-sc-pin {
+    background: transparent !important;
+    border: none !important;
+}
+
+.charge-sc-pin span {
+    display: block;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #ef4444;
+    border: 2px solid #fff;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.35);
+}
+
+@media (max-width: 768px) {
+    .charge-map {
+        height: 260px;
+    }
+
+    .charge-bar-track {
+        height: 140px;
+    }
+}
+
