@@ -1,133 +1,173 @@
 {{ define "main" }}
-<div class="container py-5">
-    <div class="row">
-        <div class="col-12 text-center mb-4">
-            <h1 class="mb-2">
-                <i class="fas fa-bolt me-2"></i>Charge Stats
-            </h1>
-            <p class="text-muted mb-1">Our {{ .Site.Params.tesla_model }} on the road</p>
-            <p class="charge-date-range mb-0">May 1 – Jul 21, 2026</p>
+<section class="charge-hero">
+    <div class="charge-hero-bg" aria-hidden="true"></div>
+    <div class="container charge-hero-inner">
+        <p class="charge-kicker">{{ .Site.Params.tesla_model }}</p>
+        <h1 class="charge-hero-title">Charge Stats</h1>
+        <p class="charge-hero-sub">Europe, plugged in — May 1 to July 21, 2026</p>
+        <div class="charge-hero-pills">
+            <span><i class="fas fa-bolt"></i> 2,374 kWh</span>
+            <span><i class="fas fa-road"></i> 10,863 km</span>
+            <span><i class="fas fa-map-marker-alt"></i> 43 Superchargers</span>
         </div>
     </div>
+</section>
 
-    <div class="row g-4 mb-4">
-        <div class="col-lg-7">
-            <div class="charge-panel h-100">
+<div class="container charge-page py-5">
+    <div class="row g-4 align-items-stretch mb-4">
+        <div class="col-lg-8">
+            <div class="charge-stage charge-reveal">
+                <div class="charge-stage-head">
+                    <h2>The juice trail</h2>
+                    <p>From the Low Countries through France to Madrid — every red ping is a Supercharger pit stop.</p>
+                </div>
                 <div id="chargeMap" class="charge-map" aria-label="Supercharger sessions across Western Europe"></div>
-                <div class="charge-map-stats">
-                    <div>
-                        <div class="charge-map-stat-value">43</div>
-                        <div class="charge-map-stat-label">Unique Superchargers</div>
+                <div class="charge-map-strip">
+                    <div class="charge-map-chip">
+                        <strong class="charge-count" data-count="43">0</strong>
+                        <span>Unique Superchargers</span>
                     </div>
-                    <div>
-                        <div class="charge-map-stat-value">50</div>
-                        <div class="charge-map-stat-label">Supercharger Sessions</div>
+                    <div class="charge-map-chip">
+                        <strong class="charge-count" data-count="50">0</strong>
+                        <span>Sessions</span>
+                    </div>
+                    <div class="charge-map-chip charge-map-chip--hot">
+                        <strong>88%</strong>
+                        <span>via Supercharger</span>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="col-lg-5">
-            <div class="row g-3 h-100">
-                <div class="col-6 col-lg-12">
-                    <div class="charge-stat-card h-100">
-                        <div class="charge-stat-label">Total Charged</div>
-                        <div class="charge-stat-value">2,374 <span>kWh</span></div>
-                    </div>
-                </div>
-                <div class="col-6 col-lg-12">
-                    <div class="charge-stat-card h-100">
-                        <div class="charge-stat-label">Total Spent</div>
-                        <div class="charge-stat-value">SGD 1,192</div>
-                    </div>
-                </div>
+        <div class="col-lg-4">
+            <div class="charge-stack h-100">
+                <article class="charge-hero-stat charge-reveal" style="--delay: 0.08s">
+                    <div class="charge-hero-stat-icon" aria-hidden="true"><i class="fas fa-battery-full"></i></div>
+                    <div class="charge-stat-label">Total charged</div>
+                    <div class="charge-stat-value"><span class="charge-count" data-count="2374" data-sep=",">0</span> <em>kWh</em></div>
+                    <p class="charge-stat-note">Enough to keep the Model Y humming across borders</p>
+                </article>
+                <article class="charge-hero-stat charge-hero-stat--spend charge-reveal" style="--delay: 0.16s">
+                    <div class="charge-hero-stat-icon" aria-hidden="true"><i class="fas fa-coins"></i></div>
+                    <div class="charge-stat-label">Total spent</div>
+                    <div class="charge-stat-value">SGD <span class="charge-count" data-count="1192" data-sep=",">0</span></div>
+                    <p class="charge-stat-note">Road-trip fuel, electric edition</p>
+                </article>
             </div>
         </div>
     </div>
 
     <div class="row g-4 mb-4">
         <div class="col-lg-7">
-            <div class="charge-panel">
-                <h2 class="h5 mb-3">Monthly charging</h2>
+            <div class="charge-stage charge-reveal" style="--delay: 0.1s">
+                <div class="charge-stage-head">
+                    <h2>Monthly rhythm</h2>
+                    <p>May and July went hard. June took a breath.</p>
+                </div>
                 <div class="charge-bar-chart" role="img" aria-label="Bar chart of monthly charging: May 1,085 kWh, June 360 kWh, July 929 kWh">
                     <div class="charge-bar-col">
                         <div class="charge-bar-track">
-                            <div class="charge-bar" style="--bar-h: 100%;" title="1,085 kWh"></div>
+                            <div class="charge-bar" style="--bar-h: 100%; --bar-delay: 0.15s" data-kwh="1085">
+                                <span class="charge-bar-tip">1,085 kWh</span>
+                            </div>
                         </div>
-                        <div class="charge-bar-kwh">1,085</div>
                         <div class="charge-bar-label">May</div>
                     </div>
                     <div class="charge-bar-col">
                         <div class="charge-bar-track">
-                            <div class="charge-bar" style="--bar-h: 33%;" title="360 kWh"></div>
+                            <div class="charge-bar" style="--bar-h: 33%; --bar-delay: 0.28s" data-kwh="360">
+                                <span class="charge-bar-tip">360 kWh</span>
+                            </div>
                         </div>
-                        <div class="charge-bar-kwh">360</div>
                         <div class="charge-bar-label">Jun</div>
                     </div>
                     <div class="charge-bar-col">
                         <div class="charge-bar-track">
-                            <div class="charge-bar" style="--bar-h: 86%;" title="929 kWh"></div>
+                            <div class="charge-bar" style="--bar-h: 86%; --bar-delay: 0.4s" data-kwh="929">
+                                <span class="charge-bar-tip">929 kWh</span>
+                            </div>
                         </div>
-                        <div class="charge-bar-kwh">929</div>
                         <div class="charge-bar-label">Jul</div>
                     </div>
                 </div>
-                <p class="text-muted small mb-0 mt-3">Scale max 1,085 kWh · values sum to 2,374 kWh</p>
             </div>
         </div>
         <div class="col-lg-5">
-            <div class="charge-panel h-100">
-                <h2 class="h5 mb-3">Where we charged</h2>
-                <ul class="charge-breakdown list-unstyled mb-0">
-                    <li>
-                        <div class="charge-breakdown-head">
-                            <span><i class="fas fa-home me-2 charge-icon-home"></i>Home</span>
-                            <span>48 kWh · 2%</span>
+            <div class="charge-stage charge-reveal h-100" style="--delay: 0.18s">
+                <div class="charge-stage-head">
+                    <h2>Where the electrons came from</h2>
+                    <p>Almost all Supercharger — a little home, a little “other.”</p>
+                </div>
+                <div class="charge-donut-wrap">
+                    <div class="charge-donut" aria-hidden="true">
+                        <svg viewBox="0 0 120 120" class="charge-donut-svg">
+                            <circle class="charge-donut-track" cx="60" cy="60" r="44"></circle>
+                            <circle class="charge-donut-seg charge-donut-sc" cx="60" cy="60" r="44" stroke-dashoffset="0"></circle>
+                            <circle class="charge-donut-seg charge-donut-other" cx="60" cy="60" r="44" stroke-dashoffset="-243.3"></circle>
+                            <circle class="charge-donut-seg charge-donut-home" cx="60" cy="60" r="44" stroke-dashoffset="-271"></circle>
+                        </svg>
+                        <div class="charge-donut-center">
+                            <strong>88%</strong>
+                            <span>Supercharger</span>
                         </div>
-                        <div class="charge-progress"><span style="width: 2%; background: #3b82f6;"></span></div>
-                    </li>
-                    <li>
-                        <div class="charge-breakdown-head">
-                            <span><i class="fas fa-bolt me-2 charge-icon-sc"></i>Supercharger</span>
-                            <span>2,092 kWh · 88%</span>
-                        </div>
-                        <div class="charge-progress"><span style="width: 88%; background: #ef4444;"></span></div>
-                    </li>
-                    <li>
-                        <div class="charge-breakdown-head">
-                            <span><i class="fas fa-briefcase me-2 charge-icon-work"></i>Work</span>
-                            <span>0 kWh · 0%</span>
-                        </div>
-                        <div class="charge-progress"><span style="width: 0%; background: #eab308;"></span></div>
-                    </li>
-                    <li>
-                        <div class="charge-breakdown-head">
-                            <span><i class="fas fa-shield-alt me-2 charge-icon-other"></i>Other</span>
-                            <span>233 kWh · 10%</span>
-                        </div>
-                        <div class="charge-progress"><span style="width: 10%; background: #78716c;"></span></div>
-                    </li>
-                </ul>
+                    </div>
+                    <ul class="charge-breakdown list-unstyled mb-0">
+                        <li>
+                            <span class="charge-swatch charge-swatch-sc"></span>
+                            <div>
+                                <strong>Supercharger</strong>
+                                <small>2,092 kWh</small>
+                            </div>
+                            <em>88%</em>
+                        </li>
+                        <li>
+                            <span class="charge-swatch charge-swatch-other"></span>
+                            <div>
+                                <strong>Other</strong>
+                                <small>233 kWh</small>
+                            </div>
+                            <em>10%</em>
+                        </li>
+                        <li>
+                            <span class="charge-swatch charge-swatch-home"></span>
+                            <div>
+                                <strong>Home</strong>
+                                <small>48 kWh</small>
+                            </div>
+                            <em>2%</em>
+                        </li>
+                        <li>
+                            <span class="charge-swatch charge-swatch-work"></span>
+                            <div>
+                                <strong>Work</strong>
+                                <small>0 kWh</small>
+                            </div>
+                            <em>0%</em>
+                        </li>
+                    </ul>
+                </div>
             </div>
         </div>
     </div>
 
-    <div class="row g-3 mb-4">
+    <div class="row g-4 mb-2">
         <div class="col-md-6">
-            <div class="charge-stat-card charge-stat-card--accent">
-                <div class="charge-stat-label"><i class="fas fa-leaf me-2"></i>Saved vs petrol</div>
-                <div class="charge-stat-value">SGD 1,107</div>
-            </div>
+            <article class="charge-finale charge-finale--save charge-reveal" style="--delay: 0.12s">
+                <div class="charge-finale-label"><i class="fas fa-leaf"></i> Saved vs petrol</div>
+                <div class="charge-finale-value">SGD <span class="charge-count" data-count="1107" data-sep=",">0</span></div>
+                <p>The quiet flex: same kilometers, lighter wallet, zero pump drama.</p>
+            </article>
         </div>
         <div class="col-md-6">
-            <div class="charge-stat-card charge-stat-card--accent">
-                <div class="charge-stat-label"><i class="fas fa-road me-2"></i>Total kilometers added</div>
-                <div class="charge-stat-value">10,863 <span>km</span></div>
-            </div>
+            <article class="charge-finale charge-finale--km charge-reveal" style="--delay: 0.2s">
+                <div class="charge-finale-label"><i class="fas fa-tachometer-alt"></i> Kilometers added</div>
+                <div class="charge-finale-value"><span class="charge-count" data-count="10863" data-sep=",">0</span> <em>km</em></div>
+                <p>Range restored one stall at a time — Netherlands to Madrid and everything in between.</p>
+            </article>
         </div>
     </div>
 
-    <p class="text-center text-muted small mb-0">
-        Stats from the Tesla app for our {{ .Site.Params.tesla_model }} · May–July 2026 European miles
+    <p class="charge-footnote text-center mb-0">
+        Pulled from the Tesla app · {{ .Site.Params.tesla_model }} · Silent Wanderers on the road
     </p>
 </div>
 {{ end }}
@@ -135,6 +175,57 @@
 {{ define "scripts" }}
 <script>
 document.addEventListener('DOMContentLoaded', function () {
+    // Reveal + count-up when in view
+    var revealEls = document.querySelectorAll('.charge-reveal');
+    var countEls = document.querySelectorAll('.charge-count');
+    var counted = new WeakSet();
+
+    function animateCount(el) {
+        if (counted.has(el)) return;
+        counted.add(el);
+        var target = parseInt(el.getAttribute('data-count'), 10) || 0;
+        var sep = el.getAttribute('data-sep') || '';
+        var duration = 1100;
+        var start = performance.now();
+        function frame(now) {
+            var t = Math.min(1, (now - start) / duration);
+            var eased = 1 - Math.pow(1 - t, 3);
+            var val = Math.round(target * eased);
+            el.textContent = sep ? val.toLocaleString('en-US') : String(val);
+            if (t < 1) requestAnimationFrame(frame);
+        }
+        requestAnimationFrame(frame);
+    }
+
+    if ('IntersectionObserver' in window) {
+        var io = new IntersectionObserver(function (entries) {
+            entries.forEach(function (entry) {
+                if (!entry.isIntersecting) return;
+                entry.target.classList.add('is-visible');
+                entry.target.querySelectorAll('.charge-count').forEach(animateCount);
+                if (entry.target.classList.contains('charge-count')) animateCount(entry.target);
+                io.unobserve(entry.target);
+            });
+        }, { threshold: 0.25 });
+        revealEls.forEach(function (el) { io.observe(el); });
+        countEls.forEach(function (el) {
+            if (![].some.call(revealEls, function (r) { return r.contains(el); })) io.observe(el);
+        });
+    } else {
+        revealEls.forEach(function (el) { el.classList.add('is-visible'); });
+        countEls.forEach(animateCount);
+    }
+
+    // Animate bars after paint
+    requestAnimationFrame(function () {
+        document.querySelectorAll('.charge-bar').forEach(function (bar) {
+            bar.classList.add('is-grown');
+        });
+        document.querySelectorAll('.charge-donut-seg').forEach(function (seg) {
+            seg.classList.add('is-drawn');
+        });
+    });
+
     var mapEl = document.getElementById('chargeMap');
     if (!mapEl || typeof L === 'undefined') return;
 
@@ -143,37 +234,44 @@ document.addEventListener('DOMContentLoaded', function () {
         zoomControl: true
     }).setView([46.5, 2.5], 5);
 
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '© OpenStreetMap contributors'
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+        attribution: '&copy; OpenStreetMap &copy; CARTO',
+        subdomains: 'abcd',
+        maxZoom: 18
     }).addTo(map);
 
-    // Approximate Supercharger trail: northern Europe → France → Spain (Madrid)
     var trail = [
-        [52.37, 4.90],   // Amsterdam area
-        [51.22, 4.40],   // Antwerp
-        [50.85, 4.35],   // Brussels
-        [49.0, 2.3],     // North of Paris
-        [48.85, 2.35],   // Paris
-        [47.3, 0.7],     // Loire
-        [45.75, 4.85],   // Lyon
-        [44.84, -0.58],  // Bordeaux
-        [43.6, 1.44],    // Toulouse
-        [41.65, -0.88],  // Zaragoza
-        [40.42, -3.70]   // Madrid
+        [52.37, 4.90],
+        [51.22, 4.40],
+        [50.85, 4.35],
+        [49.0, 2.3],
+        [48.85, 2.35],
+        [47.3, 0.7],
+        [45.75, 4.85],
+        [44.84, -0.58],
+        [43.6, 1.44],
+        [41.65, -0.88],
+        [40.42, -3.70]
     ];
 
     L.polyline(trail, {
-        color: '#ef4444',
+        color: '#b45309',
+        weight: 4,
+        opacity: 0.35
+    }).addTo(map);
+
+    L.polyline(trail, {
+        color: '#e11d48',
         weight: 3,
-        opacity: 0.85,
-        dashArray: null
+        opacity: 0.95,
+        className: 'charge-route-line'
     }).addTo(map);
 
     var pin = L.divIcon({
         className: 'charge-sc-pin',
         html: '<span></span>',
-        iconSize: [10, 10],
-        iconAnchor: [5, 5]
+        iconSize: [12, 12],
+        iconAnchor: [6, 6]
     });
 
     trail.forEach(function (pt, i) {
@@ -182,7 +280,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
-    map.fitBounds(trail, { padding: [28, 28], maxZoom: 6 });
+    map.fitBounds(trail, { padding: [32, 32], maxZoom: 6 });
 });
 </script>
 {{ end }}
