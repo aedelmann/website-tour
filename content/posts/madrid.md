@@ -1,6 +1,7 @@
 ---
 title: "Madrid at 37°C: First Visit, Full Tesla Tank Energy, Zero Chill"
 date: 2026-07-21
+draft: true
 location: "Madrid, Spain"
 latitude: 40.4168
 longitude: -3.7038
