@@ -3,6 +3,18 @@ public/
 resources/
 .hugo_build.lock
 
+# Node (Netlify Functions deps)
+node_modules/
+
+# Secrets — never commit
+.env
+.env.*
+!.env.example
+*.pem
+!well-known/appspecific/com.tesla.3p.public-key.pem
+private-key.pem
+tesla-private*.pem
+
 # macOS
 .DS_Store
 .AppleDouble

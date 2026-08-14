@@ -1,0 +1,11 @@
+{
+  "name": "silent-wanderers",
+  "private": true,
+  "description": "Hugo site with Netlify Functions for Tesla Charge Stats",
+  "dependencies": {
+    "@netlify/blobs": "^9.1.2"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
