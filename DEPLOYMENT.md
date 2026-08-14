@@ -126,4 +126,96 @@ After initial deployment via GitHub:
 
 ---
 
+## Tesla Charge Stats
+
+Auto-updates `/charging/` from the **Tesla Fleet API** (Europe) charging history. Tokens stay in Netlify Functions + Blobs — never in the browser. The page hydrates from `GET /api/charging-stats`; if that snapshot is missing, it keeps the hardcoded May–Jul 2026 figures.
+
+**Important:** this uses official Fleet API only (`fleet-api.prd.eu.vn.cloud.tesla.com`). Do not use `owner-api.teslamotors.com`. `charging_history` is Tesla-billed public/Supercharger sessions — not home charging. Do not call `vehicle_data` on a schedule (wakes the car).
+
+### 1. Generate the EC keypair
+
+```bash
+./scripts/generate-tesla-key.sh
+```
+
+- Writes the **public** key to `well-known/appspecific/com.tesla.3p.public-key.pem`
+- Hugo mounts `well-known/` → `static/.well-known/` (Hugo ignores real dotfolders under `static/`)
+- Prints the **private** key once — paste it into Netlify as `TESLA_PRIVATE_KEY` (never commit it)
+
+After deploy, Tesla must get **HTTP 200** (no redirect):
+
+```bash
+curl -sI https://silentwanderers.com/.well-known/appspecific/com.tesla.3p.public-key.pem
+curl -s  https://silentwanderers.com/.well-known/appspecific/com.tesla.3p.public-key.pem
+```
+
+Expect `Content-Type: text/plain; charset=utf-8` (set in `netlify.toml`).
+
+### 2. Create the Tesla app (Personal Use, EU)
+
+1. Go to [developer.tesla.com](https://developer.tesla.com) → create an application (Personal Use).
+2. Region: **Europe**. Add a payment method with a **low billing cap**.
+3. Allowed origin: `https://silentwanderers.com`
+4. Redirect URI: `https://silentwanderers.com/.netlify/functions/tesla-oauth-callback`
+5. Scopes needed: `openid`, `offline_access`, `vehicle_device_data`, `vehicle_charging_cmds`
+6. Note `Client ID` and `Client Secret`.
+
+Virtual key pairing is **not** required for `charging_history`, but the public key must still be hosted — Tesla validates the app domain on partner register.
+
+### 3. Netlify environment variables (dashboard only — never git)
+
+| Variable | Purpose |
+| --- | --- |
+| `TESLA_CLIENT_ID` | App client id |
+| `TESLA_CLIENT_SECRET` | App client secret |
+| `TESLA_VIN` | Vehicle VIN (server-side only; never published) |
+| `TESLA_PRIVATE_KEY` | PEM private key from the generate script |
+| `TESLA_SETUP_SECRET` | Shared secret protecting oauth start + partner-register |
+| `TESLA_FLEET_BASE` | Optional; defaults to `https://fleet-api.prd.eu.vn.cloud.tesla.com` |
+
+Deploy the site so the PEM URL and functions are live.
+
+### 4. Partner register (once, EU)
+
+```bash
+curl -s "https://silentwanderers.com/.netlify/functions/tesla-partner-register?secret=YOUR_SETUP_SECRET"
+```
+
+Uses `client_credentials` against the EU Fleet audience and `POST /api/1/partner_accounts` with domain `silentwanderers.com`. Idempotent-ish — returns Tesla’s response.
+
+### 5. OAuth bootstrap (you as the vehicle owner)
+
+```bash
+# Open in a browser (must be logged into the Tesla account that owns the car):
+https://silentwanderers.com/.netlify/functions/tesla-oauth?secret=YOUR_SETUP_SECRET
+```
+
+Approves scopes, then `tesla-oauth-callback` stores the **refresh token** in Netlify Blobs (`tesla` store). Each token refresh invalidates the previous refresh token — sync always persists the new one.
+
+### 6. Confirm the public API + page
+
+```bash
+curl -s https://silentwanderers.com/api/charging-stats | head
+```
+
+- Scheduled sync: `tesla-charging-sync` every 6 hours (`0 */6 * * *`, including weekends).
+- Manual trigger (optional): invoke `/.netlify/functions/tesla-charging-sync` from the Netlify UI.
+- Open `/charging/` — numbers/map hydrate from the snapshot without rebuilding Hugo.
+- On Tesla `401`, the last good snapshot is kept; the static fallback still renders if no snapshot exists.
+
+### Architecture (quick map)
+
+| Piece | Role |
+| --- | --- |
+| `netlify/functions/tesla-oauth.js` | Starts authorize redirect |
+| `netlify/functions/tesla-oauth-callback.js` | Code → tokens → Blobs |
+| `netlify/functions/tesla-charging-sync.js` | Refresh + paginate history + snapshot |
+| `netlify/functions/charging-stats.js` | Public GET snapshot JSON |
+| `netlify/functions/tesla-partner-register.js` | One-shot partner registration |
+| `static/js/charging-stats.js` | Page hydration + Leaflet pins |
+
+Public JSON never includes VIN, street address, cabinet IDs, home GPS, or live vehicle location.
+
+---
+
 **Need help?** Email: contactus@silentwanderers.com
