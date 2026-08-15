@@ -36,3 +36,6 @@ tesla-private*.pem
 # Temporary files
 *.tmp
 .cache/
+
+# Local Netlify folder
+.netlify

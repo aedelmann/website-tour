@@ -20,6 +20,49 @@
     return String(code).toUpperCase();
   }
 
+  function formatMoney(amount, code, fallback) {
+    var c = String(code || fallback || 'EUR').toUpperCase();
+    var n = Math.round(Number(amount) || 0);
+    if (c === 'EUR') return '€ ' + n;
+    if (c === 'CHF') return 'CHF ' + n;
+    return c + ' ' + n;
+  }
+
+  function formatSessionDate(iso) {
+    if (!iso) return '';
+    var d = new Date(iso);
+    if (Number.isNaN(d.getTime())) return '';
+    return d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
+  }
+
+  function sitePopupHtml(s, defaultCurrency) {
+    var html =
+      '<strong>' +
+      escapeHtml(s.name || 'Supercharger') +
+      '</strong>' +
+      (s.city ? '<br>' + escapeHtml(s.city) : '') +
+      '<br>' +
+      formatKwh(s.energyKwh || 0) +
+      ' kWh';
+    var sessions = Array.isArray(s.sessions) ? s.sessions : [];
+    var siteCur = s.currency || defaultCurrency;
+    if (typeof s.spent === 'number') {
+      html += '<br>' + formatMoney(s.spent, siteCur, defaultCurrency);
+    }
+    if (sessions.length >= 2) {
+      sessions.forEach(function (sess) {
+        html +=
+          '<br>' +
+          escapeHtml(formatSessionDate(sess.at)) +
+          ' · ' +
+          formatKwh(sess.energyKwh || 0) +
+          ' kWh · ' +
+          formatMoney(sess.spent, sess.currency || siteCur, defaultCurrency);
+      });
+    }
+    return html;
+  }
+
   function setText(sel, text) {
     var el = document.querySelector(sel);
     if (el) el.textContent = text;
@@ -252,7 +295,7 @@
     });
   }
 
-  function initMap(sites) {
+  function initMap(sites, defaultCurrency) {
     var mapEl = document.getElementById('chargeMap');
     if (!mapEl || typeof L === 'undefined') return;
 
@@ -284,14 +327,7 @@
         realSites.forEach(function (s) {
           var latlng = [s.lat, s.lng];
           bounds.push(latlng);
-          var popup =
-            '<strong>' +
-            escapeHtml(s.name || 'Supercharger') +
-            '</strong>' +
-            (s.city ? '<br>' + escapeHtml(s.city) : '') +
-            '<br>' +
-            formatKwh(s.energyKwh || 0) +
-            ' kWh';
+          var popup = sitePopupHtml(s, defaultCurrency);
           L.marker(latlng, { icon: pin }).addTo(map).bindPopup(popup);
         });
         map.fitBounds(bounds, { padding: [32, 32], maxZoom: 7 });
@@ -347,10 +383,10 @@
   document.addEventListener('DOMContentLoaded', function () {
     var sitesForMap = null;
 
-    function finish(liveSites) {
+    function finish(liveSites, currency) {
       initRevealAndCounts();
       // null = use hardcoded fallback trail; array = live Supercharger pins only
-      initMap(liveSites);
+      initMap(liveSites, currency);
     }
 
     fetch('/api/charging-stats', { credentials: 'same-origin' })
@@ -361,7 +397,8 @@
       .then(function (data) {
         var ok = hydrate(data);
         sitesForMap = ok && Array.isArray(data.sites) ? data.sites : [];
-        finish(ok ? sitesForMap : null);
+        var cur = data && data.totals ? data.totals.currency : null;
+        finish(ok ? sitesForMap : null, cur);
       })
       .catch(function () {
         // Keep hardcoded May–Jul 2026 markup

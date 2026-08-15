@@ -29,10 +29,22 @@
   to = "/posts/:splat"
   status = 301
 
+[[redirects]]
+  from = "/map"
+  to = "/"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/map/*"
+  to = "/"
+  status = 301
+  force = true
+
 # Public Charge Stats snapshot (no secrets)
 [[redirects]]
   from = "/api/charging-stats"
-  to = "/.netlify/functions/charging-stats"
+  to = "/data/charging-stats.json"
   status = 200
 
 [[headers]]

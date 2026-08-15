@@ -292,6 +292,24 @@ function formatPeriodLabel(startIso, endIso) {
   return `Europe, plugged in — ${startStr} to ${endIsToday ? 'today' : endStr}`;
 }
 
+function majorityCurrency(codes, fallback) {
+  const counts = new Map();
+  for (const c of codes || []) {
+    if (!c) continue;
+    const key = String(c).toUpperCase();
+    counts.set(key, (counts.get(key) || 0) + 1);
+  }
+  let best = null;
+  let n = 0;
+  for (const [c, v] of counts) {
+    if (v > n) {
+      best = c;
+      n = v;
+    }
+  }
+  return best || fallback || null;
+}
+
 /**
  * Sanitize Tesla charging_history sessions into a public snapshot.
  * Omits VIN, street address, cabinet IDs. City + site name + Supercharger lat/lng OK.
@@ -304,9 +322,12 @@ function aggregateSnapshot(sessions, meta) {
   let currency = null;
   let earliest = null;
   let latest = null;
+  let lastStop = null;
+  let lastStopTs = null;
 
   for (const session of sessions) {
     if (!session) continue;
+    // sessionCost() is the source of truth for totals.spent and site.spent
     const kwh = sessionEnergyKwh(session);
     const cost = sessionCost(session);
     const cur = sessionCurrency(session);
@@ -327,9 +348,16 @@ function aggregateSnapshot(sessions, meta) {
 
     const mk = monthKeyFromIso(start || stop);
     if (mk) {
-      const prev = monthsMap.get(mk) || { key: mk, label: monthLabel(mk), energyKwh: 0, sessionCount: 0 };
+      const prev = monthsMap.get(mk) || {
+        key: mk,
+        label: monthLabel(mk),
+        energyKwh: 0,
+        sessionCount: 0,
+        spent: 0,
+      };
       prev.energyKwh += kwh;
       prev.sessionCount += 1;
+      prev.spent += cost;
       monthsMap.set(mk, prev);
     }
 
@@ -347,18 +375,45 @@ function aggregateSnapshot(sessions, meta) {
       lng: typeof lng === 'number' ? lng : null,
       energyKwh: 0,
       sessionCount: 0,
+      spent: 0,
+      currencies: [],
+      sessions: [],
     };
     prev.energyKwh += kwh;
     prev.sessionCount += 1;
+    prev.spent += cost;
+    if (cur) prev.currencies.push(cur);
+    prev.sessions.push({
+      at: stop || start || null,
+      energyKwh: Math.round(kwh * 10) / 10,
+      spent: Math.round(cost * 100) / 100,
+      currency: cur,
+    });
     if (prev.lat == null && typeof lat === 'number') prev.lat = lat;
     if (prev.lng == null && typeof lng === 'number') prev.lng = lng;
     sitesMap.set(key, prev);
+
+    if (stop) {
+      const t = new Date(stop).getTime();
+      if (!Number.isNaN(t) && (lastStopTs == null || t > lastStopTs)) {
+        lastStopTs = t;
+        lastStop = {
+          name,
+          city,
+          country,
+          at: stop,
+          lat: typeof lat === 'number' ? lat : null,
+          lng: typeof lng === 'number' ? lng : null,
+        };
+      }
+    }
   }
 
   const months = Array.from(monthsMap.values()).sort((a, b) => a.key.localeCompare(b.key));
   // Prefer last 3 calendar months when there are many; otherwise all in range.
   const monthsOut = months.length > 3 ? months.slice(-3) : months;
 
+  const fallbackCurrency = currency || (totalSpent > 0 ? 'EUR' : null);
   const sites = Array.from(sitesMap.values())
     .map((s) => ({
       name: s.name,
@@ -368,6 +423,11 @@ function aggregateSnapshot(sessions, meta) {
       lng: s.lng,
       energyKwh: Math.round(s.energyKwh * 10) / 10,
       sessionCount: s.sessionCount,
+      spent: Math.round(s.spent * 100) / 100,
+      currency: majorityCurrency(s.currencies, fallbackCurrency),
+      sessions: (s.sessions || [])
+        .slice()
+        .sort((a, b) => String(b.at || '').localeCompare(String(a.at || ''))),
     }))
     .sort((a, b) => b.energyKwh - a.energyKwh);
 
@@ -389,15 +449,17 @@ function aggregateSnapshot(sessions, meta) {
       sessionCount: sessions.length,
       uniqueSites: sites.length,
       spent: Math.round(totalSpent * 100) / 100,
-      currency: currency || (totalSpent > 0 ? 'EUR' : null),
+      currency: fallbackCurrency,
     },
     months: monthsOut.map((m) => ({
       key: m.key,
       label: m.label,
       energyKwh: Math.round(m.energyKwh * 10) / 10,
       sessionCount: m.sessionCount,
+      spent: Math.round((m.spent || 0) * 100) / 100,
     })),
     sites,
+    lastStop: lastStop || undefined,
     meta: meta || undefined,
   };
 }

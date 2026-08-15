@@ -33,7 +33,7 @@
                             </div>
                             <div class="col-md-6 text-md-end">
                                 {{ if .Params.latitude }}
-                                <a href="{{ "/map/" | relURL }}?lat={{ .Params.latitude }}&lng={{ .Params.longitude }}&zoom=10"
+                                <a href="{{ "/" | relURL }}?lat={{ .Params.latitude }}&lng={{ .Params.longitude }}&zoom=10#homeMap"
                                    class="btn btn-outline-primary btn-sm">
                                     <i class="fas fa-map-marker-alt me-1"></i>View on Map
                                 </a>

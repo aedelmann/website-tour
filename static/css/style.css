@@ -123,6 +123,81 @@ body {
     font-size: 0.9rem;
 }
 
+/* Homepage on-the-road chip */
+.hero-section .road-chip,
+.hero-section a.road-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-top: 1.1rem;
+    padding: 0.55rem 0.9rem 0.55rem 0.7rem;
+    max-width: 100%;
+    text-align: left;
+    text-decoration: none !important;
+    color: var(--text) !important;
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    box-shadow: var(--shadow);
+    transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+}
+.hero-section .road-chip:hover {
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-md);
+    border-color: #d6d3d1;
+    color: var(--text) !important;
+}
+.road-chip-dot {
+    width: 10px;
+    height: 10px;
+    flex: 0 0 10px;
+    border-radius: 50%;
+    background: #a8a29e;
+    box-shadow: 0 0 0 4px rgba(168, 162, 158, 0.18);
+}
+.road-chip.is-on-road .road-chip-dot {
+    background: #16a34a;
+    box-shadow: 0 0 0 4px rgba(22, 163, 74, 0.18);
+    animation: road-chip-pulse 1.8s ease-out infinite;
+}
+.road-chip.is-off-road .road-chip-dot {
+    background: #b45309;
+    box-shadow: 0 0 0 4px rgba(180, 83, 9, 0.14);
+}
+.road-chip-body {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.2;
+    min-width: 0;
+}
+.road-chip-state {
+    font-size: 0.92rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    color: var(--text);
+}
+.road-chip.is-on-road .road-chip-state { color: #15803d; }
+.road-chip.is-off-road .road-chip-state { color: #9a3412; }
+.road-chip-meta {
+    margin-top: 0.12rem;
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: var(--text-muted);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.road-chip-go {
+    color: var(--primary);
+    font-size: 0.78rem;
+    opacity: 0.75;
+}
+@keyframes road-chip-pulse {
+    0% { box-shadow: 0 0 0 0 rgba(22, 163, 74, 0.35); }
+    70% { box-shadow: 0 0 0 8px rgba(22, 163, 74, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(22, 163, 74, 0); }
+}
+
 /* Sections */
 section {
     padding-top: 3rem;

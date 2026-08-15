@@ -9,7 +9,14 @@
                     {{ .Site.Title }}
                 </h1>
                 <p>{{ .Site.Params.description }}</p>
-                <small><i class="fas fa-car me-1"></i> Traveling Europe in our {{ .Site.Params.tesla_model }}</small>
+                <a id="roadStatus" class="road-chip" href="{{ "/charging/" | relURL }}">
+                    <span class="road-chip-dot" aria-hidden="true"></span>
+                    <span class="road-chip-body">
+                        <span class="road-chip-state">Traveling Europe</span>
+                        <span class="road-chip-meta">in our {{ .Site.Params.tesla_model }}</span>
+                    </span>
+                    <i class="fas fa-bolt road-chip-go" aria-hidden="true"></i>
+                </a>
             </div>
         </div>
     </div>
@@ -80,7 +87,7 @@
                 <h2 class="mb-2">
                     <i class="fas fa-map-marked-alt me-2"></i>Our Journey Map
                 </h2>
-                <p class="text-muted mb-0">Click on any pin to read about our adventures at that location</p>
+                <p class="text-muted mb-0">Amber pins are stories. Small red dots are Superchargers we’ve used.</p>
             </div>
         </div>
         <div class="row">
@@ -150,22 +157,130 @@
   {{ end }}
 {{ end }}
 <script type="application/json" id="homeMapLocations">{{ $mapLocations | jsonify }}</script>
+<style>
+</style>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
+    function escapeHtml(s) {
+        if (!s) return '';
+        var div = document.createElement('div');
+        div.textContent = s;
+        return div.innerHTML;
+    }
+
+    function formatKwh(n) {
+        var v = Math.round(n * 10) / 10;
+        return (Number.isInteger(v) ? v : v.toFixed(1)).toLocaleString('en-US');
+    }
+
+    function formatMoney(amount, code, fallback) {
+        var c = String(code || fallback || 'EUR').toUpperCase();
+        var n = Math.round(Number(amount) || 0);
+        if (c === 'EUR') return '€ ' + n;
+        if (c === 'CHF') return 'CHF ' + n;
+        return c + ' ' + n;
+    }
+
+    function formatSessionDate(iso) {
+        if (!iso) return '';
+        var d = new Date(iso);
+        if (isNaN(d.getTime())) return '';
+        return d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
+    }
+
+    function sitePopupHtml(s, defaultCurrency) {
+        var html =
+            '<strong>' + escapeHtml(s.name || 'Supercharger') + '</strong>' +
+            (s.city ? '<br>' + escapeHtml(s.city) : '') +
+            '<br>' + formatKwh(s.energyKwh || 0) + ' kWh';
+        var sessions = Array.isArray(s.sessions) ? s.sessions : [];
+        var siteCur = s.currency || defaultCurrency;
+        if (typeof s.spent === 'number') {
+            html += '<br>' + formatMoney(s.spent, siteCur, defaultCurrency);
+        }
+        if (sessions.length >= 2) {
+            sessions.forEach(function(sess) {
+                html +=
+                    '<br>' + escapeHtml(formatSessionDate(sess.at)) +
+                    ' · ' + formatKwh(sess.energyKwh || 0) +
+                    ' kWh · ' + formatMoney(sess.spent, sess.currency || siteCur, defaultCurrency);
+            });
+        }
+        return html;
+    }
+
+    function applyRoadStatus(data) {
+        var el = document.getElementById('roadStatus');
+        if (!el) return;
+        var stop = (data && data.lastStop) || {};
+        var at = stop.at ? new Date(stop.at) : null;
+        if (!at || isNaN(at.getTime())) return;
+        var days = (Date.now() - at.getTime()) / 864e5;
+        var place = stop.city || stop.name || 'Europe';
+        var when = at.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
+        var onRoad = days <= 7;
+        var state = onRoad ? 'On the road' : 'Off the road';
+        var meta = onRoad
+            ? 'Last Supercharger · ' + place
+            : 'Last Supercharged in ' + place + ' · ' + when;
+        var go = onRoad ? 'fa-road' : 'fa-home';
+        el.classList.toggle('is-on-road', onRoad);
+        el.classList.toggle('is-off-road', !onRoad);
+        el.innerHTML =
+            '<span class="road-chip-dot" aria-hidden="true"></span>' +
+            '<span class="road-chip-body">' +
+            '<span class="road-chip-state">' + state + '</span>' +
+            '<span class="road-chip-meta">' + meta + '</span>' +
+            '</span>' +
+            '<i class="fas ' + go + ' road-chip-go" aria-hidden="true"></i>';
+    }
+
+    function fetchChargingStats() {
+        return fetch('/api/charging-stats', { credentials: 'same-origin' })
+            .then(function(res) {
+                if (!res.ok) throw new Error('no snapshot');
+                return res.json();
+            })
+            .catch(function() {
+                return fetch('/data/charging-stats.json', { credentials: 'same-origin' })
+                    .then(function(res) {
+                        if (!res.ok) throw new Error('no json');
+                        return res.json();
+                    });
+            });
+    }
+
+    var statsPromise = fetchChargingStats()
+        .then(function(data) {
+            applyRoadStatus(data);
+            return data;
+        })
+        .catch(function() {
+            return null;
+        });
+
     var mapEl = document.getElementById('homeMap');
     if (!mapEl || typeof L === 'undefined') return;
 
     try {
-        var homeMap = L.map('homeMap').setView([
-            {{ .Site.Params.map_center_lat | default 50.0755 }},
-            {{ .Site.Params.map_center_lng | default 14.4378 }}
-        ], {{ .Site.Params.map_zoom | default 6 }});
+        var homeMap = L.map('homeMap', {
+            scrollWheelZoom: false,
+            zoomControl: true
+        }).setView([46.5, 2.5], 5);
 
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '© OpenStreetMap contributors'
+        L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+            attribution: '&copy; OpenStreetMap &copy; CARTO',
+            subdomains: 'abcd',
+            maxZoom: 18
         }).addTo(homeMap);
 
-        // SVG pin (no Font Awesome dependency—icons always show)
+        var scPin = L.divIcon({
+            className: 'charge-sc-pin',
+            html: '<span></span>',
+            iconSize: [12, 12],
+            iconAnchor: [6, 6]
+        });
+
         var mapPinIcon = L.divIcon({
             html: '<svg xmlns="http://www.w3.org/2000/svg" width="28" height="36" viewBox="0 0 24 36" aria-hidden="true" style="display:block;filter:drop-shadow(0 1px 2px rgba(0,0,0,.35))"><path fill="#b45309" stroke="#7c2d12" stroke-width="0.5" d="M12 0C5.4 0 0 5.2 0 11.6 0 20 12 36 12 36s12-16 12-24.4C24 5.2 18.6 0 12 0zm0 16.4a5.4 5.4 0 110-10.8 5.4 5.4 0 010 10.8z"/></svg>',
             className: 'custom-map-pin',
@@ -185,50 +300,73 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         var baseUrl = window.location.origin;
-        function escapeHtml(s) {
-            if (!s) return '';
-            var div = document.createElement('div');
-            div.textContent = s;
-            return div.innerHTML;
+
+        function addSuperchargerPins(sites, defaultCurrency) {
+            var bounds = [];
+            if (!Array.isArray(sites)) return bounds;
+            sites.forEach(function(s) {
+                if (!s || typeof s.lat !== 'number' || typeof s.lng !== 'number') return;
+                var latlng = [s.lat, s.lng];
+                bounds.push(latlng);
+                L.marker(latlng, { icon: scPin }).addTo(homeMap).bindPopup(sitePopupHtml(s, defaultCurrency));
+            });
+            return bounds;
         }
-        var bounds = [];
-        locations.forEach(function(location) {
-            bounds.push([location.lat, location.lng]);
-            var marker = L.marker([location.lat, location.lng], { icon: mapPinIcon }).addTo(homeMap);
-            var imgSrc = location.featured_image
-                ? (location.featured_image.indexOf('http') === 0 ? location.featured_image : baseUrl + (location.featured_image.indexOf('/') === 0 ? '' : '/') + location.featured_image)
-                : '';
-            var imgHtml = imgSrc ? '<img src="' + imgSrc.replace(/"/g, '&quot;') + '" alt="" class="img-fluid" style="max-width: 200px; border-radius: 8px; margin: 0.5rem 0;">' : '';
-            var popupContent = '<div class="map-popup">' +
-                '<h6>' + escapeHtml(location.title) + '</h6>' +
-                '<p class="mb-2"><strong>' + escapeHtml(location.location) + '</strong></p>' +
-                '<p class="text-muted small mb-2">' + escapeHtml(location.date) + '</p>' + imgHtml +
-                '<p class="small mt-2">' + escapeHtml(location.summary) + '</p>' +
-                '<a href="' + escapeHtml(location.url) + '" class="btn btn-primary btn-sm">Read Post <i class="fas fa-arrow-right ms-1"></i></a>' +
-                '</div>';
-            marker.bindPopup(popupContent);
+
+        function addBlogPins() {
+            locations.forEach(function(location) {
+                var marker = L.marker([location.lat, location.lng], { icon: mapPinIcon, zIndexOffset: 1000 }).addTo(homeMap);
+                var imgSrc = location.featured_image
+                    ? (location.featured_image.indexOf('http') === 0 ? location.featured_image : baseUrl + (location.featured_image.indexOf('/') === 0 ? '' : '/') + location.featured_image)
+                    : '';
+                var imgHtml = imgSrc ? '<img src="' + imgSrc.replace(/"/g, '&quot;') + '" alt="" class="img-fluid" style="max-width: 200px; border-radius: 8px; margin: 0.5rem 0;">' : '';
+                var popupContent = '<div class="map-popup">' +
+                    '<h6>' + escapeHtml(location.title) + '</h6>' +
+                    '<p class="mb-2"><strong>' + escapeHtml(location.location) + '</strong></p>' +
+                    '<p class="text-muted small mb-2">' + escapeHtml(location.date) + '</p>' + imgHtml +
+                    '<p class="small mt-2">' + escapeHtml(location.summary) + '</p>' +
+                    '<a href="' + escapeHtml(location.url) + '" class="btn btn-primary btn-sm">Read Post <i class="fas fa-arrow-right ms-1"></i></a>' +
+                    '</div>';
+                marker.bindPopup(popupContent);
+            });
+        }
+
+        function updateHomeStats() {
+            var totalDistance = locations.reduce(function(sum, loc) { return sum + (loc.distance || 0); }, 0);
+            function countryFromLocation(loc) {
+                if (!loc || typeof loc !== 'string') return 'Unknown';
+                var parts = loc.split(',');
+                var last = parts[parts.length - 1];
+                return (last && last.trim()) ? last.trim() : loc.trim();
+            }
+            var countries = new Set(locations.map(function(l) { return countryFromLocation(l.location); })).size;
+            var postsEl = document.getElementById('home-posts-count');
+            if (postsEl) postsEl.textContent = locations.length;
+            var countriesEl = document.getElementById('home-countries-count');
+            if (countriesEl) countriesEl.textContent = countries;
+            var distanceEl = document.getElementById('home-distance');
+            if (distanceEl) distanceEl.textContent = totalDistance.toLocaleString();
+            var daysEl = document.getElementById('home-days');
+            if (daysEl) daysEl.textContent = Math.ceil(locations.length * 2.5);
+        }
+
+        statsPromise.then(function(data) {
+            var sites = data && Array.isArray(data.sites) ? data.sites : [];
+            var currency = data && data.totals ? data.totals.currency : null;
+            var scBounds = addSuperchargerPins(sites, currency);
+            addBlogPins();
+            if (scBounds.length > 0) {
+                homeMap.fitBounds(scBounds, { padding: [32, 32], maxZoom: 7 });
+            }
+            var q = new URLSearchParams(window.location.search);
+            var qLat = parseFloat(q.get('lat'));
+            var qLng = parseFloat(q.get('lng'));
+            var qZoom = parseInt(q.get('zoom'), 10);
+            if (!isNaN(qLat) && !isNaN(qLng)) {
+                homeMap.flyTo([qLat, qLng], isNaN(qZoom) ? 10 : qZoom);
+            }
+            updateHomeStats();
         });
-
-        if (bounds.length > 0) {
-            homeMap.fitBounds(bounds, { padding: [50, 50], maxZoom: 6 });
-        }
-
-        var totalDistance = locations.reduce(function(sum, loc) { return sum + (loc.distance || 0); }, 0);
-        function countryFromLocation(loc) {
-            if (!loc || typeof loc !== 'string') return 'Unknown';
-            var parts = loc.split(',');
-            var last = parts[parts.length - 1];
-            return (last && last.trim()) ? last.trim() : loc.trim();
-        }
-        var countries = new Set(locations.map(function(l) { return countryFromLocation(l.location); })).size;
-        var postsEl = document.getElementById('home-posts-count');
-        if (postsEl) postsEl.textContent = locations.length;
-        var countriesEl = document.getElementById('home-countries-count');
-        if (countriesEl) countriesEl.textContent = countries;
-        var distanceEl = document.getElementById('home-distance');
-        if (distanceEl) distanceEl.textContent = totalDistance.toLocaleString();
-        var daysEl = document.getElementById('home-days');
-        if (daysEl) daysEl.textContent = Math.ceil(locations.length * 2.5);
     } catch (e) {
         console.error('Home map init error:', e);
         mapEl.innerHTML = '<p class="text-center text-muted py-5">Map could not be loaded. Please refresh the page.</p>';
@@ -248,4 +386,3 @@ document.addEventListener('DOMContentLoaded', function() {
 }
 </style>
 {{ end }}
-
