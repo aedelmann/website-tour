@@ -530,6 +530,324 @@ footer hr {
     margin-right: 0.5rem;
 }
 
+.contact-page .contact-hero-lead {
+    max-width: 40rem;
+    margin-left: auto;
+    margin-right: auto;
+    font-family: var(--font-serif);
+    font-size: 1.15rem;
+    line-height: 1.55;
+}
+
+.contact-page .contact-reach-block {
+    max-width: 28rem;
+    margin: 0 auto;
+}
+
+.contact-page .contact-action-btn {
+    border-radius: var(--radius);
+}
+
+.contact-page .contact-section-label,
+.about-page .about-section-label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 0.85rem;
+}
+
+.contact-page .contact-faq .accordion-item {
+    border: 1px solid var(--border);
+    border-radius: var(--radius) !important;
+    overflow: hidden;
+    margin-bottom: 0.75rem;
+    background: var(--bg-elevated);
+}
+
+.contact-page .contact-faq .accordion-button {
+    font-family: var(--font-sans);
+    font-weight: 600;
+    background: var(--bg-elevated);
+    color: var(--text);
+    box-shadow: none;
+}
+
+.contact-page .contact-faq .accordion-button:not(.collapsed) {
+    color: var(--primary);
+    background: rgba(180, 83, 9, 0.06);
+}
+
+.contact-page .contact-faq .accordion-button:focus {
+    box-shadow: 0 0 0 0.2rem rgba(180, 83, 9, 0.2);
+}
+
+/* About page */
+.about-page .about-hero-lead {
+    max-width: 32rem;
+    margin-left: auto;
+    margin-right: auto;
+    font-family: var(--font-serif);
+    font-size: 1.2rem;
+    line-height: 1.55;
+}
+
+.about-page .about-section-title {
+    font-family: var(--font-serif);
+    font-weight: 600;
+}
+
+.about-page .about-avatar {
+    border-radius: 50%;
+    object-fit: cover;
+    box-shadow: var(--shadow);
+    border: 3px solid var(--bg-elevated);
+}
+
+.about-page .about-avatar--sm {
+    width: 160px;
+    max-width: 42vw;
+    height: auto;
+    aspect-ratio: 1;
+}
+
+.about-page .about-trip-card,
+.about-page .about-profile-card {
+    background: var(--bg-elevated);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow);
+}
+
+.about-page .about-trip-card {
+    max-width: 44rem;
+    margin: 0 auto;
+    padding: 1.35rem 1.5rem;
+    text-align: center;
+}
+
+.about-page .about-trip-card p {
+    text-align: left;
+}
+
+.about-page .about-trip-chips,
+.about-page .about-chip-row,
+.about-page .about-follow-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.about-page .about-trip-chips,
+.about-page .about-follow-row {
+    justify-content: center;
+}
+
+.about-chip {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.35rem 0.75rem;
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    background: rgba(180, 83, 9, 0.06);
+    color: var(--text);
+    font-size: 0.85rem;
+    font-weight: 500;
+    line-height: 1.3;
+}
+
+.about-chip i {
+    color: var(--primary);
+}
+
+.about-page .about-work-accordion {
+    max-width: 68rem;
+    margin: 0 auto;
+}
+
+.about-page .about-work-accordion .accordion-item {
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg) !important;
+    overflow: hidden;
+    background: var(--bg-elevated);
+    box-shadow: var(--shadow);
+}
+
+.about-page .about-work-accordion .accordion-button {
+    font-family: var(--font-sans);
+    font-weight: 600;
+    background: var(--bg-elevated);
+    color: var(--text);
+    box-shadow: none;
+}
+
+.about-page .about-work-accordion .accordion-button:not(.collapsed) {
+    color: var(--primary);
+    background: rgba(180, 83, 9, 0.06);
+}
+
+.about-page .about-work-accordion .accordion-button:focus {
+    box-shadow: 0 0 0 0.2rem rgba(180, 83, 9, 0.2);
+}
+
+.about-page .about-work-accordion .accordion-body {
+    padding: 1.25rem 1rem 1.5rem;
+}
+
+.about-page .about-profile-card {
+    padding: 1.35rem 1.15rem 1.4rem;
+    box-shadow: none;
+}
+
+.about-page .about-subhead {
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin: 1.35rem 0 0.65rem;
+}
+
+.about-page .about-toolbox,
+.about-page .about-plain-list {
+    margin: 0;
+    padding-left: 1.1rem;
+    color: var(--text-muted);
+    font-size: 0.95rem;
+}
+
+.about-page .about-toolbox li,
+.about-page .about-plain-list li {
+    margin-bottom: 0.35rem;
+}
+
+.about-page .about-timeline {
+    border-left: 2px solid rgba(180, 83, 9, 0.25);
+    padding-left: 1rem;
+    margin-left: 0.15rem;
+}
+
+.about-page .about-timeline-item {
+    position: relative;
+    margin-bottom: 1.15rem;
+}
+
+.about-page .about-timeline-item:last-child {
+    margin-bottom: 0;
+}
+
+.about-page .about-timeline-item::before {
+    content: "";
+    position: absolute;
+    left: -1.3rem;
+    top: 0.45rem;
+    width: 0.55rem;
+    height: 0.55rem;
+    border-radius: 50%;
+    background: var(--primary);
+    box-shadow: 0 0 0 3px rgba(180, 83, 9, 0.15);
+}
+
+.about-page .about-timeline-meta {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 0.25rem 0.75rem;
+    margin-bottom: 0.25rem;
+}
+
+.about-page .about-timeline-meta strong {
+    font-size: 0.95rem;
+    color: var(--text);
+}
+
+.about-page .about-timeline-meta span {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+}
+
+.about-page .about-timeline-item p {
+    margin: 0;
+    font-size: 0.875rem;
+    color: var(--text-muted);
+    line-height: 1.55;
+}
+
+.about-page .about-side-grid {
+    display: grid;
+    gap: 0.5rem 1.25rem;
+    margin-top: 0.25rem;
+}
+
+@media (min-width: 576px) {
+    .about-page .about-side-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+.about-page .about-code-lead {
+    max-width: 36rem;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.about-page .about-repo-grid {
+    opacity: 0.97;
+}
+
+.about-page .about-cta .btn + .btn {
+    margin-left: 0.5rem;
+}
+
+@media (max-width: 575.98px) {
+    .about-page .about-cta .btn + .btn {
+        margin-left: 0;
+        margin-top: 0.5rem;
+    }
+}
+
+/* GitHub repo cards (About) */
+.repo-card-link:hover .repo-card {
+    transform: translateY(-4px);
+    box-shadow: 0 0.5rem 1.25rem rgba(0, 0, 0, 0.12) !important;
+}
+
+.repo-card {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    border-color: var(--border);
+}
+
+.repo-card-img-wrap {
+    position: relative;
+    height: 140px;
+    background: linear-gradient(135deg, #f6f8fa 0%, #e8eaed 100%);
+    overflow: hidden;
+}
+
+.repo-card-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.repo-card-img-fallback {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 3rem;
+    color: #6c757d;
+    opacity: 0.35;
+}
+
+.repo-card-img:not([src]),
+.repo-card-img[src=""] {
+    display: none;
+}
+
 /* Leaflet popup */
 .leaflet-popup-content-wrapper {
     border-radius: var(--radius);

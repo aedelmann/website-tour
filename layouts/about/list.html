@@ -1,328 +1,335 @@
 {{ define "main" }}
-<div class="container py-5">
-    <div class="row">
-        <div class="col-12">
-            <h1 class="text-center mb-3">
-                <i class="fas fa-users me-2"></i>About Us
-            </h1>
-            <p class="text-center text-muted mb-5">
-                The two humans (and one very quiet car) behind Silent Wanderers.
-            </p>
-        </div>
-    </div>
+<div class="container py-5 about-page">
+    <!-- 1. Hero -->
+    <header class="about-hero text-center mb-5">
+        <h1 class="mb-3">
+            <i class="fas fa-users me-2"></i>About Us
+        </h1>
+        <p class="about-hero-lead text-muted mb-0">
+            The two humans (and one very quiet car) behind Silent Wanderers.
+        </p>
+    </header>
 
-    <!-- Intro: Alex & Cristyne -->
-    <div class="row align-items-center mb-5">
-        <div class="col-lg-4 text-center mb-4 mb-lg-0">
-            <div class="d-flex justify-content-center gap-3 flex-wrap">
-                <img src="{{ "/images/about/alex-github.png" | relURL }}"
-                     alt="Alexander Edelmann"
-                     class="img-fluid rounded-circle shadow-sm"
-                     style="max-width: 160px; width: 100%; height: auto; object-fit: cover;">
-                <img src="{{ "/images/about/cristyne.png" | relURL }}"
-                     alt="Cristyne Hung"
-                     class="img-fluid rounded-circle shadow-sm"
-                     style="max-width: 160px; width: 100%; height: auto; object-fit: cover;">
+    <!-- 2. Who we are -->
+    <section class="about-who mb-5" aria-labelledby="about-who-heading">
+        <div class="row align-items-center">
+            <div class="col-lg-4 text-center mb-4 mb-lg-0">
+                <div class="about-who-photos d-flex justify-content-center gap-3 flex-wrap">
+                    <img src="{{ "/images/about/alex-github.png" | relURL }}"
+                         alt="Alexander Edelmann"
+                         class="about-avatar about-avatar--sm"
+                         width="160" height="160">
+                    <img src="{{ "/images/about/cristyne.png" | relURL }}"
+                         alt="Cristyne Hung"
+                         class="about-avatar about-avatar--sm"
+                         width="160" height="160">
+                </div>
             </div>
-            <div class="mt-3">
-                <a href="https://github.com/aedelmann" target="_blank" rel="noopener" class="btn btn-outline-primary btn-sm">
-                    <i class="fab fa-github me-1"></i>github.com/aedelmann
-                </a>
+            <div class="col-lg-8">
+                <h2 id="about-who-heading" class="h3 mb-3">Hola, we're Alex &amp; Cristyne</h2>
+                <p class="text-muted mb-0">
+                    We're a couple who swapped a fixed address for a rolling one. <strong>Alex</strong> is German, a
+                    lifelong tech geek, solution architect, and full-stack engineer who has spent 20+ years building
+                    cloud and IoT systems. <strong>Cristyne</strong> is from Singapore and a fashion designer—she
+                    graduated from <strong>LASALLE College of the Arts</strong> in Singapore and most recently
+                    led fashion products at <strong>Heinemann</strong> in Singapore for the South-East Asia and
+                    Oceania region. She's also our chief adventure planner, photographer, and the reason we always
+                    find the best tapas bar in town.
+                </p>
             </div>
         </div>
-        <div class="col-lg-8">
-            <h2 class="h3 mb-3">Hola, we're Alex &amp; Cristyne</h2>
-            <p class="text-muted">
-                We're a couple who swapped a fixed address for a rolling one. <strong>Alex</strong> is German, a
-                lifelong tech geek, solution architect, and full-stack engineer who has spent 20+ years building
-                cloud and IoT systems. <strong>Cristyne</strong> is from Singapore and a fashion designer—she
-                graduated from <strong>LASALLE College of the Arts</strong> in Singapore and most recently
-                led fashion products at <strong>Heinemann</strong> in Singapore for the South-East Asia and
-                Oceania region. She's also our chief adventure planner, photographer, and the reason we always
-                find the best tapas bar in town.
-            </p>
-            <p class="text-muted mb-0">
+    </section>
+
+    <!-- 3. The trip (promoted from intro) -->
+    <section class="about-trip mb-5" aria-labelledby="about-trip-heading">
+        <div class="about-trip-card">
+            <h2 id="about-trip-heading" class="about-section-label">The trip</h2>
+            <p class="text-muted mb-3">
                 Together we're exploring Europe and beyond in our <strong>{{ .Site.Params.tesla_model }}</strong>,
                 documenting the places, the costs, the bureaucracy, and the occasional gale-force balcony wind along
                 the way. We started in southern Spain and we're not in a hurry.
             </p>
+            <div class="about-trip-chips">
+                <span class="about-chip"><i class="fas fa-car me-1"></i>{{ .Site.Params.tesla_model }}</span>
+                <span class="about-chip"><i class="fas fa-calendar-alt me-1"></i>Started 29 Dec 2025</span>
+                <span class="about-chip"><i class="fas fa-hourglass-half me-1"></i>Plan 1–2 years</span>
+            </div>
         </div>
-    </div>
+    </section>
 
-    <hr class="my-5">
-
-    <!-- Alex: work experience -->
-    <div class="row align-items-start mb-4">
-        <div class="col-lg-3 text-center mb-4 mb-lg-0">
-            <img src="{{ "/images/about/alex-github.png" | relURL }}"
-                 alt="Alexander Edelmann"
-                 class="img-fluid rounded-circle shadow-sm"
-                 style="max-width: 200px; width: 100%; height: auto; object-fit: cover;">
+    <!-- How to follow -->
+    <section class="about-follow mb-5" aria-labelledby="about-follow-heading">
+        <h2 id="about-follow-heading" class="about-section-label text-center">How to follow</h2>
+        <div class="about-follow-row">
+            {{ if .Site.Params.instagram }}
+            <a href="https://instagram.com/{{ .Site.Params.instagram }}"
+               target="_blank"
+               rel="noopener"
+               class="btn btn-outline-primary btn-sm">
+                <i class="fab fa-instagram me-1"></i>@{{ .Site.Params.instagram }}
+            </a>
+            {{ end }}
+            <a href="{{ "/posts/" | relURL }}" class="btn btn-outline-primary btn-sm">
+                <i class="fas fa-book-open me-1"></i>Blog
+            </a>
+            <a href="{{ "/" | relURL }}#homeMap" class="btn btn-outline-primary btn-sm">
+                <i class="fas fa-map-marked-alt me-1"></i>Journey map
+            </a>
         </div>
-        <div class="col-lg-9">
-            <h2 class="h3 mb-3"><i class="fas fa-briefcase me-2"></i>Alex's work, in short</h2>
-            <p class="text-muted">
-                Results-driven solution architect and full-stack engineer with <strong>20+ years</strong> of
-                experience—mostly in Java—building scalable cloud solutions, designing SDKs, and leading
-                cross-regional teams. Happiest where technology meets real business problems (and a good coffee).
-            </p>
+    </section>
 
-            <h3 class="h6 text-uppercase text-muted mt-4 mb-2">Technical toolbox</h3>
-            <ul class="text-muted">
-                <li><strong>Cloud:</strong> Azure, AWS, Google Cloud, Cloud Foundry</li>
-                <li><strong>Languages:</strong> Java, Node.js, JavaScript, C#/.NET</li>
-                <li><strong>Architecture:</strong> IoT cloud architecture, microservices, GoF design patterns, UML 2.x</li>
-                <li><strong>DevOps:</strong> CI/CD on AWS, Azure &amp; Jenkins, Kubernetes, Docker</li>
-                <li><strong>Ways of working:</strong> Agile (Scrum, Kanban)</li>
-            </ul>
+    <!-- 4. Work (demoted) -->
+    <section class="about-work mb-5" aria-labelledby="about-work-heading">
+        <h2 id="about-work-heading" class="visually-hidden">Work</h2>
+        <div class="accordion about-work-accordion" id="aboutWorkAccordion">
+            <div class="accordion-item">
+                <h3 class="accordion-header" id="aboutWorkHeading">
+                    <button class="accordion-button collapsed" type="button"
+                            data-bs-toggle="collapse" data-bs-target="#aboutWorkCollapse"
+                            aria-expanded="false" aria-controls="aboutWorkCollapse">
+                        More about our work
+                    </button>
+                </h3>
+                <div id="aboutWorkCollapse" class="accordion-collapse collapse"
+                     aria-labelledby="aboutWorkHeading" data-bs-parent="#aboutWorkAccordion">
+                    <div class="accordion-body">
+                        <div class="row g-4">
+                            <!-- Alex -->
+                            <div class="col-lg-6">
+                                <article class="about-profile-card h-100">
+                                    <h3 class="h4 mb-3">Alex's work, in short</h3>
+                                    <p class="text-muted">
+                                        Results-driven solution architect and full-stack engineer with <strong>20+ years</strong> of
+                                        experience—mostly in Java—building scalable cloud solutions, designing SDKs, and leading
+                                        cross-regional teams. Happiest where technology meets real business problems (and a good coffee).
+                                    </p>
 
-            <h3 class="h6 text-uppercase text-muted mt-4 mb-3">Experience</h3>
-            <div class="timeline">
-                <div class="mb-4">
-                    <div class="d-flex justify-content-between flex-wrap">
-                        <strong>Freelancer</strong>
-                        <span class="text-muted small">01/2026 – Present · Jerez de la Frontera, Spain</span>
+                                    <h4 class="about-subhead">Technical toolbox</h4>
+                                    <ul class="about-toolbox">
+                                        <li><strong>Cloud:</strong> Azure, AWS, Google Cloud, Cloud Foundry</li>
+                                        <li><strong>Languages:</strong> Java, Node.js, JavaScript, C#/.NET</li>
+                                        <li><strong>Architecture:</strong> IoT cloud architecture, microservices, GoF design patterns, UML 2.x</li>
+                                        <li><strong>DevOps:</strong> CI/CD on AWS, Azure &amp; Jenkins, Kubernetes, Docker</li>
+                                        <li><strong>Ways of working:</strong> Agile (Scrum, Kanban)</li>
+                                    </ul>
+
+                                    <h4 class="about-subhead">Experience</h4>
+                                    <div class="about-timeline">
+                                        <div class="about-timeline-item">
+                                            <div class="about-timeline-meta">
+                                                <strong>Freelancer</strong>
+                                                <span>01/2026 – Present · Jerez de la Frontera, Spain</span>
+                                            </div>
+                                            <p>Custom solution development (Java, Angular, …) and operating those solutions across cloud platforms for high availability.</p>
+                                        </div>
+                                        <div class="about-timeline-item">
+                                            <div class="about-timeline-meta">
+                                                <strong>Solution Architect — Bosch.IO</strong>
+                                                <span>01/2023 – 10/2025 · Singapore</span>
+                                            </div>
+                                            <p>DevOps of an Azure cloud solution enabling 1,000+ global users to calibrate electric vehicles; used Databricks, Grafana and a time-series DB for vehicle-data analysis and reporting. Led training and change initiatives.</p>
+                                        </div>
+                                        <div class="about-timeline-item">
+                                            <div class="about-timeline-meta">
+                                                <strong>Lead Architect — Bosch.IO</strong>
+                                                <span>01/2020 – 12/2022 · Singapore</span>
+                                            </div>
+                                            <p>DevOps of an end-to-end IoT cloud solution making data-driven maintenance forecasts for 10,000+ lifts using heuristic AI—cutting service footprint and installation time by &gt;50%. Gateway development in Java OSGi with a Kafka cloud backend.</p>
+                                        </div>
+                                        <div class="about-timeline-item">
+                                            <div class="about-timeline-meta">
+                                                <strong>Open-Source Project Lead &amp; Technical Product Owner — Bosch.IO</strong>
+                                                <span>2014 – 2020 · Singapore</span>
+                                            </div>
+                                            <p>Led the Eclipse Vorto project, growing the contributor community 5×. Built an IoT Suite toolchain with Eclipse EMF / Xtext, halving device-integration time via SDKs. Collaborated with Google, Microsoft and others on smart-building sensor abstraction.</p>
+                                        </div>
+                                        <div class="about-timeline-item">
+                                            <div class="about-timeline-meta">
+                                                <strong>Software Engineer &amp; System Analyst — Bosch.IO</strong>
+                                                <span>2006 – 2012 · Singapore &amp; Germany</span>
+                                            </div>
+                                            <p>Built a Java Spring Boot workflow engine for business users and streamlined SOA/EAI projects, cutting costs by up to 70% through model-driven architectures.</p>
+                                        </div>
+                                    </div>
+
+                                    <div class="about-side-grid">
+                                        <div>
+                                            <h4 class="about-subhead">Education &amp; languages</h4>
+                                            <ul class="about-plain-list">
+                                                <li>M.Sc., Furtwangen University, Germany (2001 – 2006)</li>
+                                                <li>German (native), English (fluent), Mandarin (basic), Spanish (improving daily!)</li>
+                                            </ul>
+                                        </div>
+                                        <div>
+                                            <h4 class="about-subhead">A couple of highlights</h4>
+                                            <ul class="about-plain-list">
+                                                <li>AWS Hackathon Winner, Singapore 2016 (augmented-reality IoT use case)</li>
+                                                <li>Published IoT articles on the Bosch developer portal (e.g. Eclipse Vorto integration)</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </article>
+                            </div>
+
+                            <!-- Cristyne -->
+                            <div class="col-lg-6">
+                                <article class="about-profile-card h-100">
+                                    <h3 class="h4 mb-3">Cristyne's work, in short</h3>
+                                    <p class="text-muted">
+                                        Dynamic senior buyer and fashion professional with <strong>10+ years</strong> in procurement,
+                                        category management, and product merchandising across luxury retail, travel retail, and e-commerce.
+                                        Proven at driving sales growth, tightening inventory, and launching products that actually move.
+                                    </p>
+
+                                    <h4 class="about-subhead">Key expertise</h4>
+                                    <ul class="about-toolbox">
+                                        <li>Category management, procurement &amp; negotiation, inventory optimisation</li>
+                                        <li>Product development, merchandising planning, and retail analytics</li>
+                                        <li>Tools: Adobe Illustrator &amp; Photoshop, Microsoft Office, Nav BC, Power BI</li>
+                                    </ul>
+
+                                    <h4 class="about-subhead">Experience</h4>
+                                    <div class="about-timeline">
+                                        <div class="about-timeline-item">
+                                            <div class="about-timeline-meta">
+                                                <strong>Assistant Purchasing Manager (APAC) — Heinemann Asia Pacific</strong>
+                                                <span>Sept 2021 – Oct 2025 · Singapore</span>
+                                            </div>
+                                            <p>Oversees luxury timepieces and eyewear for South-East Asia and Oceania. Achieved a <strong>70% sales increase</strong> vs pre-COVID levels, cut inventory <strong>40%</strong>, and mentors assistant buyers. Uses data dashboards to prevent stockouts and coordinates with brands for event-ready deliveries.</p>
+                                        </div>
+                                        <div class="about-timeline-item">
+                                            <div class="about-timeline-meta">
+                                                <strong>Buyer, Travel Essentials (SG &amp; Malaysia) — Lagardère Travel Retail</strong>
+                                                <span>May 2019 – Aug 2021 · Singapore</span>
+                                            </div>
+                                            <p>Managed inventory with sales forecasts; curated assortments and planograms; built promotional calendars. Launched innovative lines for &ldquo;Discover Singapore&rdquo; and &ldquo;Taste of Singapore.&rdquo;</p>
+                                        </div>
+                                        <div class="about-timeline-item">
+                                            <div class="about-timeline-meta">
+                                                <strong>Buyer, U.S. Marketplace — Yventure Group</strong>
+                                                <span>2017 – 2019 · Singapore</span>
+                                            </div>
+                                            <p>Selected products from U.S. market trends; negotiated vendor terms; aligned stock with demand forecasts. Collaborated on crowd-funding launches with Fair Leather &amp; Co. and Tocco Toscano.</p>
+                                        </div>
+                                        <div class="about-timeline-item">
+                                            <div class="about-timeline-meta">
+                                                <strong>Product Manager (APAC &amp; Africa), Handbags &amp; Accessories — Bata Shoes</strong>
+                                                <span>2015 – 2016 · Singapore</span>
+                                            </div>
+                                            <p>Led regional handbags and accessories—<strong>80% of regional sales</strong> at Q2-16 SRM vs prior year. Developed country-specific SKUs with annual turnover exceeding USD 500k.</p>
+                                        </div>
+                                        <div class="about-timeline-item">
+                                            <div class="about-timeline-meta">
+                                                <strong>Assistant Buyer (E-Commerce) — Joobz International</strong>
+                                                <span>2014 – 2015 · Singapore</span>
+                                            </div>
+                                            <p>Handled 98 luxury brands across apparel, shoes, handbags, and fine jewellery—online launches, competitor pricing, SEO with IT, and coordinated promotions.</p>
+                                        </div>
+                                        <div class="about-timeline-item">
+                                            <div class="about-timeline-meta">
+                                                <strong>Assistant Merchandiser &amp; Product Designer — Active World (Bonia Group)</strong>
+                                                <span>2011 – 2014 · Singapore</span>
+                                            </div>
+                                            <p>A/W 2013 handbags collection with Girls' Generation sold out in <strong>2 weeks</strong> and boosted seasonal sales <strong>85%</strong>. Planned buying budgets, displays, and production quality end-to-end.</p>
+                                        </div>
+                                    </div>
+
+                                    <div class="about-side-grid">
+                                        <div>
+                                            <h4 class="about-subhead">Education &amp; languages</h4>
+                                            <ul class="about-plain-list">
+                                                <li>B.A. Fashion Design, LASALLE College of the Arts &amp; U.K. Open University (2009 – 2010)</li>
+                                                <li>Diploma in Fashion Design, LASALLE College of the Arts (2006 – 2009)</li>
+                                                <li>Professional development: Retail Buying, Merchandising Planning (Retail Academy of Singapore); Supply Chain Management (Coursera)</li>
+                                                <li>English (fluent), Mandarin (advanced), German (basic)</li>
+                                            </ul>
+                                        </div>
+                                        <div>
+                                            <h4 class="about-subhead">A couple of highlights</h4>
+                                            <ul class="about-plain-list">
+                                                <li>70% sales lift in luxury timepieces &amp; eyewear post-COVID at Heinemann APAC</li>
+                                                <li>Girls' Generation collaboration collection sold out in two weeks (Bonia / Active World)</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+
+                                    <p class="mt-3 mb-0">
+                                        <a href="{{ "/files/cristyne-resume.pdf" | relURL }}" class="btn btn-outline-secondary btn-sm" target="_blank" rel="noopener">
+                                            <i class="fas fa-file-pdf me-1"></i>Full resume (PDF)
+                                        </a>
+                                    </p>
+                                </article>
+                            </div>
+                        </div>
                     </div>
-                    <p class="text-muted small mb-0">Custom solution development (Java, Angular, …) and operating those solutions across cloud platforms for high availability.</p>
-                </div>
-                <div class="mb-4">
-                    <div class="d-flex justify-content-between flex-wrap">
-                        <strong>Solution Architect — Bosch.IO</strong>
-                        <span class="text-muted small">01/2023 – 10/2025 · Singapore</span>
-                    </div>
-                    <p class="text-muted small mb-0">DevOps of an Azure cloud solution enabling 1,000+ global users to calibrate electric vehicles; used Databricks, Grafana and a time-series DB for vehicle-data analysis and reporting. Led training and change initiatives.</p>
-                </div>
-                <div class="mb-4">
-                    <div class="d-flex justify-content-between flex-wrap">
-                        <strong>Lead Architect — Bosch.IO</strong>
-                        <span class="text-muted small">01/2020 – 12/2022 · Singapore</span>
-                    </div>
-                    <p class="text-muted small mb-0">DevOps of an end-to-end IoT cloud solution making data-driven maintenance forecasts for 10,000+ lifts using heuristic AI—cutting service footprint and installation time by &gt;50%. Gateway development in Java OSGi with a Kafka cloud backend.</p>
-                </div>
-                <div class="mb-4">
-                    <div class="d-flex justify-content-between flex-wrap">
-                        <strong>Open-Source Project Lead &amp; Technical Product Owner — Bosch.IO</strong>
-                        <span class="text-muted small">2014 – 2020 · Singapore</span>
-                    </div>
-                    <p class="text-muted small mb-0">Led the Eclipse Vorto project, growing the contributor community 5×. Built an IoT Suite toolchain with Eclipse EMF / Xtext, halving device-integration time via SDKs. Collaborated with Google, Microsoft and others on smart-building sensor abstraction.</p>
-                </div>
-                <div class="mb-4">
-                    <div class="d-flex justify-content-between flex-wrap">
-                        <strong>Software Engineer &amp; System Analyst — Bosch.IO</strong>
-                        <span class="text-muted small">2006 – 2012 · Singapore &amp; Germany</span>
-                    </div>
-                    <p class="text-muted small mb-0">Built a Java Spring Boot workflow engine for business users and streamlined SOA/EAI projects, cutting costs by up to 70% through model-driven architectures.</p>
                 </div>
             </div>
-
-            <h3 class="h6 text-uppercase text-muted mt-4 mb-2">Education &amp; languages</h3>
-            <ul class="text-muted">
-                <li>M.Sc., Furtwangen University, Germany (2001 – 2006)</li>
-                <li>German (native), English (fluent), Mandarin (basic), Spanish (improving daily!)</li>
-            </ul>
-
-            <h3 class="h6 text-uppercase text-muted mt-4 mb-2">A couple of highlights</h3>
-            <ul class="text-muted">
-                <li>AWS Hackathon Winner, Singapore 2016 (augmented-reality IoT use case)</li>
-                <li>Published IoT articles on the Bosch developer portal (e.g. Eclipse Vorto integration)</li>
-            </ul>
         </div>
-    </div>
+    </section>
 
-    <hr class="my-5">
-
-    <!-- Cristyne: work experience -->
-    <div class="row align-items-start mb-4">
-        <div class="col-lg-3 text-center mb-4 mb-lg-0">
-            <img src="{{ "/images/about/cristyne.png" | relURL }}"
-                 alt="Cristyne Hung"
-                 class="img-fluid rounded-circle shadow-sm"
-                 style="max-width: 200px; width: 100%; height: auto; object-fit: cover;">
-        </div>
-        <div class="col-lg-9">
-            <h2 class="h3 mb-3"><i class="fas fa-briefcase me-2"></i>Cristyne's work, in short</h2>
-            <p class="text-muted">
-                Dynamic senior buyer and fashion professional with <strong>10+ years</strong> in procurement,
-                category management, and product merchandising across luxury retail, travel retail, and e-commerce.
-                Proven at driving sales growth, tightening inventory, and launching products that actually move.
-            </p>
-
-            <h3 class="h6 text-uppercase text-muted mt-4 mb-2">Key expertise</h3>
-            <ul class="text-muted">
-                <li>Category management, procurement &amp; negotiation, inventory optimisation</li>
-                <li>Product development, merchandising planning, and retail analytics</li>
-                <li>Tools: Adobe Illustrator &amp; Photoshop, Microsoft Office, Nav BC, Power BI</li>
-            </ul>
-
-            <h3 class="h6 text-uppercase text-muted mt-4 mb-3">Experience</h3>
-            <div class="timeline">
-                <div class="mb-4">
-                    <div class="d-flex justify-content-between flex-wrap">
-                        <strong>Assistant Purchasing Manager (APAC) — Heinemann Asia Pacific</strong>
-                        <span class="text-muted small">Sept 2021 – Oct 2025 · Singapore</span>
-                    </div>
-                    <p class="text-muted small mb-0">Oversees luxury timepieces and eyewear for South-East Asia and Oceania. Achieved a <strong>70% sales increase</strong> vs pre-COVID levels, cut inventory <strong>40%</strong>, and mentors assistant buyers. Uses data dashboards to prevent stockouts and coordinates with brands for event-ready deliveries.</p>
-                </div>
-                <div class="mb-4">
-                    <div class="d-flex justify-content-between flex-wrap">
-                        <strong>Buyer, Travel Essentials (SG &amp; Malaysia) — Lagardère Travel Retail</strong>
-                        <span class="text-muted small">May 2019 – Aug 2021 · Singapore</span>
-                    </div>
-                    <p class="text-muted small mb-0">Managed inventory with sales forecasts; curated assortments and planograms; built promotional calendars. Launched innovative lines for &ldquo;Discover Singapore&rdquo; and &ldquo;Taste of Singapore.&rdquo;</p>
-                </div>
-                <div class="mb-4">
-                    <div class="d-flex justify-content-between flex-wrap">
-                        <strong>Buyer, U.S. Marketplace — Yventure Group</strong>
-                        <span class="text-muted small">2017 – 2019 · Singapore</span>
-                    </div>
-                    <p class="text-muted small mb-0">Selected products from U.S. market trends; negotiated vendor terms; aligned stock with demand forecasts. Collaborated on crowd-funding launches with Fair Leather &amp; Co. and Tocco Toscano.</p>
-                </div>
-                <div class="mb-4">
-                    <div class="d-flex justify-content-between flex-wrap">
-                        <strong>Product Manager (APAC &amp; Africa), Handbags &amp; Accessories — Bata Shoes</strong>
-                        <span class="text-muted small">2015 – 2016 · Singapore</span>
-                    </div>
-                    <p class="text-muted small mb-0">Led regional handbags and accessories—<strong>80% of regional sales</strong> at Q2-16 SRM vs prior year. Developed country-specific SKUs with annual turnover exceeding USD 500k.</p>
-                </div>
-                <div class="mb-4">
-                    <div class="d-flex justify-content-between flex-wrap">
-                        <strong>Assistant Buyer (E-Commerce) — Joobz International</strong>
-                        <span class="text-muted small">2014 – 2015 · Singapore</span>
-                    </div>
-                    <p class="text-muted small mb-0">Handled 98 luxury brands across apparel, shoes, handbags, and fine jewellery—online launches, competitor pricing, SEO with IT, and coordinated promotions.</p>
-                </div>
-                <div class="mb-4">
-                    <div class="d-flex justify-content-between flex-wrap">
-                        <strong>Assistant Merchandiser &amp; Product Designer — Active World (Bonia Group)</strong>
-                        <span class="text-muted small">2011 – 2014 · Singapore</span>
-                    </div>
-                    <p class="text-muted small mb-0">A/W 2013 handbags collection with Girls' Generation sold out in <strong>2 weeks</strong> and boosted seasonal sales <strong>85%</strong>. Planned buying budgets, displays, and production quality end-to-end.</p>
-                </div>
-            </div>
-
-            <h3 class="h6 text-uppercase text-muted mt-4 mb-2">Education &amp; languages</h3>
-            <ul class="text-muted">
-                <li>B.A. Fashion Design, LASALLE College of the Arts &amp; U.K. Open University (2009 – 2010)</li>
-                <li>Diploma in Fashion Design, LASALLE College of the Arts (2006 – 2009)</li>
-                <li>Professional development: Retail Buying, Merchandising Planning (Retail Academy of Singapore); Supply Chain Management (Coursera)</li>
-                <li>English (fluent), Mandarin (advanced), German (basic)</li>
-            </ul>
-
-            <h3 class="h6 text-uppercase text-muted mt-4 mb-2">A couple of highlights</h3>
-            <ul class="text-muted">
-                <li>70% sales lift in luxury timepieces &amp; eyewear post-COVID at Heinemann APAC</li>
-                <li>Girls' Generation collaboration collection sold out in two weeks (Bonia / Active World)</li>
-            </ul>
-
-            <p class="mt-3 mb-0">
-                <a href="{{ "/files/cristyne-resume.pdf" | relURL }}" class="btn btn-outline-secondary btn-sm" target="_blank" rel="noopener">
-                    <i class="fas fa-file-pdf me-1"></i>Full resume (PDF)
-                </a>
-            </p>
-        </div>
-    </div>
-
-    <hr class="my-5">
-
-    <!-- Open Source / GitHub -->
-    <div class="row mb-4">
-        <div class="col-12">
-            <h2 class="h3 mb-3"><i class="fab fa-github me-2"></i>Code Alex has worked on</h2>
-            <p class="text-muted mb-4">
+    <!-- 5. Code -->
+    <section class="about-code mb-4" aria-labelledby="about-code-heading">
+        <div class="text-center mb-4">
+            <h2 id="about-code-heading" class="about-section-title mb-2">
+                <i class="fab fa-github me-2"></i>Code
+            </h2>
+            <p class="text-muted mb-0 about-code-lead">
                 A few projects from Alex's
                 <a href="https://github.com/aedelmann" target="_blank" rel="noopener">GitHub profile</a>—a mix of
                 personal work and contributions to open-source IoT and developer tooling.
             </p>
         </div>
-    </div>
-    {{- $repos := slice
-        (dict "owner" "aedelmann" "repo" "jiva" "badge" "Java" "desc" "A human workflow engine—letting business users design and run their own processes.")
-        (dict "owner" "eclipse-vorto" "repo" "vorto" "badge" "Java · IoT" "desc" "Eclipse Vorto—an IoT device description language and toolset. Alex led this open-source project.")
-        (dict "owner" "eclipse-leshan" "repo" "leshan" "badge" "Java · LwM2M" "desc" "An OMA Lightweight M2M (LWM2M) implementation for connecting constrained IoT devices.")
-        (dict "owner" "eclipse-xtext" "repo" "xtext" "badge" "Java · DSL" "desc" "A framework for building programming languages and domain-specific languages (DSLs).")
-        (dict "owner" "tombatossals" "repo" "angular-leaflet-directive" "badge" "JavaScript" "desc" "An AngularJS directive to embed and interact with Leaflet maps—the same library powering our journey map.")
-    -}}
-    <div class="row g-4 mb-4">
-        {{- range $repos }}
-        {{- $url := printf "https://github.com/%s/%s" .owner .repo -}}
-        {{- $ogImg := printf "https://opengraph.githubassets.com/%s/%s" .owner .repo -}}
-        <div class="col-md-6 col-lg-4">
-            <a href="{{ $url }}" target="_blank" rel="noopener" class="repo-card-link text-decoration-none">
-                <div class="card h-100 shadow-sm repo-card overflow-hidden">
-                    <div class="repo-card-img-wrap">
-                        <img src="{{ $ogImg }}"
-                             alt="{{ .repo }} on GitHub"
-                             class="repo-card-img"
-                             loading="lazy"
-                             width="600"
-                             height="315">
-                        <div class="repo-card-img-fallback" aria-hidden="true">
-                            <i class="fab fa-github"></i>
+        {{- $repos := slice
+            (dict "owner" "aedelmann" "repo" "jiva" "badge" "Java" "desc" "A human workflow engine—letting business users design and run their own processes.")
+            (dict "owner" "eclipse-vorto" "repo" "vorto" "badge" "Java · IoT" "desc" "Eclipse Vorto—an IoT device description language and toolset. Alex led this open-source project.")
+            (dict "owner" "eclipse-leshan" "repo" "leshan" "badge" "Java · LwM2M" "desc" "An OMA Lightweight M2M (LWM2M) implementation for connecting constrained IoT devices.")
+            (dict "owner" "eclipse-xtext" "repo" "xtext" "badge" "Java · DSL" "desc" "A framework for building programming languages and domain-specific languages (DSLs).")
+            (dict "owner" "tombatossals" "repo" "angular-leaflet-directive" "badge" "JavaScript" "desc" "An AngularJS directive to embed and interact with Leaflet maps—the same library powering our homepage journey map.")
+        -}}
+        <div class="row g-4 about-repo-grid">
+            {{- range $repos }}
+            {{- $url := printf "https://github.com/%s/%s" .owner .repo -}}
+            {{- $ogImg := printf "https://opengraph.githubassets.com/%s/%s" .owner .repo -}}
+            <div class="col-md-6 col-lg-4">
+                <a href="{{ $url }}" target="_blank" rel="noopener" class="repo-card-link text-decoration-none">
+                    <div class="card h-100 shadow-sm repo-card overflow-hidden">
+                        <div class="repo-card-img-wrap">
+                            <img src="{{ $ogImg }}"
+                                 alt="{{ .repo }} on GitHub"
+                                 class="repo-card-img"
+                                 loading="lazy"
+                                 width="600"
+                                 height="315">
+                            <div class="repo-card-img-fallback" aria-hidden="true">
+                                <i class="fab fa-github"></i>
+                            </div>
+                        </div>
+                        <div class="card-body d-flex flex-column">
+                            <h3 class="h5 mb-1 text-dark">{{ .repo }}</h3>
+                            <span class="badge bg-light text-dark mb-2 align-self-start">{{ .badge }}</span>
+                            <p class="text-muted small mb-0">{{ .desc }}</p>
+                            <span class="small text-primary mt-auto pt-2">
+                                View on GitHub <i class="fas fa-arrow-right ms-1"></i>
+                            </span>
                         </div>
                     </div>
-                    <div class="card-body d-flex flex-column">
-                        <h3 class="h5 mb-1 text-dark">{{ .repo }}</h3>
-                        <span class="badge bg-light text-dark mb-2 align-self-start">{{ .badge }}</span>
-                        <p class="text-muted small mb-0">{{ .desc }}</p>
-                        <span class="small text-primary mt-auto pt-2">
-                            View on GitHub <i class="fas fa-arrow-right ms-1"></i>
-                        </span>
-                    </div>
-                </div>
-            </a>
-        </div>
-        {{- end }}
-    </div>
-
-    <div class="row">
-        <div class="col-lg-10 mx-auto">
-            <div class="text-center mt-5">
-                <a href="{{ "/contact/" | relURL }}" class="btn btn-primary">
-                    <i class="fas fa-envelope me-1"></i>Get in touch
-                </a>
-                <a href="https://github.com/aedelmann" target="_blank" rel="noopener" class="btn btn-outline-primary">
-                    <i class="fab fa-github me-1"></i>See more on GitHub
                 </a>
             </div>
+            {{- end }}
         </div>
+    </section>
+
+    <!-- 6. Footer CTA -->
+    <div class="about-cta text-center mt-5">
+        <a href="{{ "/contact/" | relURL }}" class="btn btn-primary">
+            <i class="fas fa-envelope me-1"></i>Get in touch
+        </a>
+        <a href="https://github.com/aedelmann" target="_blank" rel="noopener" class="btn btn-outline-primary">
+            <i class="fab fa-github me-1"></i>See more on GitHub
+        </a>
     </div>
 </div>
 
-<style>
-.repo-card-link:hover .repo-card {
-    transform: translateY(-4px);
-    box-shadow: 0 0.5rem 1.25rem rgba(0, 0, 0, 0.12) !important;
-}
-.repo-card {
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-.repo-card-img-wrap {
-    position: relative;
-    height: 140px;
-    background: linear-gradient(135deg, #f6f8fa 0%, #e8eaed 100%);
-    overflow: hidden;
-}
-.repo-card-img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-}
-.repo-card-img-fallback {
-    position: absolute;
-    inset: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 3rem;
-    color: #6c757d;
-    opacity: 0.35;
-}
-.repo-card-img:not([src]),
-.repo-card-img[src=""] {
-    display: none;
-}
-</style>
 <script>
 document.querySelectorAll('.repo-card-img').forEach(function(img) {
     function showFallback() {
