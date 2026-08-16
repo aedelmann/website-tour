@@ -78,6 +78,24 @@
         </div>
     </section>
 
+    <!-- Also building -->
+    <section class="about-also mb-5" aria-labelledby="about-also-heading">
+        <div class="about-also-card">
+            <h2 id="about-also-heading" class="about-section-label">Also building</h2>
+            <p class="text-muted mb-3">
+                Alex is also building <strong>{{ .Site.Params.rallybuddy_name }}</strong> —
+                a way to find a tennis, pickleball, or pádel partner at your level on a local court.
+                No membership, no court booking, no fee.
+            </p>
+            <a href="{{ .Site.Params.rallybuddy_url }}"
+               class="btn btn-outline-primary btn-sm"
+               target="_blank"
+               rel="noopener">
+                <i class="fas fa-table-tennis me-1"></i>{{ .Site.Params.rallybuddy_name }}
+            </a>
+        </div>
+    </section>
+
     <!-- 4. Work (demoted) -->
     <section class="about-work mb-5" aria-labelledby="about-work-heading">
         <h2 id="about-work-heading" class="visually-hidden">Work</h2>

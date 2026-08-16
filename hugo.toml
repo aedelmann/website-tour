@@ -20,6 +20,8 @@ buildFuture = true
   email = "contactus@silentwanderers.com"
   instagram = "silentwanderers_"
   tesla_model = "Tesla Model Y"
+  rallybuddy_name = "RallyBuddy"
+  rallybuddy_url = "https://rallybuddy.app"
   
   # Map initial view (Europe, zoomed in)
   map_center_lat = 38
