@@ -531,12 +531,17 @@ footer hr {
 }
 
 .contact-page .contact-hero-lead {
-    max-width: 34rem;
+    max-width: 40rem;
     margin-left: auto;
     margin-right: auto;
     font-family: var(--font-serif);
     font-size: 1.15rem;
     line-height: 1.55;
+}
+
+.contact-page .contact-reach-block {
+    max-width: 28rem;
+    margin: 0 auto;
 }
 
 .contact-page .contact-action-btn {
@@ -551,24 +556,6 @@ footer hr {
     text-transform: uppercase;
     color: var(--text-muted);
     margin-bottom: 0.85rem;
-}
-
-.contact-page .contact-journey-card {
-    max-width: 40rem;
-    margin: 0 auto;
-    background: var(--bg-elevated);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-lg);
-    box-shadow: var(--shadow);
-    padding: 1.35rem 1.5rem;
-}
-
-.contact-page .contact-journey-row {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 0.75rem 1rem;
-    margin-bottom: 0.65rem;
 }
 
 .contact-page .contact-faq .accordion-item {
@@ -625,12 +612,6 @@ footer hr {
     aspect-ratio: 1;
 }
 
-.about-page .about-avatar--md {
-    width: 88px;
-    height: 88px;
-    flex-shrink: 0;
-}
-
 .about-page .about-trip-card,
 .about-page .about-profile-card {
     background: var(--bg-elevated);
@@ -646,14 +627,20 @@ footer hr {
     text-align: center;
 }
 
+.about-page .about-trip-card p {
+    text-align: left;
+}
+
 .about-page .about-trip-chips,
-.about-page .about-chip-row {
+.about-page .about-chip-row,
+.about-page .about-follow-row {
     display: flex;
     flex-wrap: wrap;
     gap: 0.5rem;
 }
 
-.about-page .about-trip-chips {
+.about-page .about-trip-chips,
+.about-page .about-follow-row {
     justify-content: center;
 }
 
@@ -674,15 +661,43 @@ footer hr {
     color: var(--primary);
 }
 
-.about-page .about-profile-card {
-    padding: 1.5rem 1.35rem 1.6rem;
+.about-page .about-work-accordion {
+    max-width: 68rem;
+    margin: 0 auto;
 }
 
-.about-page .about-profile-header {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    margin-bottom: 1rem;
+.about-page .about-work-accordion .accordion-item {
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg) !important;
+    overflow: hidden;
+    background: var(--bg-elevated);
+    box-shadow: var(--shadow);
+}
+
+.about-page .about-work-accordion .accordion-button {
+    font-family: var(--font-sans);
+    font-weight: 600;
+    background: var(--bg-elevated);
+    color: var(--text);
+    box-shadow: none;
+}
+
+.about-page .about-work-accordion .accordion-button:not(.collapsed) {
+    color: var(--primary);
+    background: rgba(180, 83, 9, 0.06);
+}
+
+.about-page .about-work-accordion .accordion-button:focus {
+    box-shadow: 0 0 0 0.2rem rgba(180, 83, 9, 0.2);
+}
+
+.about-page .about-work-accordion .accordion-body {
+    padding: 1.25rem 1rem 1.5rem;
+}
+
+.about-page .about-profile-card {
+    padding: 1.35rem 1.15rem 1.4rem;
+    box-shadow: none;
 }
 
 .about-page .about-subhead {
