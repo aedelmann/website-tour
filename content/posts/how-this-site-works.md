@@ -14,6 +14,8 @@ Picture this: we are sitting in Jerez with a coffee, a Tesla in the driveway, an
 
 This is the unglamorous version of how [silentwanderers.com](https://silentwanderers.com) is put together. Not a product pitch. Just the stack, the Tesla bits, and the slightly weird workflow where a bot opens pull requests and we still have to hit merge.
 
+![How Silent Wanderers is put together: Tesla billed history goes through a private Netlify sync into a public JSON snapshot, then onto the Hugo site. Below that, Grok Bot opens a GitHub PR, we preview, then merge.](/images/posts/how-the-site-works.png)
+
 ## The boring (good) foundation
 
 The site is a **Hugo** static site. Markdown in, HTML out. It lives on **GitHub** ([aedelmann/website-tour](https://github.com/aedelmann/website-tour)) and **Netlify** builds it and puts it on the custom domain.
