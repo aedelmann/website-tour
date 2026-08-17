@@ -43,4 +43,4 @@ No protocol walkthroughs, no customer names beyond that. The point was a clean c
 
 ---
 
-That is Lift Manager in one pass: sensors in the shaft, a buffering edge gateway, a REST cloud with predictive and alarm services, and UIs for ops and partners. Past Bosch.IO work—kept under About, not mixed with the travel posts.
+That is Lift Manager in one pass: sensors in the shaft, a buffering edge gateway, a REST cloud with predictive and alarm services, and UIs for ops and partners.
