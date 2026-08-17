@@ -19,6 +19,7 @@ buildFuture = true
   # Contact info
   email = "contactus@silentwanderers.com"
   instagram = "silentwanderers_"
+  github = "aedelmann"
   tesla_model = "Tesla Model Y"
   rallybuddy_name = "RallyBuddy"
   rallybuddy_url = "https://rallybuddy.app"

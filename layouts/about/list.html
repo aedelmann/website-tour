@@ -286,85 +286,29 @@
     </section>
 
     <!-- 5. Code -->
-    <section class="about-code mb-4" aria-labelledby="about-code-heading">
-        <div class="text-center mb-4">
-            <h2 id="about-code-heading" class="about-section-title mb-2">
-                <i class="fab fa-github me-2"></i>Code
-            </h2>
-            <p class="text-muted mb-0 about-code-lead">
-                A few projects from Alex's
-                <a href="https://github.com/aedelmann" target="_blank" rel="noopener">GitHub profile</a>—a mix of
-                personal work and contributions to open-source IoT and developer tooling.
+    {{ if .Site.Params.github }}
+    <section class="about-code mb-5" aria-labelledby="about-code-heading">
+        <div class="about-also-card">
+            <h2 id="about-code-heading" class="about-section-label">Code</h2>
+            <p class="text-muted mb-3">
+                Alex also keeps public projects and open-source work on GitHub—personal stuff plus contributions
+                to IoT and developer tooling. Browse the repos yourself.
             </p>
-        </div>
-        {{- $repos := slice
-            (dict "owner" "aedelmann" "repo" "jiva" "badge" "Java" "desc" "A human workflow engine—letting business users design and run their own processes.")
-            (dict "owner" "eclipse-vorto" "repo" "vorto" "badge" "Java · IoT" "desc" "Eclipse Vorto—an IoT device description language and toolset. Alex led this open-source project.")
-            (dict "owner" "eclipse-leshan" "repo" "leshan" "badge" "Java · LwM2M" "desc" "An OMA Lightweight M2M (LWM2M) implementation for connecting constrained IoT devices.")
-            (dict "owner" "eclipse-xtext" "repo" "xtext" "badge" "Java · DSL" "desc" "A framework for building programming languages and domain-specific languages (DSLs).")
-            (dict "owner" "tombatossals" "repo" "angular-leaflet-directive" "badge" "JavaScript" "desc" "An AngularJS directive to embed and interact with Leaflet maps—the same library powering our homepage journey map.")
-        -}}
-        <div class="row g-4 about-repo-grid">
-            {{- range $repos }}
-            {{- $url := printf "https://github.com/%s/%s" .owner .repo -}}
-            {{- $ogImg := printf "https://opengraph.githubassets.com/%s/%s" .owner .repo -}}
-            <div class="col-md-6 col-lg-4">
-                <a href="{{ $url }}" target="_blank" rel="noopener" class="repo-card-link text-decoration-none">
-                    <div class="card h-100 shadow-sm repo-card overflow-hidden">
-                        <div class="repo-card-img-wrap">
-                            <img src="{{ $ogImg }}"
-                                 alt="{{ .repo }} on GitHub"
-                                 class="repo-card-img"
-                                 loading="lazy"
-                                 width="600"
-                                 height="315">
-                            <div class="repo-card-img-fallback" aria-hidden="true">
-                                <i class="fab fa-github"></i>
-                            </div>
-                        </div>
-                        <div class="card-body d-flex flex-column">
-                            <h3 class="h5 mb-1 text-dark">{{ .repo }}</h3>
-                            <span class="badge bg-light text-dark mb-2 align-self-start">{{ .badge }}</span>
-                            <p class="text-muted small mb-0">{{ .desc }}</p>
-                            <span class="small text-primary mt-auto pt-2">
-                                View on GitHub <i class="fas fa-arrow-right ms-1"></i>
-                            </span>
-                        </div>
-                    </div>
-                </a>
-            </div>
-            {{- end }}
+            <a href="https://github.com/{{ .Site.Params.github }}"
+               class="btn btn-outline-primary btn-sm"
+               target="_blank"
+               rel="noopener">
+                <i class="fab fa-github me-1"></i>See my GitHub
+            </a>
         </div>
     </section>
+    {{ end }}
 
     <!-- 6. Footer CTA -->
     <div class="about-cta text-center mt-5">
         <a href="{{ "/contact/" | relURL }}" class="btn btn-primary">
             <i class="fas fa-envelope me-1"></i>Get in touch
         </a>
-        <a href="https://github.com/aedelmann" target="_blank" rel="noopener" class="btn btn-outline-primary">
-            <i class="fab fa-github me-1"></i>See more on GitHub
-        </a>
     </div>
 </div>
-
-<script>
-document.querySelectorAll('.repo-card-img').forEach(function(img) {
-    function showFallback() {
-        img.style.display = 'none';
-        var fb = img.closest('.repo-card-img-wrap') && img.closest('.repo-card-img-wrap').querySelector('.repo-card-img-fallback');
-        if (fb) fb.style.display = 'flex';
-    }
-    function hideFallback() {
-        var fb = img.closest('.repo-card-img-wrap') && img.closest('.repo-card-img-wrap').querySelector('.repo-card-img-fallback');
-        if (fb) fb.style.display = 'none';
-    }
-    img.addEventListener('load', hideFallback);
-    img.addEventListener('error', showFallback);
-    if (img.complete) {
-        if (img.naturalHeight > 0) hideFallback();
-        else showFallback();
-    }
-});
-</script>
 {{ end }}
