@@ -1,0 +1,57 @@
+{{ define "main" }}
+<div class="container py-5 about-page about-project-page">
+    <nav class="about-project-crumb mb-4" aria-label="Breadcrumb">
+        <a href="{{ "/about/" | relURL }}" class="about-project-back">
+            <i class="fas fa-arrow-left me-1"></i>About Us
+        </a>
+    </nav>
+
+    <article class="about-project">
+        <header class="about-project-header mb-4">
+            <p class="about-section-label mb-2">Solution architecture</p>
+            <h1 class="about-project-title mb-3">{{ .Title }}</h1>
+            <p class="about-project-meta text-muted mb-0">
+                Alexander Edelmann · Lead solution architect · Bosch.IO · 2020–2022
+            </p>
+        </header>
+
+        {{ with .Params.lede }}
+        <div class="about-project-lede mb-4">
+            {{ . | $.Page.RenderString }}
+        </div>
+        {{ end }}
+
+        <p class="about-project-flow text-muted mb-3">
+            The picture below is the shape of the system. Hardware → gateway → cloud → people.
+        </p>
+
+        {{ with .Params.featured_image }}
+        <figure class="about-project-figure mb-5">
+            <img src="{{ . | relURL }}"
+                 alt="{{ $.Params.architecture_alt | default $.Title }}"
+                 class="about-project-architecture img-fluid"
+                 width="1400"
+                 height="720"
+                 loading="eager">
+            <figcaption class="about-project-caption text-muted">
+                Hardware (vibration + distance) → Gateway (collect, buffer, KPI, sync) →
+                Cloud (ingest, alarms &amp; KPI, predictive, REST API) → Operations UI + Partners
+            </figcaption>
+        </figure>
+        {{ end }}
+
+        <div class="about-project-body">
+            {{ .Content }}
+        </div>
+
+        <footer class="about-project-footer mt-5 pt-4">
+            <a href="{{ "/about/" | relURL }}" class="btn btn-outline-primary btn-sm">
+                <i class="fas fa-arrow-left me-1"></i>Back to About
+            </a>
+            <a href="{{ "/contact/" | relURL }}" class="btn btn-primary btn-sm ms-2">
+                <i class="fas fa-envelope me-1"></i>Get in touch
+            </a>
+        </footer>
+    </article>
+</div>
+{{ end }}

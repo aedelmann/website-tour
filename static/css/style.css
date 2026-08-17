@@ -1496,3 +1496,178 @@ footer hr {
     box-shadow: var(--shadow);
     text-align: center;
 }
+
+/* About — solution-architecture projects */
+.about-page .about-projects-intro {
+    max-width: 36rem;
+    margin-left: auto;
+    margin-right: auto;
+    font-size: 0.98rem;
+    line-height: 1.55;
+}
+
+.about-page .about-projects-grid {
+    display: grid;
+    gap: 1rem;
+    max-width: 40rem;
+    margin: 0 auto;
+}
+
+.about-page .about-project-card {
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+    padding: 1.25rem 1.35rem 1.35rem;
+    background: var(--bg-elevated);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow);
+    text-decoration: none;
+    color: inherit;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease, transform 0.15s ease;
+}
+
+.about-page .about-project-card:hover {
+    border-color: rgba(180, 83, 9, 0.45);
+    box-shadow: var(--shadow-md);
+    transform: translateY(-1px);
+    color: inherit;
+}
+
+.about-page .about-project-card-icon {
+    flex: 0 0 auto;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: var(--radius);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(13, 148, 136, 0.1);
+    color: var(--accent);
+    font-size: 1.1rem;
+}
+
+.about-page .about-project-card-title {
+    font-family: var(--font-serif);
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin: 0 0 0.2rem;
+    color: var(--text);
+}
+
+.about-page .about-project-card-meta {
+    margin: 0 0 0.55rem;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+}
+
+.about-page .about-project-card-text {
+    margin: 0 0 0.65rem;
+    font-size: 0.95rem;
+    line-height: 1.55;
+    color: var(--text-muted);
+}
+
+.about-page .about-project-card-cta {
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: var(--primary);
+}
+
+/* About project detail page */
+.about-project-page .about-project {
+    max-width: 44rem;
+    margin: 0 auto;
+}
+
+.about-project-page .about-project-back {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--text-muted);
+    text-decoration: none;
+}
+
+.about-project-page .about-project-back:hover {
+    color: var(--primary);
+}
+
+.about-project-page .about-project-title {
+    font-family: var(--font-serif);
+    font-weight: 600;
+    font-size: clamp(1.75rem, 4vw, 2.35rem);
+    line-height: 1.2;
+    color: var(--text);
+}
+
+.about-project-page .about-project-meta {
+    font-size: 0.92rem;
+}
+
+.about-project-page .about-project-lede {
+    font-family: var(--font-serif);
+    font-size: 1.12rem;
+    line-height: 1.65;
+    color: var(--text);
+}
+
+.about-project-page .about-project-flow {
+    font-size: 0.95rem;
+}
+
+.about-project-page .about-project-figure {
+    margin: 0;
+}
+
+.about-project-page .about-project-architecture {
+    width: 100%;
+    height: auto;
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border);
+    background: var(--bg-elevated);
+    box-shadow: var(--shadow);
+}
+
+.about-project-page .about-project-caption {
+    margin-top: 0.65rem;
+    font-size: 0.82rem;
+    line-height: 1.45;
+}
+
+.about-project-page .about-project-body {
+    font-size: 1.02rem;
+    line-height: 1.7;
+    color: var(--text);
+}
+
+.about-project-page .about-project-body h2 {
+    font-family: var(--font-serif);
+    font-size: 1.35rem;
+    font-weight: 600;
+    margin: 2rem 0 0.75rem;
+    color: var(--text);
+}
+
+.about-project-page .about-project-body p,
+.about-project-page .about-project-body li {
+    color: var(--text-muted);
+}
+
+.about-project-page .about-project-body ol,
+.about-project-page .about-project-body ul {
+    padding-left: 1.2rem;
+    margin-bottom: 1rem;
+}
+
+.about-project-page .about-project-body li {
+    margin-bottom: 0.35rem;
+}
+
+.about-project-page .about-project-body hr {
+    border: 0;
+    border-top: 1px solid var(--border);
+    margin: 2rem 0;
+}
+
+.about-project-page .about-project-footer {
+    border-top: 1px solid var(--border);
+}
