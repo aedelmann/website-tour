@@ -5,6 +5,9 @@ type: "about"
 description: "How Lift Manager moved vibration and distance data from the lift shaft through an edge gateway to a cloud that feeds operations and partners—Alex as lead solution architect at Bosch.IO."
 featured_image: "/images/about/lift-manager-architecture.png"
 architecture_alt: "Lift Manager architecture: on-lift vibration and distance sensors feed the Lift Manager Gateway (collect, buffer, KPI, sync over HTTPS), then Lift Manager Cloud (ingest, alarms and KPI, predictive, REST API), which serves an Operations UI and partner integrations."
+project_meta: "Alexander Edelmann · Lead solution architect · Bosch.IO · 2020–2022"
+flow: "The picture below is the shape of the system. Hardware → gateway → cloud → people."
+architecture_caption: "Hardware (vibration + distance) → Gateway (collect, buffer, KPI, sync) → Cloud (ingest, alarms & KPI, predictive, REST API) → Operations UI + Partners"
 lede: "I led Lift Manager as **lead solution architect** at Bosch.IO (2020–2022): an end-to-end IoT stack for lift maintenance forecasts. Sensors on the shaft, a Java OSGi gateway at the edge, a Spring Boot cloud on Azure, and a REST surface for operations and partners. At the scale we shipped for, that meant data-driven maintenance across **10,000+ lifts**, heuristic AI, and a **>50%** cut in service footprint and installation time."
 build:
   list: never
