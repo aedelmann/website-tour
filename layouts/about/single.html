@@ -11,7 +11,7 @@
             <p class="about-section-label mb-2">Solution architecture</p>
             <h1 class="about-project-title mb-3">{{ .Title }}</h1>
             <p class="about-project-meta text-muted mb-0">
-                Alexander Edelmann · Lead solution architect · Bosch.IO · 2020–2022
+                {{ .Params.project_meta }}
             </p>
         </header>
 
@@ -21,9 +21,11 @@
         </div>
         {{ end }}
 
+        {{ with .Params.flow }}
         <p class="about-project-flow text-muted mb-3">
-            The picture below is the shape of the system. Hardware → gateway → cloud → people.
+            {{ . }}
         </p>
+        {{ end }}
 
         {{ with .Params.featured_image }}
         <figure class="about-project-figure mb-5">
@@ -33,10 +35,11 @@
                  width="1400"
                  height="720"
                  loading="eager">
+            {{ with $.Params.architecture_caption }}
             <figcaption class="about-project-caption text-muted">
-                Hardware (vibration + distance) → Gateway (collect, buffer, KPI, sync) →
-                Cloud (ingest, alarms &amp; KPI, predictive, REST API) → Operations UI + Partners
+                {{ . }}
             </figcaption>
+            {{ end }}
         </figure>
         {{ end }}
 
