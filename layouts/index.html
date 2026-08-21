@@ -236,13 +236,13 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function fetchChargingStats() {
-        return fetch('/api/charging-stats', { credentials: 'same-origin' })
+        return fetch('/api/charging-stats', { credentials: 'same-origin', cache: 'no-store' })
             .then(function(res) {
                 if (!res.ok) throw new Error('no snapshot');
                 return res.json();
             })
             .catch(function() {
-                return fetch('/data/charging-stats.json', { credentials: 'same-origin' })
+                return fetch('/data/charging-stats.json', { credentials: 'same-origin', cache: 'no-store' })
                     .then(function(res) {
                         if (!res.ok) throw new Error('no json');
                         return res.json();
