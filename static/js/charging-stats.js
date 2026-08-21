@@ -119,8 +119,12 @@
 
     var noteEl = row.querySelector('.charge-home-rate-note');
     if (noteEl) {
-      noteEl.textContent = 'Home € estimated at €0.25/kWh.';
-      show(noteEl);
+      if (typeof totals.spent === 'number') {
+        noteEl.textContent = 'Home € estimated at €0.25/kWh.';
+        show(noteEl);
+      } else {
+        hide(noteEl);
+      }
     }
 
     var barChart = row.querySelector('.charge-bar-chart--home') || row.querySelector('.charge-bar-chart');
@@ -137,8 +141,9 @@
     months.forEach(function (m, i) {
       var pct = Math.max(4, Math.round((m.energyKwh / max) * 100));
       var tip = formatKwh(m.energyKwh) + ' kWh';
-      var money = formatMoney(m.spent, cur);
-      ariaParts.push((m.label || m.key) + ' ' + tip + ' · ' + money);
+      var hasSpend = typeof m.spent === 'number';
+      var money = hasSpend ? formatMoney(m.spent, cur) : '';
+      ariaParts.push((m.label || m.key) + ' ' + tip + (money ? ' · ' + money : ''));
       html +=
         '<div class="charge-bar-col">' +
         '<div class="charge-bar-track">' +
@@ -154,9 +159,10 @@
         '</span></div></div>' +
         '<div class="charge-bar-label">' +
         (m.label || m.key) +
-        '<span class="charge-bar-spend">' +
-        money +
-        '</span></div></div>';
+        (hasSpend
+          ? '<span class="charge-bar-spend">' + money + '</span>'
+          : '') +
+        '</div></div>';
     });
     barChart.setAttribute(
       'aria-label',
