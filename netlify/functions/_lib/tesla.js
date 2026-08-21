@@ -25,6 +25,8 @@ const KEY_SNAPSHOT = 'charging-stats';
 const HOME_TIME_ZONE = 'Europe/Madrid';
 /** How far back to request Wall Connector telemetry_history. */
 const HOME_HISTORY_MONTHS = 14;
+/** Estimated Spanish household rate for home Wall Connector spend (€/kWh). Not a Tesla invoice. */
+const HOME_EUR_PER_KWH = 0.25;
 
 function fleetBase() {
   return (process.env.TESLA_FLEET_BASE || DEFAULT_FLEET_BASE).replace(/\/$/, '');
@@ -845,22 +847,26 @@ function pickHomeChargeSessions(payload) {
 
 /**
  * Sanitize Wall Connector charge_history into a public `home` block.
- * Wh → kWh. Month buckets in Europe/Madrid. No invented €. No GPS.
+ * Wh → kWh. Month buckets in Europe/Madrid. Spend = kWh × HOME_EUR_PER_KWH (estimate). No GPS.
  */
 function aggregateHomeSnapshot(sessions, meta) {
   const list = Array.isArray(sessions) ? sessions.filter(Boolean) : [];
   const monthsMap = new Map();
   let totalKwh = 0;
+  let totalSpent = 0;
   const outSessions = [];
 
   for (const session of list) {
     const kwh = homeSessionEnergyKwh(session);
+    const spent = kwh * HOME_EUR_PER_KWH;
     const start = homeSessionStartDate(session);
     totalKwh += kwh;
+    totalSpent += spent;
     const at = start ? start.toISOString() : null;
     outSessions.push({
       at,
       energyKwh: Math.round(kwh * 1000) / 1000,
+      spent: Math.round(spent * 100) / 100,
     });
 
     const mk = start ? monthKeyInTimeZone(start, HOME_TIME_ZONE) : null;
@@ -870,9 +876,11 @@ function aggregateHomeSnapshot(sessions, meta) {
         label: monthLabel(mk),
         energyKwh: 0,
         sessionCount: 0,
+        spent: 0,
       };
       prev.energyKwh += kwh;
       prev.sessionCount += 1;
+      prev.spent += spent;
       monthsMap.set(mk, prev);
     }
   }
@@ -885,17 +893,20 @@ function aggregateHomeSnapshot(sessions, meta) {
   return {
     updatedAt: new Date().toISOString(),
     source: 'tesla_energy_charge_history',
-    note: 'Wall Connector (home) charge sessions. Energy only — Tesla does not invoice home charging.',
+    note: `Wall Connector (home) charge sessions. Spend estimated at €${HOME_EUR_PER_KWH}/kWh (not a Tesla invoice).`,
     energySiteId: meta && meta.energySiteId != null ? meta.energySiteId : undefined,
     totals: {
       energyKwh: Math.round(totalKwh * 1000) / 1000,
       sessionCount: list.length,
+      spent: Math.round(totalSpent * 100) / 100,
+      currency: 'EUR',
     },
     months: monthsOut.map((m) => ({
       key: m.key,
       label: m.label,
       energyKwh: Math.round(m.energyKwh * 1000) / 1000,
       sessionCount: m.sessionCount,
+      spent: Math.round((m.spent || 0) * 100) / 100,
     })),
     sessions: outSessions,
   };
@@ -972,6 +983,7 @@ module.exports = {
   AUTH_AUTHORIZE_URL,
   AUTH_TOKEN_URL,
   DOMAIN,
+  HOME_EUR_PER_KWH,
   HOME_TIME_ZONE,
   KEY_REFRESH,
   KEY_SNAPSHOT,

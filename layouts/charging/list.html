@@ -154,9 +154,10 @@
             <div class="charge-stage charge-reveal" style="--delay: 0.14s" data-charge-months="home">
                 <div class="charge-stage-head">
                     <h2>Home · Wall Connector</h2>
-                    <p>Garage charging — kWh only (Tesla does not invoice the Wall Connector).</p>
+                    <p>Garage charging — energy and estimated home electricity spend.</p>
                 </div>
                 <p class="charge-home-totals" hidden></p>
+                <p class="charge-home-rate-note" hidden></p>
                 <div class="charge-bar-chart charge-bar-chart--home" role="img" aria-label="Home Wall Connector monthly charging"></div>
             </div>
         </div>
@@ -186,5 +187,5 @@
 {{ end }}
 
 {{ define "scripts" }}
-<script src="/js/charging-stats.js?v=home1" defer></script>
+<script src="/js/charging-stats.js?v=home2" defer></script>
 {{ end }}

@@ -81,7 +81,7 @@
   }
 
   /**
-   * Separate Wall Connector graph. No €. Hidden when snapshot has no home block.
+   * Separate Wall Connector graph. Shows estimated € (HOME_EUR_PER_KWH). Hidden when no home block.
    */
   function hydrateHome(home) {
     var row = document.querySelector('[data-home-charge]');
@@ -102,14 +102,25 @@
 
     show(row);
 
+    var cur = totals.currency || 'EUR';
     var totalsEl = row.querySelector('.charge-home-totals');
     if (totalsEl) {
-      totalsEl.textContent =
+      var totalsText =
         formatKwh(totals.energyKwh || 0) +
         ' kWh · ' +
         formatInt(totals.sessionCount || 0) +
         ' sessions';
+      if (typeof totals.spent === 'number') {
+        totalsText += ' · ' + formatMoney(totals.spent, cur);
+      }
+      totalsEl.textContent = totalsText;
       show(totalsEl);
+    }
+
+    var noteEl = row.querySelector('.charge-home-rate-note');
+    if (noteEl) {
+      noteEl.textContent = 'Home € estimated at €0.25/kWh.';
+      show(noteEl);
     }
 
     var barChart = row.querySelector('.charge-bar-chart--home') || row.querySelector('.charge-bar-chart');
@@ -126,7 +137,8 @@
     months.forEach(function (m, i) {
       var pct = Math.max(4, Math.round((m.energyKwh / max) * 100));
       var tip = formatKwh(m.energyKwh) + ' kWh';
-      ariaParts.push((m.label || m.key) + ' ' + tip);
+      var money = formatMoney(m.spent, cur);
+      ariaParts.push((m.label || m.key) + ' ' + tip + ' · ' + money);
       html +=
         '<div class="charge-bar-col">' +
         '<div class="charge-bar-track">' +
@@ -142,7 +154,9 @@
         '</span></div></div>' +
         '<div class="charge-bar-label">' +
         (m.label || m.key) +
-        '</div></div>';
+        '<span class="charge-bar-spend">' +
+        money +
+        '</span></div></div>';
     });
     barChart.setAttribute(
       'aria-label',

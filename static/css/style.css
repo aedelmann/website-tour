@@ -1217,6 +1217,12 @@ footer hr {
     color: var(--text-muted, #78716c);
 }
 
+.charge-home-rate-note {
+    margin: -0.45rem 0 0.85rem;
+    font-size: 0.8rem;
+    color: var(--text-muted, #78716c);
+}
+
 .charge-bar-chart--home .charge-bar-track {
     background:
         repeating-linear-gradient(
