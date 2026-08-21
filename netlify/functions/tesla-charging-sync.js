@@ -1,7 +1,7 @@
 /**
  * Scheduled sync (~every 6 hours): refresh token, paginate charging_history,
  * write sanitized public snapshot to Blobs. Never wakes the vehicle.
- * Schedule configured in netlify.toml: 0 */6 * * *
+ * Schedule configured in netlify.toml (cron every 6 hours).
  */
 const {
   aggregateSnapshot,
