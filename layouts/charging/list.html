@@ -58,12 +58,12 @@
 
     <div class="row g-4 mb-4">
         <div class="col-lg-7">
-            <div class="charge-stage charge-reveal" style="--delay: 0.1s">
+            <div class="charge-stage charge-reveal" style="--delay: 0.1s" data-charge-months="supercharger">
                 <div class="charge-stage-head">
-                    <h2>Monthly rhythm</h2>
+                    <h2>Supercharger · monthly</h2>
                     <p>May and July went hard. June took a breath.</p>
                 </div>
-                <div class="charge-bar-chart" role="img" aria-label="Bar chart of monthly charging: May 1,085 kWh, June 360 kWh, July 929 kWh">
+                <div class="charge-bar-chart" role="img" aria-label="Bar chart of monthly Supercharger charging: May 1,085 kWh, June 360 kWh, July 929 kWh">
                     <div class="charge-bar-col">
                         <div class="charge-bar-track">
                             <div class="charge-bar" style="--bar-h: 100%; --bar-delay: 0.15s" data-kwh="1085">
@@ -149,6 +149,19 @@
         </div>
     </div>
 
+    <div class="row g-4 mb-4" data-home-charge hidden>
+        <div class="col-12">
+            <div class="charge-stage charge-reveal" style="--delay: 0.14s" data-charge-months="home">
+                <div class="charge-stage-head">
+                    <h2>Home · Wall Connector</h2>
+                    <p>Garage charging — kWh only (Tesla does not invoice the Wall Connector).</p>
+                </div>
+                <p class="charge-home-totals" hidden></p>
+                <div class="charge-bar-chart charge-bar-chart--home" role="img" aria-label="Home Wall Connector monthly charging"></div>
+            </div>
+        </div>
+    </div>
+
     <div class="row g-4 mb-2">
         <div class="col-md-6">
             <article class="charge-finale charge-finale--save charge-reveal" style="--delay: 0.12s">
@@ -173,5 +186,5 @@
 {{ end }}
 
 {{ define "scripts" }}
-<script src="/js/charging-stats.js?v=cost4" defer></script>
+<script src="/js/charging-stats.js?v=home1" defer></script>
 {{ end }}

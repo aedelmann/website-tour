@@ -1210,6 +1210,29 @@ footer hr {
     color: var(--text-muted, #78716c);
 }
 
+.charge-home-totals {
+    margin: 0 0 0.85rem;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--text-muted, #78716c);
+}
+
+.charge-bar-chart--home .charge-bar-track {
+    background:
+        repeating-linear-gradient(
+            to top,
+            transparent 0,
+            transparent 39px,
+            rgba(37, 99, 235, 0.1) 39px,
+            rgba(37, 99, 235, 0.1) 40px
+        ),
+        rgba(37, 99, 235, 0.06);
+}
+
+.charge-bar-chart--home .charge-bar {
+    background: linear-gradient(180deg, #60a5fa 0%, #2563eb 48%, #1d4ed8 100%);
+}
+
 .charge-donut-wrap {
     display: grid;
     grid-template-columns: minmax(0, 150px) 1fr;
