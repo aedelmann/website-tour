@@ -9,7 +9,9 @@ const {
   getRefreshToken,
   getSnapshot,
   jsonResponse,
+  loadStaticChargingStats,
   persistTokensFromResponse,
+  preserveLocationsFromPrior,
   refreshAccessToken,
   requiredEnv,
   setSnapshot,
@@ -95,6 +97,16 @@ exports.handler = async (event) => {
     const snapshot = aggregateSnapshot(sessions, {
       sessionCountFetched: sessions.length,
     });
+    // Tesla may omit siteEntryLocation after unsorted retry; never wipe last-known pins.
+    // Prefer Blobs prior, then static/data/charging-stats.json. Copy only — never invent GPS.
+    let previous = null;
+    try {
+      previous = await getSnapshot(event);
+    } catch (_) {
+      /* Blobs may be empty/misconfigured; static seed still applies */
+    }
+    const staticSeed = loadStaticChargingStats();
+    preserveLocationsFromPrior(snapshot, [previous, staticSeed]);
     await setSnapshot(event, snapshot);
 
     return respond(200, {

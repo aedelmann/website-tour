@@ -265,14 +265,188 @@ function sessionCurrency(session) {
   return null;
 }
 
+/**
+ * Coerce a Tesla lat/lng value. Accepts finite numbers only (string numerics ok).
+ * Never invents coordinates.
+ */
+function asCoord(value) {
+  if (typeof value === 'number' && Number.isFinite(value)) return value;
+  if (typeof value === 'string' && value.trim() !== '') {
+    const n = Number(value);
+    if (Number.isFinite(n)) return n;
+  }
+  return null;
+}
+
+/**
+ * Read lat/lng from a nested Tesla location object ({latitude,longitude} or {lat,lng,lon}).
+ */
+function latLngFromObject(obj) {
+  if (!obj || typeof obj !== 'object') return null;
+  const lat = asCoord(obj.latitude ?? obj.lat);
+  const lng = asCoord(obj.longitude ?? obj.lng ?? obj.lon);
+  if (lat != null && lng != null) return { lat, lng };
+  return null;
+}
+
+/**
+ * Session coordinates from known Fleet charging_history shapes.
+ * Prefer siteEntryLocation; also try siteLocation, location, gps, coordinates,
+ * and top-level latitude/longitude. No fabricated GPS.
+ */
+function sessionLatLng(session) {
+  if (!session || typeof session !== 'object') return { lat: null, lng: null };
+  for (const key of ['siteEntryLocation', 'siteLocation', 'location', 'gps', 'coordinates', 'siteGps']) {
+    const found = latLngFromObject(session[key]);
+    if (found) return found;
+  }
+  const lat = asCoord(session.latitude ?? session.lat);
+  const lng = asCoord(session.longitude ?? session.lng ?? session.lon);
+  if (lat != null && lng != null) return { lat, lng };
+  return { lat: null, lng: null };
+}
+
+/**
+ * City/country from siteAddress (and a few alternate address keys). No street.
+ */
+function sessionCityCountry(session) {
+  if (!session || typeof session !== 'object') return { city: null, country: null };
+  const addr =
+    session.siteAddress || session.address || session.siteLocationAddress || session.site_address || {};
+  const city =
+    (typeof addr.city === 'string' && addr.city) ||
+    (typeof session.city === 'string' && session.city) ||
+    null;
+  const country =
+    (typeof addr.country === 'string' && addr.country) ||
+    (typeof addr.countryCode === 'string' && addr.countryCode) ||
+    (typeof session.country === 'string' && session.country) ||
+    null;
+  return { city, country };
+}
+
 function siteKey(session) {
-  const lat = session?.siteEntryLocation?.latitude;
-  const lng = session?.siteEntryLocation?.longitude;
+  const { lat, lng } = sessionLatLng(session);
   const name = session?.siteLocationName || '';
-  if (typeof lat === 'number' && typeof lng === 'number') {
+  if (lat != null && lng != null) {
     return `${name}|${lat.toFixed(4)},${lng.toFixed(4)}`;
   }
   return name || session?.sessionId || 'unknown';
+}
+
+/**
+ * Load the committed static snapshot (last-known good pins). Used as a seed when
+ * Blobs was overwritten with null lat/lng. Never invents coordinates.
+ */
+function loadStaticChargingStats() {
+  try {
+    return require('../../../static/data/charging-stats.json');
+  } catch (_) {
+    /* continue */
+  }
+  const fs = require('fs');
+  const path = require('path');
+  const candidates = [
+    path.join(__dirname, '../../../static/data/charging-stats.json'),
+    path.join(process.cwd(), 'static/data/charging-stats.json'),
+  ];
+  for (const p of candidates) {
+    try {
+      if (fs.existsSync(p)) return JSON.parse(fs.readFileSync(p, 'utf8'));
+    } catch (_) {
+      /* try next */
+    }
+  }
+  return null;
+}
+
+/**
+ * Index prior site locations by exact name (and name|city when city present).
+ * Only stores real numeric lat/lng and non-empty city/country from seeds.
+ */
+function buildLocationIndex(seeds) {
+  const byName = new Map();
+  const byNameCity = new Map();
+
+  function remember(name, city, country, lat, lng) {
+    if (!name) return;
+    const entry = byName.get(name) || { lat: null, lng: null, city: null, country: null };
+    if (entry.lat == null && typeof lat === 'number' && typeof lng === 'number') {
+      entry.lat = lat;
+      entry.lng = lng;
+    }
+    if (!entry.city && city) entry.city = city;
+    if (!entry.country && country) entry.country = country;
+    byName.set(name, entry);
+    if (city) {
+      const key = `${name}|${city}`;
+      const cur = byNameCity.get(key) || { lat: null, lng: null, city: null, country: null };
+      if (cur.lat == null && typeof lat === 'number' && typeof lng === 'number') {
+        cur.lat = lat;
+        cur.lng = lng;
+      }
+      if (!cur.city && city) cur.city = city;
+      if (!cur.country && country) cur.country = country;
+      byNameCity.set(key, cur);
+    }
+  }
+
+  for (const seed of seeds || []) {
+    if (!seed) continue;
+    for (const site of seed.sites || []) {
+      if (!site || !site.name) continue;
+      remember(site.name, site.city || null, site.country || null, site.lat, site.lng);
+    }
+    const ls = seed.lastStop;
+    if (ls && ls.name) {
+      remember(ls.name, ls.city || null, ls.country || null, ls.lat, ls.lng);
+    }
+  }
+
+  return { byName, byNameCity };
+}
+
+function lookupPriorLocation(index, name, city) {
+  if (!name || !index) return null;
+  if (city) {
+    const hit = index.byNameCity.get(`${name}|${city}`);
+    if (hit) return hit;
+  }
+  return index.byName.get(name) || null;
+}
+
+/**
+ * Copy lat/lng/city/country from prior snapshot(s) onto sites (and lastStop)
+ * that are missing them. Match by site name; if needed, name+city.
+ * Does not invent coordinates — only copies values already present in seeds.
+ */
+function preserveLocationsFromPrior(snapshot, seeds) {
+  if (!snapshot || !Array.isArray(snapshot.sites)) return snapshot;
+  const index = buildLocationIndex(seeds);
+  for (const site of snapshot.sites) {
+    if (!site || !site.name) continue;
+    const prior = lookupPriorLocation(index, site.name, site.city);
+    if (!prior) continue;
+    if (site.lat == null && typeof prior.lat === 'number' && typeof prior.lng === 'number') {
+      site.lat = prior.lat;
+      site.lng = prior.lng;
+    }
+    if (!site.city && prior.city) site.city = prior.city;
+    if (!site.country && prior.country) site.country = prior.country;
+  }
+  if (snapshot.lastStop && snapshot.lastStop.name) {
+    const ls = snapshot.lastStop;
+    const prior = lookupPriorLocation(index, ls.name, ls.city);
+    if (prior) {
+      if (ls.lat == null && typeof prior.lat === 'number' && typeof prior.lng === 'number') {
+        ls.lat = prior.lat;
+        ls.lng = prior.lng;
+      }
+      if (!ls.city && prior.city) ls.city = prior.city;
+      if (!ls.country && prior.country) ls.country = prior.country;
+    }
+  }
+  return snapshot;
 }
 
 function monthKeyFromIso(iso) {
@@ -379,17 +553,15 @@ function aggregateSnapshot(sessions, meta) {
     }
 
     const key = siteKey(session);
-    const lat = session?.siteEntryLocation?.latitude;
-    const lng = session?.siteEntryLocation?.longitude;
-    const city = session?.siteAddress?.city || null;
-    const country = session?.siteAddress?.country || session?.siteAddress?.countryCode || null;
+    const { lat, lng } = sessionLatLng(session);
+    const { city, country } = sessionCityCountry(session);
     const name = session?.siteLocationName || city || 'Supercharger';
     const prev = sitesMap.get(key) || {
       name,
       city,
       country,
-      lat: typeof lat === 'number' ? lat : null,
-      lng: typeof lng === 'number' ? lng : null,
+      lat: lat != null ? lat : null,
+      lng: lng != null ? lng : null,
       energyKwh: 0,
       sessionCount: 0,
       spent: 0,
@@ -406,8 +578,10 @@ function aggregateSnapshot(sessions, meta) {
       spent: Math.round(cost * 100) / 100,
       currency: cur,
     });
-    if (prev.lat == null && typeof lat === 'number') prev.lat = lat;
-    if (prev.lng == null && typeof lng === 'number') prev.lng = lng;
+    if (prev.lat == null && lat != null) prev.lat = lat;
+    if (prev.lng == null && lng != null) prev.lng = lng;
+    if (!prev.city && city) prev.city = city;
+    if (!prev.country && country) prev.country = country;
     sitesMap.set(key, prev);
 
     if (stop) {
@@ -419,8 +593,8 @@ function aggregateSnapshot(sessions, meta) {
           city,
           country,
           at: stop,
-          lat: typeof lat === 'number' ? lat : null,
-          lng: typeof lng === 'number' ? lng : null,
+          lat: lat != null ? lat : null,
+          lng: lng != null ? lng : null,
         };
       }
     }
@@ -559,10 +733,14 @@ module.exports = {
   getSnapshot,
   htmlResponse,
   jsonResponse,
+  loadStaticChargingStats,
   partnerAccessToken,
   persistTokensFromResponse,
+  preserveLocationsFromPrior,
   refreshAccessToken,
   requiredEnv,
+  sessionCityCountry,
+  sessionLatLng,
   setRefreshToken,
   setSnapshot,
   setupSecretOk,
