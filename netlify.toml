@@ -24,6 +24,10 @@
 [functions."tesla-charging-sync"]
   schedule = "0 */6 * * *"
 
+# Bundled static snapshot so empty/misconfigured Blobs never 500 the public API
+[functions."charging-stats"]
+  included_files = ["static/data/charging-stats.json"]
+
 [[redirects]]
   from = "/post/*"
   to = "/posts/:splat"
@@ -41,10 +45,10 @@
   status = 301
   force = true
 
-# Public Charge Stats snapshot (no secrets)
+# Public Charge Stats — live function (Blobs), not frozen static rewrite
 [[redirects]]
   from = "/api/charging-stats"
-  to = "/data/charging-stats.json"
+  to = "/.netlify/functions/charging-stats"
   status = 200
 
 [[headers]]
