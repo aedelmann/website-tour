@@ -148,10 +148,12 @@
       if (max <= 0) max = 1;
       var html = '';
       var ariaParts = [];
+      var cur = totals.currency || 'EUR';
       months.forEach(function (m, i) {
         var pct = Math.max(4, Math.round((m.energyKwh / max) * 100));
         var tip = formatKwh(m.energyKwh) + ' kWh';
-        ariaParts.push(m.label + ' ' + tip);
+        var money = formatMoney(m.spent, cur);
+        ariaParts.push(m.label + ' ' + tip + ' · ' + money);
         html +=
           '<div class="charge-bar-col">' +
           '<div class="charge-bar-track">' +
@@ -167,7 +169,9 @@
           '</span></div></div>' +
           '<div class="charge-bar-label">' +
           (m.label || m.key) +
-          '</div></div>';
+          '<span class="charge-bar-spend">' +
+          money +
+          '</span></div></div>';
       });
       barChart.setAttribute('aria-label', 'Bar chart of monthly charging: ' + ariaParts.join(', '));
       barChart.innerHTML = html;
@@ -176,7 +180,7 @@
       if (stageHead) {
         var p = stageHead.querySelector('.charge-stage-head p');
         if (p && months.length >= 2) {
-          p.textContent = 'Supercharger energy by month.';
+          p.textContent = 'Supercharger energy and spend by month.';
         }
       }
     }
