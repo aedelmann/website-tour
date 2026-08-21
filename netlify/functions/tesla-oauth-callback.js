@@ -27,7 +27,7 @@ exports.handler = async (event) => {
 
   try {
     const tokens = await exchangeAuthorizationCode(q.code);
-    await persistTokensFromResponse(tokens);
+    await persistTokensFromResponse(event, tokens);
     return htmlResponse(
       200,
       `<!DOCTYPE html><html><head><title>Tesla connected</title></head><body>

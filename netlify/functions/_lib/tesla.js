@@ -3,7 +3,7 @@
  * Official Fleet API only (EU). Never log tokens.
  */
 
-const { getStore } = require('@netlify/blobs');
+const { connectLambda, getStore } = require('@netlify/blobs');
 
 const DEFAULT_FLEET_BASE = 'https://fleet-api.prd.eu.vn.cloud.tesla.com';
 /** Token exchange must use fleet-auth (server-side rate limits). */
@@ -36,7 +36,12 @@ function requiredEnv(name) {
   return v;
 }
 
-function teslaStore() {
+/**
+ * Functions v1 / Lambda compatibility does not auto-inject NETLIFY_BLOBS_CONTEXT.
+ * Call connectLambda(event) immediately before getStore (inside the request handler).
+ */
+function teslaStore(event) {
+  connectLambda(event);
   return getStore({ name: BLOB_STORE, consistency: 'strong' });
 }
 
@@ -127,19 +132,19 @@ async function partnerAccessToken() {
   });
 }
 
-async function getRefreshToken() {
-  const store = teslaStore();
+async function getRefreshToken(event) {
+  const store = teslaStore(event);
   return store.get(KEY_REFRESH);
 }
 
-async function setRefreshToken(token) {
+async function setRefreshToken(event, token) {
   if (!token) return;
-  const store = teslaStore();
+  const store = teslaStore(event);
   await store.set(KEY_REFRESH, token);
 }
 
-async function getSnapshot() {
-  const store = teslaStore();
+async function getSnapshot(event) {
+  const store = teslaStore(event);
   const raw = await store.get(KEY_SNAPSHOT, { type: 'text' });
   if (!raw) return null;
   try {
@@ -149,17 +154,17 @@ async function getSnapshot() {
   }
 }
 
-async function setSnapshot(snapshot) {
-  const store = teslaStore();
+async function setSnapshot(event, snapshot) {
+  const store = teslaStore(event);
   await store.set(KEY_SNAPSHOT, JSON.stringify(snapshot));
 }
 
 /**
  * Persist a new refresh token whenever Tesla returns one (each refresh invalidates the prior).
  */
-async function persistTokensFromResponse(tokenResponse) {
+async function persistTokensFromResponse(event, tokenResponse) {
   if (tokenResponse && tokenResponse.refresh_token) {
-    await setRefreshToken(tokenResponse.refresh_token);
+    await setRefreshToken(event, tokenResponse.refresh_token);
   }
 }
 

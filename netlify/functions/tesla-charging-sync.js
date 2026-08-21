@@ -15,9 +15,9 @@ const {
   setSnapshot,
 } = require('./_lib/tesla');
 
-exports.handler = async () => {
+exports.handler = async (event) => {
   try {
-    const refreshToken = await getRefreshToken();
+    const refreshToken = await getRefreshToken(event);
     if (!refreshToken) {
       return jsonResponse(200, {
         ok: false,
@@ -29,10 +29,10 @@ exports.handler = async () => {
     let tokenResponse;
     try {
       tokenResponse = await refreshAccessToken(refreshToken);
-      await persistTokensFromResponse(tokenResponse);
+      await persistTokensFromResponse(event, tokenResponse);
     } catch (err) {
       // Leave last good snapshot on auth failure.
-      const existing = await getSnapshot();
+      const existing = await getSnapshot(event);
       return jsonResponse(200, {
         ok: false,
         skipped: true,
@@ -56,7 +56,7 @@ exports.handler = async () => {
       sessions = await fetchAllChargingHistory(accessToken, vin);
     } catch (err) {
       if (err.code === 'TESLA_AUTH') {
-        const existing = await getSnapshot();
+        const existing = await getSnapshot(event);
         return jsonResponse(200, {
           ok: false,
           skipped: true,
@@ -70,7 +70,7 @@ exports.handler = async () => {
     const snapshot = aggregateSnapshot(sessions, {
       sessionCountFetched: sessions.length,
     });
-    await setSnapshot(snapshot);
+    await setSnapshot(event, snapshot);
 
     return jsonResponse(200, {
       ok: true,
