@@ -6,8 +6,14 @@
 const { getStore } = require('@netlify/blobs');
 
 const DEFAULT_FLEET_BASE = 'https://fleet-api.prd.eu.vn.cloud.tesla.com';
+/** Token exchange must use fleet-auth (server-side rate limits). */
 const AUTH_TOKEN_URL = 'https://fleet-auth.prd.vn.cloud.tesla.com/oauth2/v3/token';
-const AUTH_AUTHORIZE_URL = 'https://fleet-auth.prd.vn.cloud.tesla.com/oauth2/v3/authorize';
+/**
+ * User authorize host per Tesla third-party token docs.
+ * @see https://developer.tesla.com/docs/fleet-api/authentication/third-party-tokens
+ */
+const AUTH_AUTHORIZE_HOST = 'https://auth.tesla.com';
+const AUTH_AUTHORIZE_URL = `${AUTH_AUTHORIZE_HOST}/oauth2/v3/authorize`;
 const REDIRECT_URI = 'https://silentwanderers.com/.netlify/functions/tesla-oauth-callback';
 const DOMAIN = 'silentwanderers.com';
 const SCOPES = 'openid offline_access vehicle_device_data vehicle_charging_cmds';
@@ -82,6 +88,10 @@ async function formTokenRequest(params) {
     const err = new Error(data.error_description || data.error || `Token exchange failed (${res.status})`);
     err.status = res.status;
     err.code = 'TOKEN_ERROR';
+    // Safe Tesla OAuth error fields only — never attach tokens or secrets.
+    err.teslaError = typeof data.error === 'string' ? data.error : null;
+    err.teslaErrorDescription =
+      typeof data.error_description === 'string' ? data.error_description : null;
     throw err;
   }
   return data;
@@ -516,6 +526,7 @@ async function fetchAllChargingHistory(accessToken, vin) {
 }
 
 module.exports = {
+  AUTH_AUTHORIZE_HOST,
   AUTH_AUTHORIZE_URL,
   AUTH_TOKEN_URL,
   DOMAIN,
