@@ -16,7 +16,7 @@ const AUTH_AUTHORIZE_HOST = 'https://auth.tesla.com';
 const AUTH_AUTHORIZE_URL = `${AUTH_AUTHORIZE_HOST}/oauth2/v3/authorize`;
 const REDIRECT_URI = 'https://silentwanderers.com/.netlify/functions/tesla-oauth-callback';
 const DOMAIN = 'silentwanderers.com';
-const SCOPES = 'openid offline_access vehicle_device_data vehicle_charging_cmds';
+const SCOPES = 'openid offline_access vehicle_device_data vehicle_charging_cmds energy_device_data';
 
 const BLOB_STORE = 'tesla';
 const KEY_REFRESH = 'refresh_token';
@@ -130,7 +130,7 @@ async function partnerAccessToken() {
     client_id: requiredEnv('TESLA_CLIENT_ID'),
     client_secret: requiredEnv('TESLA_CLIENT_SECRET'),
     audience: fleetBase(),
-    scope: 'openid offline_access vehicle_device_data vehicle_charging_cmds',
+    scope: SCOPES,
   });
 }
 
