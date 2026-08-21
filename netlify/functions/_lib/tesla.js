@@ -21,6 +21,10 @@ const SCOPES = 'openid offline_access vehicle_device_data vehicle_charging_cmds 
 const BLOB_STORE = 'tesla';
 const KEY_REFRESH = 'refresh_token';
 const KEY_SNAPSHOT = 'charging-stats';
+/** Wall Connector charge history month buckets (Alex is in Spain). */
+const HOME_TIME_ZONE = 'Europe/Madrid';
+/** How far back to request Wall Connector telemetry_history. */
+const HOME_HISTORY_MONTHS = 14;
 
 function fleetBase() {
   return (process.env.TESLA_FLEET_BASE || DEFAULT_FLEET_BASE).replace(/\/$/, '');
@@ -715,19 +719,273 @@ async function fetchAllChargingHistory(accessToken, vin) {
   return all;
 }
 
+/**
+ * GET /api/1/products — vehicles + energy sites. Never wakes the car.
+ */
+async function fetchProducts(accessToken) {
+  const url = `${fleetBase()}/api/1/products`;
+  const res = await fetch(url, {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+      'Content-Type': 'application/json',
+    },
+  });
+  if (res.status === 401 || res.status === 403) {
+    const err = new Error(`Tesla products unauthorized (${res.status})`);
+    err.status = res.status;
+    err.code = 'TESLA_AUTH';
+    throw err;
+  }
+  if (!res.ok) {
+    const text = await res.text();
+    const err = new Error(`Tesla products failed (${res.status})`);
+    err.status = res.status;
+    err.code = 'TESLA_API';
+    err.detail = text.slice(0, 300);
+    throw err;
+  }
+  return res.json();
+}
+
+/**
+ * Prefer resource_type wall_connector / charger; else any product with energy_site_id and no VIN.
+ */
+function findWallConnectorEnergySiteId(productsPayload) {
+  const raw = productsPayload?.response ?? productsPayload?.data ?? productsPayload;
+  const items = Array.isArray(raw) ? raw : [];
+  let fallback = null;
+  for (const p of items) {
+    if (!p || typeof p !== 'object') continue;
+    const id = p.energy_site_id ?? p.energySiteId;
+    if (id == null || id === '') continue;
+    const type = String(p.resource_type || p.resourceType || '').toLowerCase();
+    if (
+      type === 'wall_connector' ||
+      type === 'charger' ||
+      type.includes('wall_connector') ||
+      type.includes('wall connector')
+    ) {
+      return id;
+    }
+    if (fallback == null && !p.vin && !p.vehicle_id && !p.vehicleId) {
+      fallback = id;
+    }
+  }
+  return fallback;
+}
+
+/**
+ * Parse charge_start_time from Energy charge_history (protobuf-ish {seconds} or ISO).
+ */
+function homeSessionStartDate(session) {
+  if (!session || typeof session !== 'object') return null;
+  const t = session.charge_start_time ?? session.chargeStartTime ?? session.chargeStartDateTime;
+  if (typeof t === 'string' && t) {
+    const d = new Date(t);
+    return Number.isNaN(d.getTime()) ? null : d;
+  }
+  if (t && typeof t === 'object') {
+    if (typeof t.seconds === 'number' && Number.isFinite(t.seconds)) {
+      return new Date(t.seconds * 1000);
+    }
+    if (typeof t.seconds === 'string' && t.seconds.trim() !== '') {
+      const n = Number(t.seconds);
+      if (Number.isFinite(n)) return new Date(n * 1000);
+    }
+  }
+  if (typeof session.start_date === 'string') {
+    const d = new Date(session.start_date);
+    return Number.isNaN(d.getTime()) ? null : d;
+  }
+  return null;
+}
+
+/** Energy is watt-hours on telemetry_history?kind=charge. */
+function homeSessionEnergyKwh(session) {
+  if (!session || typeof session !== 'object') return 0;
+  const wh =
+    typeof session.energy_added_wh === 'number'
+      ? session.energy_added_wh
+      : typeof session.energyAddedWh === 'number'
+        ? session.energyAddedWh
+        : typeof session.energy_wh === 'number'
+          ? session.energy_wh
+          : null;
+  if (wh == null || Number.isNaN(wh)) return 0;
+  return wh / 1000;
+}
+
+function monthKeyInTimeZone(date, timeZone) {
+  if (!date || Number.isNaN(date.getTime())) return null;
+  const parts = new Intl.DateTimeFormat('en-CA', {
+    timeZone: timeZone || HOME_TIME_ZONE,
+    year: 'numeric',
+    month: '2-digit',
+  }).formatToParts(date);
+  let y = null;
+  let m = null;
+  for (const p of parts) {
+    if (p.type === 'year') y = p.value;
+    if (p.type === 'month') m = p.value;
+  }
+  if (!y || !m) return null;
+  return `${y}-${m}`;
+}
+
+function pickHomeChargeSessions(payload) {
+  if (!payload) return [];
+  const r = payload.response ?? payload.data ?? payload;
+  if (Array.isArray(r?.charge_history)) return r.charge_history;
+  if (Array.isArray(payload.charge_history)) return payload.charge_history;
+  if (Array.isArray(r?.charges)) return r.charges;
+  if (Array.isArray(r?.data)) return r.data;
+  if (Array.isArray(r)) return r;
+  return [];
+}
+
+/**
+ * Sanitize Wall Connector charge_history into a public `home` block.
+ * Wh → kWh. Month buckets in Europe/Madrid. No invented €. No GPS.
+ */
+function aggregateHomeSnapshot(sessions, meta) {
+  const list = Array.isArray(sessions) ? sessions.filter(Boolean) : [];
+  const monthsMap = new Map();
+  let totalKwh = 0;
+  const outSessions = [];
+
+  for (const session of list) {
+    const kwh = homeSessionEnergyKwh(session);
+    const start = homeSessionStartDate(session);
+    totalKwh += kwh;
+    const at = start ? start.toISOString() : null;
+    outSessions.push({
+      at,
+      energyKwh: Math.round(kwh * 1000) / 1000,
+    });
+
+    const mk = start ? monthKeyInTimeZone(start, HOME_TIME_ZONE) : null;
+    if (mk) {
+      const prev = monthsMap.get(mk) || {
+        key: mk,
+        label: monthLabel(mk),
+        energyKwh: 0,
+        sessionCount: 0,
+      };
+      prev.energyKwh += kwh;
+      prev.sessionCount += 1;
+      monthsMap.set(mk, prev);
+    }
+  }
+
+  const months = Array.from(monthsMap.values()).sort((a, b) => a.key.localeCompare(b.key));
+  const monthsOut = months.length > 6 ? months.slice(-6) : months;
+
+  outSessions.sort((a, b) => String(b.at || '').localeCompare(String(a.at || '')));
+
+  return {
+    updatedAt: new Date().toISOString(),
+    source: 'tesla_energy_charge_history',
+    note: 'Wall Connector (home) charge sessions. Energy only — Tesla does not invoice home charging.',
+    energySiteId: meta && meta.energySiteId != null ? meta.energySiteId : undefined,
+    totals: {
+      energyKwh: Math.round(totalKwh * 1000) / 1000,
+      sessionCount: list.length,
+    },
+    months: monthsOut.map((m) => ({
+      key: m.key,
+      label: m.label,
+      energyKwh: Math.round(m.energyKwh * 1000) / 1000,
+      sessionCount: m.sessionCount,
+    })),
+    sessions: outSessions,
+  };
+}
+
+/**
+ * Fetch Wall Connector telemetry_history?kind=charge for one energy site.
+ * Dates are RFC3339; time_zone Europe/Madrid.
+ */
+async function fetchWallConnectorChargeHistory(accessToken, energySiteId, startDate, endDate) {
+  const url = new URL(`${fleetBase()}/api/1/energy_sites/${energySiteId}/telemetry_history`);
+  url.searchParams.set('kind', 'charge');
+  url.searchParams.set('start_date', startDate);
+  url.searchParams.set('end_date', endDate);
+  url.searchParams.set('time_zone', HOME_TIME_ZONE);
+
+  const res = await fetch(url.toString(), {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+      'Content-Type': 'application/json',
+    },
+  });
+
+  if (res.status === 401 || res.status === 403) {
+    const err = new Error(`Tesla energy charge history unauthorized (${res.status})`);
+    err.status = res.status;
+    err.code = 'TESLA_AUTH';
+    throw err;
+  }
+  if (!res.ok) {
+    const text = await res.text();
+    const err = new Error(`Tesla energy charge history failed (${res.status})`);
+    err.status = res.status;
+    err.code = 'TESLA_API';
+    err.detail = text.slice(0, 300);
+    throw err;
+  }
+
+  const payload = await res.json();
+  return pickHomeChargeSessions(payload);
+}
+
+/**
+ * Discover Wall Connector via products, then fetch + aggregate home charge history.
+ * Returns null when there is no site or no sessions (caller should keep prior home).
+ * Throws on API/auth failures (caller should keep prior home).
+ */
+async function fetchHomeChargingBlock(accessToken) {
+  const products = await fetchProducts(accessToken);
+  const energySiteId = findWallConnectorEnergySiteId(products);
+  if (energySiteId == null) {
+    return null;
+  }
+
+  const end = new Date();
+  const start = new Date(end.getTime());
+  start.setUTCMonth(start.getUTCMonth() - HOME_HISTORY_MONTHS);
+
+  const sessions = await fetchWallConnectorChargeHistory(
+    accessToken,
+    energySiteId,
+    start.toISOString(),
+    end.toISOString()
+  );
+  if (!sessions.length) {
+    return null;
+  }
+
+  return aggregateHomeSnapshot(sessions, { energySiteId });
+}
+
 module.exports = {
   AUTH_AUTHORIZE_HOST,
   AUTH_AUTHORIZE_URL,
   AUTH_TOKEN_URL,
   DOMAIN,
+  HOME_TIME_ZONE,
   KEY_REFRESH,
   KEY_SNAPSHOT,
   REDIRECT_URI,
   SCOPES,
+  aggregateHomeSnapshot,
   aggregateSnapshot,
   buildAuthorizeUrl,
   exchangeAuthorizationCode,
   fetchAllChargingHistory,
+  fetchHomeChargingBlock,
+  fetchProducts,
+  fetchWallConnectorChargeHistory,
+  findWallConnectorEnergySiteId,
   fleetBase,
   getRefreshToken,
   getSnapshot,

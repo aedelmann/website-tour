@@ -74,6 +74,83 @@
     el.style.display = 'none';
   }
 
+  function show(el) {
+    if (!el) return;
+    el.hidden = false;
+    el.style.display = '';
+  }
+
+  /**
+   * Separate Wall Connector graph. No €. Hidden when snapshot has no home block.
+   */
+  function hydrateHome(home) {
+    var row = document.querySelector('[data-home-charge]');
+    if (!row) return;
+
+    var months = home && Array.isArray(home.months) ? home.months : [];
+    var totals = home && home.totals ? home.totals : null;
+    var hasData =
+      totals &&
+      typeof totals.sessionCount === 'number' &&
+      totals.sessionCount > 0 &&
+      months.length > 0;
+
+    if (!hasData) {
+      hide(row);
+      return;
+    }
+
+    show(row);
+
+    var totalsEl = row.querySelector('.charge-home-totals');
+    if (totalsEl) {
+      totalsEl.textContent =
+        formatKwh(totals.energyKwh || 0) +
+        ' kWh · ' +
+        formatInt(totals.sessionCount || 0) +
+        ' sessions';
+      show(totalsEl);
+    }
+
+    var barChart = row.querySelector('.charge-bar-chart--home') || row.querySelector('.charge-bar-chart');
+    if (!barChart) return;
+
+    var max = 0;
+    months.forEach(function (m) {
+      if (m.energyKwh > max) max = m.energyKwh;
+    });
+    if (max <= 0) max = 1;
+
+    var html = '';
+    var ariaParts = [];
+    months.forEach(function (m, i) {
+      var pct = Math.max(4, Math.round((m.energyKwh / max) * 100));
+      var tip = formatKwh(m.energyKwh) + ' kWh';
+      ariaParts.push((m.label || m.key) + ' ' + tip);
+      html +=
+        '<div class="charge-bar-col">' +
+        '<div class="charge-bar-track">' +
+        '<div class="charge-bar" style="--bar-h: ' +
+        pct +
+        '%; --bar-delay: ' +
+        (0.15 + i * 0.12).toFixed(2) +
+        's" data-kwh="' +
+        m.energyKwh +
+        '">' +
+        '<span class="charge-bar-tip">' +
+        tip +
+        '</span></div></div>' +
+        '<div class="charge-bar-label">' +
+        (m.label || m.key) +
+        '</div></div>';
+    });
+    barChart.setAttribute(
+      'aria-label',
+      'Bar chart of monthly home Wall Connector charging: ' + ariaParts.join(', ')
+    );
+    barChart.innerHTML = html;
+  }
+
   function resetCountTargets(root) {
     root.querySelectorAll('.charge-count').forEach(function (el) {
       el.removeAttribute('data-counted');
@@ -137,9 +214,12 @@
         '" data-sep=",">0</span>';
     }
 
-    // Monthly bars
+    // Monthly Supercharger bars (kWh + €) — never mix home into this chart
     var months = Array.isArray(data.months) ? data.months : [];
-    var barChart = document.querySelector('.charge-bar-chart');
+    var scStage = document.querySelector('[data-charge-months="supercharger"]');
+    var barChart = scStage
+      ? scStage.querySelector('.charge-bar-chart')
+      : document.querySelector('.charge-bar-chart:not(.charge-bar-chart--home)');
     if (barChart && months.length) {
       var max = 0;
       months.forEach(function (m) {
@@ -173,7 +253,10 @@
           money +
           '</span></div></div>';
       });
-      barChart.setAttribute('aria-label', 'Bar chart of monthly charging: ' + ariaParts.join(', '));
+      barChart.setAttribute(
+        'aria-label',
+        'Bar chart of monthly Supercharger charging: ' + ariaParts.join(', ')
+      );
       barChart.innerHTML = html;
 
       var stageHead = barChart.closest('.charge-stage');
@@ -185,12 +268,15 @@
       }
     }
 
+    // Home / Wall Connector — separate graph; hide if no live home data (no fake kWh)
+    hydrateHome(data.home);
+
     // Source mix: charging_history has no home/work/other — hide fake mix
     var mixCol = document.querySelector('.charge-donut-wrap');
     if (mixCol) {
       var mixStage = mixCol.closest('.col-lg-5') || mixCol.closest('.charge-stage');
       hide(mixStage);
-      var monthCol = document.querySelector('.charge-bar-chart');
+      var monthCol = barChart;
       if (monthCol) {
         var mc = monthCol.closest('.col-lg-7');
         if (mc) {
@@ -225,7 +311,11 @@
       : 'unknown';
     setText(
       '.charge-footnote',
-      'Tesla Supercharger history · last updated ' +
+      'Tesla Supercharger history' +
+        (data.home && data.home.totals && data.home.totals.sessionCount
+          ? ' + Wall Connector (home)'
+          : '') +
+        ' · last updated ' +
         updated +
         ' · ' +
         (data.vehicle || 'Tesla Model Y')

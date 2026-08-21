@@ -1,11 +1,13 @@
 /**
  * Scheduled sync (~every 6 hours): refresh token, paginate charging_history,
- * write sanitized public snapshot to Blobs. Never wakes the vehicle.
+ * fetch Wall Connector (home) charge history, write sanitized public snapshot
+ * to Blobs. Never wakes the vehicle (no wake_up / vehicle_data).
  * Schedule configured in netlify.toml (cron every 6 hours).
  */
 const {
   aggregateSnapshot,
   fetchAllChargingHistory,
+  fetchHomeChargingBlock,
   getRefreshToken,
   getSnapshot,
   jsonResponse,
@@ -34,6 +36,10 @@ function logSyncResult(body) {
   if (body.totals && body.totals.sessionCount !== undefined) {
     safe.totals = { sessionCount: body.totals.sessionCount };
   }
+  if (body.home && body.home.sessionCount !== undefined) {
+    safe.home = { sessionCount: body.home.sessionCount };
+  }
+  if (body.homeKept !== undefined) safe.homeKept = body.homeKept;
   console.log(JSON.stringify(safe));
 }
 
@@ -107,13 +113,36 @@ exports.handler = async (event) => {
     }
     const staticSeed = loadStaticChargingStats();
     preserveLocationsFromPrior(snapshot, [previous, staticSeed]);
+
+    // Wall Connector (home): separate block. On fail/empty, keep prior home — never mix into Supercharger.
+    let homeKept = false;
+    try {
+      const home = await fetchHomeChargingBlock(accessToken);
+      if (home && home.totals && home.totals.sessionCount > 0) {
+        snapshot.home = home;
+      } else if (previous && previous.home) {
+        snapshot.home = previous.home;
+        homeKept = true;
+      }
+    } catch (_) {
+      if (previous && previous.home) {
+        snapshot.home = previous.home;
+        homeKept = true;
+      }
+    }
+
     await setSnapshot(event, snapshot);
 
-    return respond(200, {
+    const body = {
       ok: true,
       updatedAt: snapshot.updatedAt,
       totals: snapshot.totals,
-    });
+    };
+    if (snapshot.home && snapshot.home.totals) {
+      body.home = { sessionCount: snapshot.home.totals.sessionCount };
+    }
+    if (homeKept) body.homeKept = true;
+    return respond(200, body);
   } catch (err) {
     // Never wipe the last good snapshot on unexpected errors.
     const body = {
