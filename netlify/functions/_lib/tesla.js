@@ -39,10 +39,12 @@ function requiredEnv(name) {
 /**
  * Functions v1 / Lambda compatibility does not auto-inject NETLIFY_BLOBS_CONTEXT.
  * Call connectLambda(event) immediately before getStore (inside the request handler).
+ * Use default (eventual) consistency — strong needs uncachedEdgeURL, which connectLambda
+ * does not inject on Functions v1. Fine for OAuth tokens and a ~6h Charge Stats snapshot.
  */
 function teslaStore(event) {
   connectLambda(event);
-  return getStore({ name: BLOB_STORE, consistency: 'strong' });
+  return getStore({ name: BLOB_STORE });
 }
 
 function jsonResponse(status, body, extraHeaders) {
