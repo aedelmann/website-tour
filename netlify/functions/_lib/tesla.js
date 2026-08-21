@@ -486,14 +486,18 @@ async function fetchAllChargingHistory(accessToken, vin) {
   let pageNo = 1;
   const pageSize = 50;
   const maxPages = 40;
+  // Drop sort params after a first-page 400 — Tesla may reject sortBy values.
+  let useSort = true;
 
   while (pageNo <= maxPages) {
     const url = new URL(`${fleetBase()}/api/1/dx/charging/history`);
     if (vin) url.searchParams.set('vin', vin);
     url.searchParams.set('pageNo', String(pageNo));
     url.searchParams.set('pageSize', String(pageSize));
-    url.searchParams.set('sortBy', 'chargeStartDateTime');
-    url.searchParams.set('sortOrder', 'DESC');
+    if (useSort) {
+      url.searchParams.set('sortBy', 'chargeStartDateTime');
+      url.searchParams.set('sortOrder', 'DESC');
+    }
 
     const res = await fetch(url.toString(), {
       headers: {
@@ -507,6 +511,11 @@ async function fetchAllChargingHistory(accessToken, vin) {
       err.status = res.status;
       err.code = 'TESLA_AUTH';
       throw err;
+    }
+    // First page 400 with sort: retry once without sortBy/sortOrder.
+    if (res.status === 400 && pageNo === 1 && useSort) {
+      useSort = false;
+      continue;
     }
     if (!res.ok) {
       const text = await res.text();
