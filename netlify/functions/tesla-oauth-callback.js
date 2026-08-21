@@ -15,9 +15,10 @@ exports.handler = async (event) => {
 
   const q = event.queryStringParameters || {};
   if (q.error) {
+    const desc = q.error_description ? ` — ${escapeHtml(q.error_description)}` : '';
     return htmlResponse(
       400,
-      `<p>Tesla authorization failed: ${escapeHtml(q.error)}</p>`
+      `<p>Tesla authorization failed: ${escapeHtml(q.error)}${desc}</p>`
     );
   }
   if (!q.code) {
@@ -36,9 +37,27 @@ exports.handler = async (event) => {
       </body></html>`
     );
   } catch (err) {
+    const safe = {
+      status: err.status != null ? err.status : null,
+      teslaError: err.teslaError || null,
+      teslaErrorDescription: err.teslaErrorDescription || null,
+      code: err.code || null,
+    };
+    // Never log code, access_token, refresh_token, or client_secret.
+    console.error('Tesla token exchange failed', safe);
+    const statusLabel = safe.status != null ? String(safe.status) : 'n/a';
+    const teslaError = safe.teslaError || 'n/a';
+    const teslaDesc = safe.teslaErrorDescription || err.message || 'n/a';
+    const ourCode = safe.code || 'n/a';
     return htmlResponse(
       500,
-      `<p>Token exchange failed. Check client credentials and redirect URI.</p>`
+      `<!DOCTYPE html><html><head><title>Tesla token exchange failed</title></head><body>
+        <h1>Token exchange failed</h1>
+        <p>HTTP status: ${escapeHtml(statusLabel)}</p>
+        <p>Tesla error: ${escapeHtml(teslaError)}</p>
+        <p>error_description: ${escapeHtml(teslaDesc)}</p>
+        <p>code: ${escapeHtml(ourCode)}</p>
+      </body></html>`
     );
   }
 };
