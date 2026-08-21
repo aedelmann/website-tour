@@ -25,6 +25,9 @@ function logSyncResult(body) {
   if (body.hasSnapshot !== undefined) safe.hasSnapshot = body.hasSnapshot;
   if (body.error !== undefined) safe.error = body.error;
   if (body.message !== undefined) safe.message = body.message;
+  // TESLA_API: status + Tesla body snippet (err.detail). Never tokens/VIN.
+  if (body.status !== undefined) safe.status = body.status;
+  if (body.detail !== undefined) safe.detail = body.detail;
   if (body.updatedAt !== undefined) safe.updatedAt = body.updatedAt;
   if (body.totals && body.totals.sessionCount !== undefined) {
     safe.totals = { sessionCount: body.totals.sessionCount };
@@ -72,7 +75,7 @@ exports.handler = async (event) => {
       });
     }
 
-    const vin = requiredEnv('TESLA_VIN');
+    const vin = requiredEnv('TESLA_VIN').trim();
     let sessions;
     try {
       sessions = await fetchAllChargingHistory(accessToken, vin);
@@ -101,10 +104,14 @@ exports.handler = async (event) => {
     });
   } catch (err) {
     // Never wipe the last good snapshot on unexpected errors.
-    return respond(500, {
+    const body = {
       ok: false,
       error: err.code || 'SYNC_ERROR',
       message: err.message || 'Sync failed',
-    });
+    };
+    if (err.status != null) body.status = err.status;
+    // Safe Tesla error body snippet only (already sliced; never tokens/VIN).
+    if (err.detail != null) body.detail = err.detail;
+    return respond(500, body);
   }
 };
