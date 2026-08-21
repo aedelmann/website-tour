@@ -393,7 +393,7 @@
       initMap(liveSites, currency);
     }
 
-    fetch('/api/charging-stats', { credentials: 'same-origin' })
+    fetch('/api/charging-stats', { credentials: 'same-origin', cache: 'no-store' })
       .then(function (res) {
         if (!res.ok) throw new Error('no snapshot');
         return res.json();

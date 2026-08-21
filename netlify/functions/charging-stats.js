@@ -38,10 +38,32 @@ function loadStaticFallback() {
   return null;
 }
 
+function hasPlottablePins(snapshot) {
+  const sites = snapshot && Array.isArray(snapshot.sites) ? snapshot.sites : [];
+  for (let i = 0; i < sites.length; i++) {
+    const s = sites[i];
+    if (
+      s &&
+      typeof s.lat === 'number' &&
+      Number.isFinite(s.lat) &&
+      typeof s.lng === 'number' &&
+      Number.isFinite(s.lng)
+    ) {
+      return true;
+    }
+  }
+  return false;
+}
+
+/** Live Blobs: short TTL when pins exist; never park a zero-pin body on the CDN. */
+function liveCacheControl(snapshot) {
+  return hasPlottablePins(snapshot) ? 'public, max-age=60' : 'no-store';
+}
+
 function okSnapshot(snapshot, cacheControl) {
   return jsonResponse(200, snapshot, {
     ...CORS,
-    'Cache-Control': cacheControl || 'public, max-age=300',
+    'Cache-Control': cacheControl,
   });
 }
 
@@ -66,7 +88,7 @@ exports.handler = async (event) => {
   try {
     const snapshot = await getSnapshot(event);
     if (snapshot) {
-      return okSnapshot(snapshot);
+      return okSnapshot(snapshot, liveCacheControl(snapshot));
     }
   } catch (_) {
     // Blobs misconfigured / bundling failure — fall through to static
