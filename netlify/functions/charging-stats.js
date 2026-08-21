@@ -64,7 +64,7 @@ exports.handler = async (event) => {
   }
 
   try {
-    const snapshot = await getSnapshot();
+    const snapshot = await getSnapshot(event);
     if (snapshot) {
       return okSnapshot(snapshot);
     }
