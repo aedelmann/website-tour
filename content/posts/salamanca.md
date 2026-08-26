@@ -6,25 +6,6 @@ latitude: 40.9650
 longitude: -5.6640
 categories: ["City Exploration"]
 tags: ["salamanca", "spain", "castilla y leon", "unesco", "road trip", "tesla", "ferrol", "architecture"]
-banner: "/images/salamanca/salamanca-sign-cathedral.jpg"
-featured_image: "/images/salamanca/salamanca-sign-cathedral.jpg"
-gallery:
-  - src: "/images/salamanca/salamanca-sign-cathedral.jpg"
-    caption: "City-sign energy: giant SALAMANCA letters on a wall of pink-and-white petunias, New Cathedral towers photobombing in the back, Casa de las Conchas flexing its scallop shells to the right. Overcast sky doing free softbox duty."
-  - src: "/images/salamanca/salamanca-cathedral-street.jpg"
-    caption: "Architecture walk mode—narrow sandstone street pointing straight at the New Cathedral bell tower, Spain and Castilla y León flags hanging out on the right, chains along the low wall like the cathedral politely asked for personal space."
-  - src: "/images/salamanca/salamanca-san-esteban.jpg"
-    caption: "Convento de San Esteban showing off: Plateresque facade carved within an inch of its life, arcade stretching off to the right, diamond-pattern courtyard under a flat grey sky. Salamanca does not do subtle stonework."
-  - src: "/images/salamanca/salamanca-scholar-statue.jpg"
-    caption: "Bronze scholar mid-thesis on a stone plinth, New Cathedral towers doing the serious backdrop thing, scaffolding on the right reminding us that even golden cities need renovations. Overcast approved."
-  - src: "/images/salamanca/salamanca-wet-street-cathedral.jpg"
-    caption: "Wet-stone runway: long pedestrian street reflecting the grey sky, pharmacy green cross glowing on the left, Spanish flag on the right, cathedral tower dead-center like it booked the vanishing point months ago."
-  - src: "/images/salamanca/salamanca-trees-cathedral.jpg"
-    caption: "Another cathedral approach—clipped round trees, damp paving, a few empty café tables, and the Nº 8 doorway keeping things tidy. Crowds: optional. Clouds: mandatory."
-  - src: "/images/salamanca/salamanca-libreria-dome.jpg"
-    caption: "Honey sandstone, grey dome, little turret, big trees framing the shot, and a librería at street level because of course a university city puts books under the architecture flex."
-  - src: "/images/salamanca/salamanca-cafe-street.jpg"
-    caption: "Old-town squeeze: enclosed wooden galería balcony on the right, café tables under white umbrellas waiting for braver weather, scooters parked like punctuation. Quiet enough to hear your step count congratulate itself."
 reading_time: 8
 tesla_stats:
   distance: 600
