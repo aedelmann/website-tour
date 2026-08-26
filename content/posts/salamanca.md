@@ -6,6 +6,8 @@ latitude: 40.9650
 longitude: -5.6640
 categories: ["City Exploration"]
 tags: ["salamanca", "spain", "castilla y leon", "unesco", "road trip", "tesla", "ferrol", "architecture"]
+banner: "/images/salamanca/salamanca-cover.jpg"
+featured_image: "/images/salamanca/salamanca-cover.jpg"
 reading_time: 8
 tesla_stats:
   distance: 600
