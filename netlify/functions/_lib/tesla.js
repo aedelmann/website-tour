@@ -455,6 +455,247 @@ function preserveLocationsFromPrior(snapshot, seeds) {
   return snapshot;
 }
 
+/** Nominatim / OSM — free, no API key. Identify the app; keep ≤1 request/sec. */
+const NOMINATIM_SEARCH_URL = 'https://nominatim.openstreetmap.org/search';
+const NOMINATIM_USER_AGENT =
+  'SilentWanderers/1.0 (https://silentwanderers.com; Charge Stats Supercharger pins)';
+const NOMINATIM_MIN_INTERVAL_MS = 1100;
+/** Cap per sync so a flood of new sites cannot blow the function timeout. */
+const GEOCODE_MAX_SITES_PER_SYNC = 8;
+
+function sleep(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+/** Fold accents/case for loose city matching (Merida ≈ Mérida). */
+function foldGeoText(value) {
+  return String(value || '')
+    .normalize('NFD')
+    .replace(/\p{M}/gu, '')
+    .toLowerCase()
+    .trim();
+}
+
+/**
+ * Parse Tesla siteLocationName: "City, Country" or "City, Country - Suffix".
+ */
+function parseTeslaSiteName(name) {
+  if (!name || typeof name !== 'string') {
+    return { city: null, country: null, suffix: null };
+  }
+  const m = name.trim().match(/^([^,]+),\s*([^-]+?)(?:\s*-\s*(.+))?$/);
+  if (!m) return { city: name.trim(), country: null, suffix: null };
+  return {
+    city: m[1].trim() || null,
+    country: m[2].trim() || null,
+    suffix: m[3] ? m[3].trim() : null,
+  };
+}
+
+/**
+ * Score a Nominatim hit for a Tesla Supercharger site name.
+ * Prefer charging_station + city/country match; reject wrong-country hits.
+ * Returns -1 when the hit is not acceptable.
+ */
+function scoreNominatimHit(hit, parsed) {
+  if (!hit || typeof hit !== 'object') return -1;
+  const lat = asCoord(hit.lat);
+  const lng = asCoord(hit.lon);
+  if (lat == null || lng == null) return -1;
+
+  const display = foldGeoText(hit.display_name);
+  const hitName = foldGeoText(hit.name);
+  const addr = hit.address && typeof hit.address === 'object' ? hit.address : {};
+  const addrCountry = foldGeoText(addr.country);
+  const countryFold = foldGeoText(parsed.country);
+  const cityFold = foldGeoText(parsed.city);
+  const suffixFold = foldGeoText(parsed.suffix);
+
+  if (countryFold) {
+    const countryOk = addrCountry === countryFold || display.includes(countryFold);
+    if (!countryOk) return -1;
+  }
+
+  let score = 0;
+  const isCharger = hit.class === 'amenity' && hit.type === 'charging_station';
+  if (isCharger) score += 50;
+
+  let strongCity = false;
+  if (cityFold) {
+    if (
+      hitName.startsWith(cityFold) ||
+      hitName.includes(`${cityFold} supercharger`) ||
+      hitName.includes(`supercharger ${cityFold}`)
+    ) {
+      score += 40;
+      strongCity = true;
+    } else if (display.startsWith(`${cityFold},`) || display.startsWith(`${cityFold} `)) {
+      score += 25;
+      strongCity = true;
+    } else if (display.includes(cityFold)) {
+      // Weak: province/region often repeats the city name (e.g. Béjar in Salamanca province).
+      score += 5;
+    } else if (isCharger) {
+      score -= 25;
+    }
+  }
+
+  let suffixHit = false;
+  if (suffixFold && (hitName.includes(suffixFold) || display.includes(suffixFold))) {
+    score += 30;
+    suffixHit = true;
+  }
+
+  // Require a plausible match — do not accept random far-away or province-only hits.
+  if (score < 20) return -1;
+  if (cityFold && !strongCity && !suffixHit) return -1;
+  return score;
+}
+
+function pickBestNominatimHit(results, parsed) {
+  let best = null;
+  let bestScore = -1;
+  for (const hit of results || []) {
+    const score = scoreNominatimHit(hit, parsed);
+    if (score > bestScore) {
+      bestScore = score;
+      best = hit;
+    }
+  }
+  if (!best || bestScore < 0) return null;
+  const lat = asCoord(best.lat);
+  const lng = asCoord(best.lon);
+  if (lat == null || lng == null) return null;
+  return { lat, lng };
+}
+
+let nominatimNextAllowedAt = 0;
+
+async function nominatimSearch(query) {
+  const wait = nominatimNextAllowedAt - Date.now();
+  if (wait > 0) await sleep(wait);
+  nominatimNextAllowedAt = Date.now() + NOMINATIM_MIN_INTERVAL_MS;
+
+  const url = new URL(NOMINATIM_SEARCH_URL);
+  url.searchParams.set('q', query);
+  url.searchParams.set('format', 'json');
+  url.searchParams.set('limit', '5');
+  url.searchParams.set('addressdetails', '1');
+
+  const res = await fetch(url.toString(), {
+    headers: {
+      'User-Agent': NOMINATIM_USER_AGENT,
+      Accept: 'application/json',
+      'Accept-Language': 'en',
+    },
+  });
+  if (!res.ok) return [];
+  const body = await res.json();
+  return Array.isArray(body) ? body : [];
+}
+
+/**
+ * Geocode a Tesla site name via Nominatim. Biases toward Supercharger POIs;
+ * falls back to the bare site name. Returns null when nothing looks sane —
+ * never invents city-center coordinates by hand.
+ */
+async function geocodeTeslaSiteName(siteName) {
+  if (!siteName || typeof siteName !== 'string') return null;
+  const parsed = parseTeslaSiteName(siteName);
+  const queries = [];
+  if (parsed.city && parsed.country) {
+    queries.push(`Tesla Supercharger ${parsed.city} ${parsed.country}`);
+    queries.push(`Supercharger ${parsed.city} ${parsed.country}`);
+  }
+  queries.push(siteName);
+
+  const seen = new Set();
+  for (const q of queries) {
+    const key = foldGeoText(q);
+    if (!key || seen.has(key)) continue;
+    seen.add(key);
+    let results;
+    try {
+      results = await nominatimSearch(q);
+    } catch (_) {
+      continue;
+    }
+    const hit = pickBestNominatimHit(results, parsed);
+    if (hit) return hit;
+  }
+  return null;
+}
+
+function applyLocationToSite(site, lat, lng, parsed) {
+  if (!site || typeof lat !== 'number' || typeof lng !== 'number') return;
+  if (site.lat == null) site.lat = lat;
+  if (site.lng == null) site.lng = lng;
+  if (!site.city && parsed.city) site.city = parsed.city;
+  if (!site.country && parsed.country) site.country = parsed.country;
+}
+
+/**
+ * After Tesla coords + preserveLocationsFromPrior, geocode any sites (and
+ * lastStop) still missing lat/lng. Results are written onto the snapshot so
+ * the next sync reuses them via preserveLocationsFromPrior — no repeat calls.
+ * Never overwrites a finite Tesla/prior coordinate.
+ */
+async function geocodeMissingSiteLocations(snapshot) {
+  if (!snapshot || !Array.isArray(snapshot.sites)) return snapshot;
+
+  const missing = snapshot.sites.filter(
+    (s) => s && s.name && (s.lat == null || s.lng == null)
+  );
+  let budget = GEOCODE_MAX_SITES_PER_SYNC;
+
+  for (const site of missing) {
+    if (budget <= 0) break;
+    // Another site with the same name may already have been filled this pass.
+    if (site.lat != null && site.lng != null) continue;
+    const sibling = snapshot.sites.find(
+      (s) =>
+        s &&
+        s !== site &&
+        s.name === site.name &&
+        typeof s.lat === 'number' &&
+        typeof s.lng === 'number'
+    );
+    if (sibling) {
+      applyLocationToSite(site, sibling.lat, sibling.lng, parseTeslaSiteName(site.name));
+      continue;
+    }
+
+    budget -= 1;
+    const coords = await geocodeTeslaSiteName(site.name);
+    if (!coords) continue;
+    const parsed = parseTeslaSiteName(site.name);
+    applyLocationToSite(site, coords.lat, coords.lng, parsed);
+  }
+
+  if (snapshot.lastStop && snapshot.lastStop.name) {
+    const ls = snapshot.lastStop;
+    if (ls.lat == null || ls.lng == null) {
+      const match = snapshot.sites.find(
+        (s) =>
+          s &&
+          s.name === ls.name &&
+          typeof s.lat === 'number' &&
+          typeof s.lng === 'number'
+      );
+      if (match) {
+        applyLocationToSite(ls, match.lat, match.lng, parseTeslaSiteName(ls.name));
+      } else if (budget > 0) {
+        const coords = await geocodeTeslaSiteName(ls.name);
+        if (coords) {
+          applyLocationToSite(ls, coords.lat, coords.lng, parseTeslaSiteName(ls.name));
+        }
+      }
+    }
+  }
+
+  return snapshot;
+}
+
 function monthKeyFromIso(iso) {
   if (!iso || typeof iso !== 'string') return null;
   const d = new Date(iso);
@@ -1007,6 +1248,9 @@ module.exports = {
   partnerAccessToken,
   persistTokensFromResponse,
   preserveLocationsFromPrior,
+  geocodeMissingSiteLocations,
+  geocodeTeslaSiteName,
+  parseTeslaSiteName,
   refreshAccessToken,
   requiredEnv,
   sessionCityCountry,
