@@ -11,6 +11,7 @@ const {
   getRefreshToken,
   getSnapshot,
   jsonResponse,
+  geocodeMissingSiteLocations,
   loadStaticChargingStats,
   persistTokensFromResponse,
   preserveLocationsFromPrior,
@@ -104,7 +105,9 @@ exports.handler = async (event) => {
       sessionCountFetched: sessions.length,
     });
     // Tesla may omit siteEntryLocation after unsorted retry; never wipe last-known pins.
-    // Prefer Blobs prior, then static/data/charging-stats.json. Copy only — never invent GPS.
+    // 1) Prefer Tesla coords already on the snapshot (sessionLatLng).
+    // 2) Copy from Blobs prior, then static/data/charging-stats.json — never invent GPS.
+    // 3) Geocode remaining missing names (Nominatim); results persist in Blobs for step 2 next sync.
     let previous = null;
     try {
       previous = await getSnapshot(event);
@@ -113,6 +116,11 @@ exports.handler = async (event) => {
     }
     const staticSeed = loadStaticChargingStats();
     preserveLocationsFromPrior(snapshot, [previous, staticSeed]);
+    try {
+      await geocodeMissingSiteLocations(snapshot);
+    } catch (_) {
+      /* Geocoder flaky — leave null pins; seeded/prior coords already applied */
+    }
 
     // Wall Connector (home): separate block. On fail/empty, keep prior home — never mix into Supercharger.
     let homeKept = false;

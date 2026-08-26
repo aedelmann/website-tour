@@ -652,6 +652,44 @@
       ]
     },
     {
+      "name": "Salamanca, Spain",
+      "city": "Salamanca",
+      "country": "Spain",
+      "lat": 40.94559,
+      "lng": -5.63941,
+      "energyKwh": 40.6,
+      "sessionCount": 1,
+      "spent": 14.19,
+      "currency": "EUR",
+      "sessions": [
+        {
+          "at": "2026-08-26T15:09:59+02:00",
+          "energyKwh": 40.6,
+          "spent": 14.19,
+          "currency": "EUR"
+        }
+      ]
+    },
+    {
+      "name": "Merida, Spain",
+      "city": "Merida",
+      "country": "Spain",
+      "lat": 38.921746,
+      "lng": -6.375133,
+      "energyKwh": 39.6,
+      "sessionCount": 1,
+      "spent": 13.46,
+      "currency": "EUR",
+      "sessions": [
+        {
+          "at": "2026-08-26T12:14:10+02:00",
+          "energyKwh": 39.6,
+          "spent": 13.46,
+          "currency": "EUR"
+        }
+      ]
+    },
+    {
       "name": "Bernau am Chiemsee, Germany - Hochfellnstraße",
       "city": "Bernau am Chiemsee",
       "country": "Germany - Hochfellnstraße",
