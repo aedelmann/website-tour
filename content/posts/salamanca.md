@@ -8,6 +8,15 @@ categories: ["City Exploration"]
 tags: ["salamanca", "spain", "castilla y leon", "unesco", "road trip", "tesla", "ferrol", "architecture"]
 banner: "/images/salamanca/salamanca-cover.jpg"
 featured_image: "/images/salamanca/salamanca-cover.jpg"
+gallery:
+  - src: "/images/salamanca/salamanca-cover.jpg"
+    caption: "The SALAMANCA sign doing the tourist-photo job, cathedral and Casa de las Conchas behind it, flowers doing overtime."
+  - src: "/images/salamanca/salamanca-wet-street.jpg"
+    caption: "Wet stone, grey sky, and the cathedral parked at the end of the street like it owns the vanishing point. Summer clothes, 21°C. The math is not mathing."
+  - src: "/images/salamanca/salamanca-cathedral-street.jpg"
+    caption: "New Cathedral close-up. Golden sandstone, overcast, and a few people who actually packed a jacket."
+  - src: "/images/salamanca/salamanca-san-esteban.jpg"
+    caption: "San Esteban doing the carved-sandstone thing. Courtyard, portico, sky still on strike."
 reading_time: 8
 tesla_stats:
   distance: 600
