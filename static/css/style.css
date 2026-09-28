@@ -460,7 +460,7 @@ h2 {
 }
 
 .next-trip-blurb {
-    max-width: 36rem;
+    max-width: 40rem;
     font-size: 0.98rem;
 }
 
@@ -468,14 +468,14 @@ h2 {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    gap: 0.5rem 0.35rem;
+    gap: 0.4rem 0.25rem;
 }
 
 .next-trip-stop {
     display: inline-flex;
     align-items: center;
-    gap: 0.5rem;
-    padding: 0.5rem 0.85rem 0.5rem 0.65rem;
+    gap: 0.4rem;
+    padding: 0.4rem 0.7rem 0.4rem 0.55rem;
     background: #fff;
     border: 1px solid var(--border);
     border-radius: 999px;
@@ -486,51 +486,71 @@ h2 {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 1.6rem;
-    height: 1.6rem;
+    width: 1.45rem;
+    height: 1.45rem;
+    flex: 0 0 1.45rem;
     border-radius: 50%;
-    font-size: 0.72rem;
+    font-size: 0.68rem;
     color: var(--primary);
     background: rgba(180, 83, 9, 0.1);
 }
 
+.next-trip-stop--fly .next-trip-stop-icon,
 .next-trip-stop--home .next-trip-stop-icon {
     color: var(--accent);
     background: rgba(13, 148, 136, 0.12);
 }
 
+.next-trip-stop--rail .next-trip-stop-icon {
+    color: var(--primary);
+    background: rgba(180, 83, 9, 0.1);
+}
+
+.next-trip-stop-text {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.15;
+    min-width: 0;
+}
+
 .next-trip-stop-label {
-    font-size: 0.9rem;
+    font-size: 0.85rem;
     font-weight: 700;
     letter-spacing: -0.01em;
     color: var(--text);
 }
 
 .next-trip-stop-note {
+    margin-top: 0.08rem;
     font-weight: 500;
-    font-size: 0.75rem;
+    font-size: 0.68rem;
     color: var(--text-muted);
 }
 
 .next-trip-arrow {
     color: var(--primary);
-    font-size: 0.7rem;
-    opacity: 0.55;
-    padding: 0 0.15rem;
+    font-size: 0.65rem;
+    opacity: 0.5;
+    padding: 0 0.05rem;
+    flex: 0 0 auto;
 }
 
 @media (max-width: 575.98px) {
-    .next-trip-arrow {
-        display: none;
-    }
-
     .next-trip-route {
-        flex-direction: column;
-        align-items: stretch;
+        gap: 0.35rem 0.2rem;
     }
 
     .next-trip-stop {
-        justify-content: flex-start;
+        padding: 0.35rem 0.6rem 0.35rem 0.5rem;
+    }
+
+    .next-trip-stop-label {
+        font-size: 0.8rem;
+    }
+
+    .next-trip-arrow {
+        font-size: 0.55rem;
+        opacity: 0.4;
     }
 }
 
