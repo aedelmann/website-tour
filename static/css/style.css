@@ -413,6 +413,140 @@ h2 {
     font-weight: 500;
 }
 
+/* Next trip – homepage teaser */
+.next-trip-section {
+    padding-top: 0.5rem;
+    padding-bottom: 1.5rem;
+}
+
+.next-trip-card {
+    max-width: 40rem;
+    margin: 0 auto;
+    border-left: 4px solid var(--primary) !important;
+    background:
+        linear-gradient(135deg, rgba(180, 83, 9, 0.05) 0%, transparent 42%),
+        linear-gradient(225deg, rgba(13, 148, 136, 0.06) 0%, transparent 38%),
+        var(--bg-elevated);
+}
+
+.next-trip-card:hover {
+    transform: none;
+}
+
+.next-trip-header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem 0.85rem;
+    margin-bottom: 0.65rem;
+}
+
+.next-trip-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.28rem 0.7rem;
+    border-radius: 999px;
+    border: 1px solid rgba(13, 148, 136, 0.28);
+    background: rgba(13, 148, 136, 0.1);
+    color: #0f766e;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+
+.next-trip-badge i {
+    font-size: 0.7rem;
+}
+
+.next-trip-window {
+    width: 100%;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--primary);
+}
+
+.next-trip-blurb {
+    font-size: 0.98rem;
+    line-height: 1.5;
+    max-width: 32rem;
+}
+
+.next-trip-route {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.45rem;
+    margin: 0;
+    padding: 0;
+}
+
+.next-trip-stop {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    padding: 0.45rem 0.8rem;
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    background: #fff;
+    box-shadow: var(--shadow);
+}
+
+.next-trip-stop-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.35rem;
+    height: 1.35rem;
+    border-radius: 50%;
+    background: rgba(180, 83, 9, 0.1);
+    color: var(--primary);
+    font-size: 0.68rem;
+}
+
+.next-trip-stop--home .next-trip-stop-icon {
+    background: rgba(13, 148, 136, 0.12);
+    color: var(--accent);
+}
+
+.next-trip-stop-label {
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: var(--text);
+    letter-spacing: -0.01em;
+}
+
+.next-trip-home-note {
+    display: inline-block;
+    margin-left: 0.2rem;
+    font-size: 0.72rem;
+    font-weight: 500;
+    color: var(--text-muted);
+}
+
+.next-trip-arrow {
+    color: #a8a29e;
+    font-size: 0.7rem;
+    line-height: 1;
+}
+
+@media (max-width: 575.98px) {
+    .next-trip-route {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .next-trip-arrow {
+        align-self: center;
+        transform: rotate(90deg);
+    }
+
+    .next-trip-stop {
+        justify-content: flex-start;
+    }
+}
+
 /* Blog post */
 .blog-post {
     max-width: 720px;
