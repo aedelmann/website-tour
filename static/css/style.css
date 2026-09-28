@@ -488,6 +488,7 @@ h2 {
     justify-content: center;
     width: 1.6rem;
     height: 1.6rem;
+    flex: 0 0 1.6rem;
     border-radius: 50%;
     font-size: 0.72rem;
     color: var(--primary);
@@ -499,6 +500,13 @@ h2 {
     background: rgba(13, 148, 136, 0.12);
 }
 
+.next-trip-stop-text {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.2;
+    min-width: 0;
+}
+
 .next-trip-stop-label {
     font-size: 0.9rem;
     font-weight: 700;
@@ -507,8 +515,9 @@ h2 {
 }
 
 .next-trip-stop-note {
+    margin-top: 0.1rem;
     font-weight: 500;
-    font-size: 0.75rem;
+    font-size: 0.72rem;
     color: var(--text-muted);
 }
 
